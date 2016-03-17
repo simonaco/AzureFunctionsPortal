@@ -21,6 +21,7 @@ import {IntroComponent} from './intro.component';
 import {TutorialComponent} from './tutorial.component';
 import {FunctionContainer} from '../models/function-container';
 import {Observable} from 'rxjs/Rx';
+import {MonitorComponent} from './monitor.component';
 
 @Component({
     selector: 'functions-dashboard',
@@ -35,7 +36,8 @@ import {Observable} from 'rxjs/Rx';
         AppSettingsComponent,
         FunctionNewComponent,
         IntroComponent,
-        TutorialComponent
+        TutorialComponent,
+        MonitorComponent
     ]
 })
 export class DashboardComponent implements OnInit {
@@ -46,6 +48,8 @@ export class DashboardComponent implements OnInit {
     public functionTemplates: FunctionTemplate[];
     public selectedFunction: FunctionInfo;
     public openAppSettings: boolean;
+    public openMonitor: boolean;
+
 
 
     constructor(private _functionsService: FunctionsService,
@@ -110,8 +114,14 @@ export class DashboardComponent implements OnInit {
         this.openAppSettings = true;
     }
 
+    onMonitorClicked() {
+        this.resetView();
+        this.openMonitor = true;
+    }
+
     private resetView() {
         this.openAppSettings = false;
+        this.openMonitor = false;
         this.selectedFunction = null;
         this.sideBar.selectedFunction = null;
     }

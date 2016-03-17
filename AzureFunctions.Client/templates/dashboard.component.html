@@ -1,6 +1,6 @@
 ﻿<div class="container-full">
     <!-- TODO: move padding to css -->
-    <top-bar (appSettingsClicked)='onAppSettingsClicked($event)' [isFunctionSelected]="!!selectedFunction"></top-bar>
+    <top-bar (appSettingsClicked)='onAppSettingsClicked($event)' (monitorClicked)="onMonitorClicked($event)" [isFunctionSelected]="!!selectedFunction"></top-bar>
     <div class="content">
         <sidebar [functionsInfo]="functionsInfo"></sidebar>
         <div class="work-space">
@@ -20,9 +20,13 @@
                 <app-settings></app-settings>
             </div>
 
+            <div style="padding-top: 20px;" *ngIf="openMonitor">
+                <monitor></monitor>
+            </div>
+
             <div *ngIf="noContainerFound">It looks like you don't have a functions container. Select a subscription to create one:</div>
             
-            <div *ngIf="!selectedFunction && !openAppSettings && !noContainerFound">
+            <div *ngIf="!selectedFunction && !openAppSettings && !noContainerFound && !openMonitor">
                 <intro [functionsInfo]="functionsInfo"></intro>
             </div>
         </div>

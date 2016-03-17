@@ -3,7 +3,13 @@
         <div class="vertical-align-center logo" (click)="onAzureFunctionClick()" >Azure Functions</div>
     </div>
     <div class="top-bar-tools right vertical-align-center">
-        <span *ngIf="!gettingStarted" class="top-bar-tool clickable"><i class="fa fa-clock-o"></i> Monitoring</span>
+        <span *ngIf="!gettingStarted"
+              class="top-bar-tool clickable"
+              (click)='onMonitorClicked()'
+              [class.top-bar-settings-selected]="isMonitorSelected">
+              <i class="fa fa-clock-o"></i> Monitoring
+        </span>
+
         <span *ngIf="!gettingStarted"
               class="top-bar-tool clickable"
               (click)='onAppSettingsClicked()'

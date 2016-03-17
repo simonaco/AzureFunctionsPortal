@@ -28,11 +28,23 @@
     <!-- 2. Configure SystemJS -->
     <script>
       System.config({
+        paths: {
+          "npm:*": "node_modules/*"
+        },
         packages: {
           app: {
             format: 'register',
             defaultExtension: 'js'
+          },
+          'angular2-highcharts' : {
+              main: 'index',
+              format: 'cjs',
+              defaultExtension: 'js',
           }
+        },
+        map: {
+          'angular2-highcharts': 'npm:angular2-highcharts',
+          'highcharts/highstock.src': 'npm:highcharts/highstock.js',
         }
       });
       System.import('app/boot')

@@ -7,7 +7,8 @@ System.config({
   },
   paths: {
     "npm:*": "jspm_packages/npm/*",
-    "github:*": "jspm_packages/github/*"
+    "github:*": "jspm_packages/github/*",
+    "rnpm:*": "node_modules/*"
   },
 
   packages: {
@@ -24,6 +25,7 @@ System.config({
   },
 
   map: {
+    "angular2-highcharts": "rnpm:angular2-highcharts",
     "angular2": "npm:angular2@2.0.0-beta.7",
     "rxjs": "npm:rxjs@5.0.0-beta.2",
     "systemjs-hot-reloader": "github:capaj/systemjs-hot-reloader@0.5.6",

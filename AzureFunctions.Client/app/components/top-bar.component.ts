@@ -1,4 +1,4 @@
-import {Component, OnInit, EventEmitter, Input} from 'angular2/core';
+import {Component, OnInit, EventEmitter, Input, Output} from 'angular2/core';
 import {UserService} from '../services/user.service';
 import {User} from '../models/user';
 import {TenantInfo} from '../models/tenant-info';
@@ -9,23 +9,26 @@ import {TutorialEvent, TutorialStep} from '../models/tutorial';
     selector: 'top-bar',
     templateUrl: 'templates/top-bar.component.html',
     styleUrls: ['styles/top-bar.style.css'],
-    inputs: ['isFunctionSelected'],
-    outputs: ['appSettingsClicked']
+    inputs: ['isFunctionSelected']
 })
 export class TopBarComponent implements OnInit {
     @Input() gettingStarted: boolean;
+    @Output() appSettingsClicked: EventEmitter<any>;
+    @Output() monitorClicked: EventEmitter<any>;
+
     public user: User;
     public tenants: TenantInfo[];
     public currentTenant: TenantInfo;
     public inIFrame: boolean;
     public isAppSettingSelected: boolean;
+    public isMonitorSelected: boolean;
     private _isFunctionSelected: boolean;
-    private appSettingsClicked: EventEmitter<any>;
 
     constructor(private _userService: UserService,
                 private _broadcastService: IBroadcastService) {
 
         this.appSettingsClicked = new EventEmitter<any>();
+        this.monitorClicked = new EventEmitter<any>();
         this.inIFrame = this._userService.inIFrame;
 
         this._broadcastService.subscribe<TutorialEvent>(BroadcastEvent.TutorialStep, event => {
@@ -60,9 +63,15 @@ export class TopBarComponent implements OnInit {
         this.isAppSettingSelected = true;
     }
 
+    onMonitorClicked(){ 
+        this.monitorClicked.emit(null);
+        this.isMonitorSelected = true;
+    }
+
     set isFunctionSelected(selected : boolean){
         this._isFunctionSelected = selected;
         this.isAppSettingSelected = selected ? false : this.isAppSettingSelected;
+        this.isMonitorSelected = selected ? false : this.isMonitorSelected;
     }
 
     get isFunctionSelected(){
