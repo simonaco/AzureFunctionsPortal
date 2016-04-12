@@ -1,23 +1,26 @@
 ﻿import {Injectable} from 'angular2/core';
-import {IPortalService} from './iportal.service.ts';
 import {Observable, ReplaySubject} from 'rxjs/Rx';
 import {Event, Data, Verbs, Action, LogEntryLevel, Message} from '../models/portal';
-import {BroadcastEvent, IBroadcastService} from './ibroadcast.service';
 import {ErrorEvent} from '../models/error-event';
+import {BroadcastService} from './broadcast.service';
+import {BroadcastEvent} from '../models/broadcast-event'
 
 @Injectable()
-export class PortalService implements IPortalService {
-    public sessionId = "";
-    private portalSignature: string = "FxAppBlade";
+export class PortalService {
+    public sessionId = '';
+    private portalSignature: string = 'FxAppBlade';
     private resourceIdObservable: ReplaySubject<string>;
     private tokenObservable: ReplaySubject<string>;
     private getAppSettingCallback: (appSettingName: string) => void;
     private shellSrc: string;
 
-    constructor(private _broadcastService : IBroadcastService) {
+    constructor(
+        private _broadcastService : BroadcastService,
+        private initializeIFrame: boolean) {
+
         this.tokenObservable = new ReplaySubject<string>(1);
         this.resourceIdObservable = new ReplaySubject<string>(1);
-        if (this.inIFrame()){
+        if (initializeIFrame) {
             this.initializeIframe();
         }
     }
@@ -48,12 +51,12 @@ export class PortalService implements IPortalService {
     }
 
     openBlade(name: string, source: string) : void{
-        this.logAction(source, "open blade " + name, null);
+        this.logAction(source, `open blade ${name}`, null);
         this.postMessage(Verbs.openBlade, name);
     }
 
     openCollectorBlade(name: string, source: string, getAppSettingCallback: (appSettingName: string) => void): void {
-        this.logAction(source, "open-blade-" + name, null);
+        this.logAction(source, `open-blade-${name}`, null);
         this.getAppSettingCallback = getAppSettingCallback;
         this.postMessage(Verbs.openBlade, name);
     }
@@ -67,11 +70,11 @@ export class PortalService implements IPortalService {
 
         this.postMessage(Verbs.logAction, actionStr);
     }
-    
+
     setDirtyState(dirty : boolean) : void{
         this.postMessage(Verbs.setDirtyState, JSON.stringify(dirty));
     }
-    
+
     logMessage(level : LogEntryLevel, message : string, ...restArgs: any[]){
         let messageStr = JSON.stringify(<Message>{
             level : level,
@@ -83,7 +86,7 @@ export class PortalService implements IPortalService {
     }
 
     private iframeReceivedMsg(event: Event): void {
-        
+
         if (event && event.data && event.data.signature !== this.portalSignature) {
             return;
         }
@@ -112,16 +115,12 @@ export class PortalService implements IPortalService {
     }
 
     private postMessage(verb: string, data: string){
-        if(this.inIFrame()){
+        if(this.initializeIFrame) {
             window.parent.postMessage(<Data>{
                 signature : this.portalSignature,
                 kind: verb,
                 data: data
             }, this.shellSrc);
         }
-    }
-
-    private inIFrame() : boolean{
-        return window.parent !== window;
     }
 }
