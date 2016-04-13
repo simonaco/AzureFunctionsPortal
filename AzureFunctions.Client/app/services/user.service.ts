@@ -1,28 +1,28 @@
 import {Http, Headers} from 'angular2/http';
 import {Injectable} from 'angular2/core';
-import {Observable} from 'rxjs/Rx';
+import {Observable, ReplaySubject} from 'rxjs/Rx';
 import {User} from '../models/user';
 import {TenantInfo} from '../models/tenant-info';
-import {PortalService} from './portal.service';
-import {ArmService} from './arm.service';
 import {SourceControlState} from '../models/source-control-state';
+import {FunctionContainer} from '../models/function-container';
 
 @Injectable()
 export class UserService {
     public inIFrame: boolean;
-    private currentToken: string;
-    constructor(
-        private _http: Http,
-        private _portalService: PortalService,
-        private _armService: ArmService) {
+    private functionContainerSubject: ReplaySubject<FunctionContainer>;
+    private tokenSubject: ReplaySubject<string>;
+
+    constructor( private _http: Http) {
         this.inIFrame = window.parent !== window;
-        this.getToken().subscribe(t => this.currentToken = t);
+        this.functionContainerSubject = new ReplaySubject<FunctionContainer>(1);
+        this.tokenSubject = new ReplaySubject<string>(1);
     }
 
     getTenants() {
         return this._http.get('api/tenants')
             .catch(e => Observable.of({ json: () => [] }))
-            .map<TenantInfo[]>(r => r.json());
+            .map<TenantInfo[]>(r => r.json())
+            .publishReplay(1);
     }
 
     getUser() {
@@ -30,20 +30,19 @@ export class UserService {
             .map<User>(r => r.json());
     }
 
-    getCurrentToken() {
-        return this.currentToken;
-    }
-
     getToken() {
-        if (this.inIFrame) {
-            return this._portalService.getToken();
-        } else {
-            return this._http.get('api/token?plaintext=true').map<string>(r => r.text());
-        }
+        return this.tokenSubject;
     }
 
-    getSourceControlState() {
-        return this._armService.getConfig()
-        .map
+    setToken(token: string) {
+        this.tokenSubject.next(token);
+    }
+
+    setFunctionContainer(fc: FunctionContainer) {
+        this.functionContainerSubject.next(fc);
+    }
+
+    getFunctionContainer() {
+        return this.functionContainerSubject;
     }
 }

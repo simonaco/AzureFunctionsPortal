@@ -91,15 +91,16 @@ export class FunctionsService {
         private _armService: ArmService) {
 
         this._userService.getToken().subscribe(t => this.token = t);
-        this.appSettings = {};
-    }
 
-    setFunctionContainer(fc: FunctionContainer) {
-        this.scmUrl = `https://${fc.properties.hostNameSslStates.find(s => s.hostType === 1).name}`;
-        this.mainSiteUrl = `https://${fc.properties.hostNameSslStates.find(s => s.hostType === 0 && s.name.indexOf('azurewebsites.net') !== -1).name}`;
-        this.siteName = fc.name;
-        this._armService.getFunctionContainerAppSettings(fc).subscribe(a => this.appSettings = a);
-        this.fc = fc;
+        this._userService.getFunctionContainer().subscribe(fc => {
+            this.scmUrl = `https://${fc.properties.hostNameSslStates.find(s => s.hostType === 1).name}`;
+            this.mainSiteUrl = `https://${fc.properties.hostNameSslStates.find(s => s.hostType === 0 && s.name.indexOf('azurewebsites.net') !== -1).name}`;
+            this.siteName = fc.name;
+            this._armService.getFunctionContainerAppSettings(fc).subscribe(a => this.appSettings = a);
+            this.fc = fc;
+        });
+
+        this.appSettings = {};
     }
 
     getFunctions() {

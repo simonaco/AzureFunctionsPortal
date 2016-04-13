@@ -18,11 +18,13 @@ import {PopOverComponent} from './pop-over.component';
 export class LogStreamingComponent implements OnDestroy, OnChanges {
     public log: string;
     public stopped: boolean;
+    public timerInterval: number = 1000;
+
     private hostErrors: string;
     private xhReq: XMLHttpRequest;
     private timeouts: number[];
-    public timerInterval: number = 1000;
     private oldLength: number = 0;
+    private token: string;
     @Input() functionInfo: FunctionInfo;
 
     constructor(
@@ -31,9 +33,12 @@ export class LogStreamingComponent implements OnDestroy, OnChanges {
         private _functionsService: FunctionsService,
         private _broadcastService: BroadcastService,
         private _utilities: UtilitiesService) {
+
+        this._userService.getToken().subscribe(t => this.token = t);
         this.hostErrors = '';
         this.log = '';
         this.timeouts = [];
+
     }
 
     ngOnChanges() {
@@ -96,7 +101,7 @@ export class LogStreamingComponent implements OnDestroy, OnChanges {
 
         this.xhReq = new XMLHttpRequest();
         this.xhReq.open('GET', `${scmUrl}/api/logstream/application/functions/function/${this.functionInfo.name}`, true);
-        this.xhReq.setRequestHeader('Authorization', `Bearer ${this._userService.getCurrentToken()}`);
+        this.xhReq.setRequestHeader('Authorization', `Bearer ${this.token}`);
         this.xhReq.setRequestHeader('FunctionsPortal', '1');
         this.xhReq.send(null);
 

@@ -170,9 +170,11 @@
     <TypeScriptCompile Include="app\pipes\sidebar.pipe.ts" />
     <TypeScriptCompile Include="app\services\appMonitoring.service.ts" />
     <TypeScriptCompile Include="app\services\arm.service.ts" />
+    <TypeScriptCompile Include="app\services\background-tasks.service.ts" />
     <TypeScriptCompile Include="app\services\broadcast.service.ts" />
     <TypeScriptCompile Include="app\services\functions.service.ts" />
     <TypeScriptCompile Include="app\services\portal.service.ts" />
+    <TypeScriptCompile Include="app\services\telemetry.service.ts" />
     <TypeScriptCompile Include="app\services\user.service.ts" />
     <Content Include="bower.json" />
     <Content Include="mocks\bindings.json" />

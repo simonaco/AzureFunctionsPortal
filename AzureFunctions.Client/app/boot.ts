@@ -13,6 +13,7 @@ import {ArmService} from './services/arm.service';
 import {MonitoringService} from './services/appMonitoring.service';
 import {TelemetryService} from './services/telemetry.service';
 import {UtilitiesService} from './services/utilities.service';
+import {BackgroundTasksService} from './services/background-tasks.service';
 
 declare var mixpanel: any;
 
@@ -24,15 +25,16 @@ bootstrap(
     AppComponent,
     [
         HTTP_PROVIDERS,
-        BroadcastService,
-        FunctionsService,
         UserService,
+        FunctionsService,
+        BroadcastService,
         PortalService,
-        ExceptionHandler,
+        provide(ExceptionHandler, { useClass: FunctionsExceptionHandler }),
         ArmService,
         MonitoringService,
         TelemetryService,
-        UtilitiesService
+        UtilitiesService,
+        BackgroundTasksService
     ]);
 
 if (typeof mixpanel !==  'undefined') {

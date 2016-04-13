@@ -59,7 +59,7 @@ export class FunctionIntegrateV2Component {
     constructor(
         @Inject(ElementRef) elementRef: ElementRef,
         private _functionsService: FunctionsService,
-        private _broadcastService: IBroadcastService,
+        private _broadcastService: BroadcastService,
         private _portalService: PortalService) {
         this._elementRef = elementRef;
     }
