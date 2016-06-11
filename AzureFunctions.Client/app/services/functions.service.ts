@@ -92,8 +92,10 @@ export class FunctionsService {
 
         this._userService.getToken().subscribe(t => this.token = t);
         this._userService.getFunctionContainer().subscribe(fc => {
-            this.scmUrl = `https://${fc.properties.hostNameSslStates.find(s => s.hostType === 1).name}`;
-            this.mainSiteUrl = `https://${fc.properties.hostNameSslStates.find(s => s.hostType === 0 && s.name.indexOf('azurewebsites.net') !== -1).name}`;
+            // this.scmUrl = `https://${fc.properties.hostNameSslStates.find(s => s.hostType === 1).name}`;
+            // this.mainSiteUrl = `https://${fc.properties.hostNameSslStates.find(s => s.hostType === 0 && s.name.indexOf('azurewebsites.net') !== -1).name}`;
+            this.scmUrl = 'https://localhost:6061';
+            this.mainSiteUrl = 'https://localhost:6061';
             this.siteName = fc.name;
         });
         this.appSettings = {};
@@ -180,7 +182,7 @@ export class FunctionsService {
             name: "Settings",
             href: null,
             config: null,
-            script_href: `${this.scmUrl}/api/vfs/site/wwwroot/host.json`,
+            script_href: `${this.scmUrl}/api/functions/config`,
             template_id: null,
             clientOnly: true,
             isDeleted: false,
@@ -309,6 +311,13 @@ export class FunctionsService {
     }
 
     getHostSecrets() {
+        if (this.scmUrl.indexOf("localhost:6061") != -1) {
+            this.hostSecrets = {
+                masterKey: '',
+                functionKey: ''
+            };
+            return null;
+        }
         return this._http.get(`${this.scmUrl}/api/vfs/data/functions/secrets/host.json`, { headers: this.getHeaders() })
             .retryWhen(errors => errors.delay(100))
             .map<HostSecrets>(r => r.json())

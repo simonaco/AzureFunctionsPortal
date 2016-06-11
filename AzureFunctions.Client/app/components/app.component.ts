@@ -14,14 +14,22 @@ import {ErrorListComponent} from './error-list.component';
 import {MonitoringService} from '../services/appMonitoring.service';
 import {BackgroundTasksService} from '../services/background-tasks.service';
 import {GlobalStateService} from '../services/global-state.service';
+import {LocalDevelopmentInstructionsComponent} from './local-development-instructions.component';
 
 @Component({
     selector: 'azure-functions-app',
     templateUrl: 'templates/app.component.html',
-    directives: [BusyStateComponent, DashboardComponent, GettingStartedComponent, ErrorListComponent]
+    directives: [
+        BusyStateComponent,
+        DashboardComponent,
+        GettingStartedComponent,
+        ErrorListComponent,
+        LocalDevelopmentInstructionsComponent
+    ]
 })
 export class AppComponent implements OnInit, AfterViewInit {
     @ViewChild(BusyStateComponent) busyState: BusyStateComponent;
+    @ViewChild(LocalDevelopmentInstructionsComponent) localDevelopment: LocalDevelopmentInstructionsComponent;
     public gettingStarted: boolean;
     public ready: boolean;
     public functionContainer: FunctionContainer;
@@ -62,6 +70,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
     ngAfterViewInit() {
         this._globalStateService.GlobalBusyStateComponent  = this.busyState;
+        this._globalStateService.LocalDevelopmentInstructionsComponent = this.localDevelopment;
     }
 
 

@@ -1,0 +1,26 @@
+<div *ngIf="shown">
+    <div class="background">
+    </div>
+
+    <div class="wrapper" tabindex="1000" (blur)="onBlur($event)">
+        <div class="steps">
+            <div class="step">
+                <h2>1) Download your functions</h2>
+                <span>Click here to download a zip file containing your files.</span>
+                <br>
+                <span>Alternatively, you can clone your site locally using git.</span>
+            </div>
+            <div class="step">
+                <h2>2) Install Azure Functions CLI</h2>
+                <span>Run:</span>
+                <pre>npm install -g azurefunctions</pre>
+                <span>You need to run as an Admin on OSX and Linux</span>
+            </div>
+            <div class="step">
+                <h2>3) Run: </h2>
+                <span>Run the CLI in the same directory you have your function files</span>
+                <pre>azurefunctions</pre>
+            </div>
+        </div>
+    </div>
+</div>

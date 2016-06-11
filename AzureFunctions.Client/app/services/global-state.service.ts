@@ -4,12 +4,14 @@ import {UserService} from './user.service';
 import {ArmService} from './arm.service';
 import {Constants} from '../models/constants';
 import {BusyStateComponent} from '../components/busy-state.component';
+import {LocalDevelopmentInstructionsComponent} from '../components/local-development-instructions.component';
 
 @Injectable()
 export class GlobalStateService {
     private _functionContainer: FunctionContainer;
     private _appSettings: {[key: string]: string};
     private _globalBusyStateComponent: BusyStateComponent;
+    private _localDevelopmentInstructions: LocalDevelopmentInstructionsComponent;
     private _shouldBeBusy: boolean;
     private _token: string;
 
@@ -73,5 +75,13 @@ export class GlobalStateService {
 
     get CurrentToken(): string {
         return this._token;
+    }
+
+    showLocalDevelopInstructions() {
+        this._localDevelopmentInstructions.show();
+    }
+
+    set LocalDevelopmentInstructionsComponent(value: LocalDevelopmentInstructionsComponent) {
+        this._localDevelopmentInstructions = value;
     }
 }

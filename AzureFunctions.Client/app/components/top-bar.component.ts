@@ -111,6 +111,10 @@ export class TopBarComponent implements OnInit {
         }
     }
 
+    onDevelopLocallyClicked() {
+        this._globalStateService.showLocalDevelopInstructions();
+    }
+
     set isFunctionSelected(selected: boolean) {
         this.ActiveButton = TopbarButton.None;
         this._isFunctionSelected = true;
