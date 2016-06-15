@@ -2,9 +2,11 @@ import {Injectable} from '@angular/core';
 import {FunctionContainer} from '../models/function-container';
 import {UserService} from './user.service';
 import {ArmService} from './arm.service';
+import {FunctionsService} from './functions.service';
 import {Constants} from '../models/constants';
 import {BusyStateComponent} from '../components/busy-state.component';
 import {LocalDevelopmentInstructionsComponent} from '../components/local-development-instructions.component';
+import {DashboardComponent} from '../components/dashboard.component';
 
 @Injectable()
 export class GlobalStateService {
@@ -12,11 +14,16 @@ export class GlobalStateService {
     private _appSettings: {[key: string]: string};
     private _globalBusyStateComponent: BusyStateComponent;
     private _localDevelopmentInstructions: LocalDevelopmentInstructionsComponent;
+    private _dashboardComponent: DashboardComponent;
     private _shouldBeBusy: boolean;
     private _token: string;
+    private _localMode: boolean = false;
 
-
-    constructor(private _userService: UserService, private _armService: ArmService) {
+    constructor(
+        private _userService: UserService,
+        private _armService: ArmService,
+        private _functionsService: FunctionsService
+        ) {
         this._appSettings = {};
         this._userService.getFunctionContainer()
             .subscribe(fc => this._functionContainer = fc)
@@ -83,5 +90,23 @@ export class GlobalStateService {
 
     set LocalDevelopmentInstructionsComponent(value: LocalDevelopmentInstructionsComponent) {
         this._localDevelopmentInstructions = value;
+    }
+
+    set DashboardComponent(value: DashboardComponent) {
+        this._dashboardComponent = value;
+    }
+
+    checkLocalFunctionsServer() {
+        return this._functionsService.checkLocalFunctionsServer();
+    }
+
+    switchToLocalServer() {
+        this._functionsService.switchToLocalServer();
+        this._dashboardComponent.onRefreshClicked();
+    }
+
+    switchToAzure() {
+        this._functionsService.switchToAzure();
+        this._dashboardComponent.onRefreshClicked();
     }
 }

@@ -82,6 +82,7 @@ export class DashboardComponent implements OnChanges {
             }
 
         });
+        this._globalStateService.DashboardComponent = this;
     }
 
     // Handles the scenario where the FunctionInfo binding on the app.component has changed,

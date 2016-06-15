@@ -30,6 +30,7 @@
 
 .step > span {
     padding-left: 30px;
+    font-size: 16px;
 }
 
 .step > pre {
@@ -49,9 +50,24 @@
     display: inline-block;
     font-size: 16px;
     width: 156px;
+    cursor: pointer;
 }
 
 .mode-container{
     padding-top:10px;
     text-align: center;
+}
+
+.close-button {
+    position: relative;
+    float: right;
+    display: inline;
+    height: 20px;
+    right: -10px;
+    top: -15px;
+    font-size: 22px;
+}
+
+.disable-mode {
+    cursor: not-allowed !important;
 }

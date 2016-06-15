@@ -32,6 +32,10 @@ export class FunctionsService {
     private appSettings: { [key: string]: string };
     private isEasyAuthEnabled: boolean;
 
+    private azureScmServer: string;
+    private azureMainServer: string;
+    private localServer: string;
+
     // https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
     private statusCodeMap = {
         100: 'Continue',
@@ -92,10 +96,11 @@ export class FunctionsService {
 
         this._userService.getToken().subscribe(t => this.token = t);
         this._userService.getFunctionContainer().subscribe(fc => {
-            // this.scmUrl = `https://${fc.properties.hostNameSslStates.find(s => s.hostType === 1).name}`;
-            // this.mainSiteUrl = `https://${fc.properties.hostNameSslStates.find(s => s.hostType === 0 && s.name.indexOf('azurewebsites.net') !== -1).name}`;
-            this.scmUrl = 'https://localhost:6061';
-            this.mainSiteUrl = 'https://localhost:6061';
+            this.scmUrl = `https://${fc.properties.hostNameSslStates.find(s => s.hostType === 1).name}`;
+            this.mainSiteUrl = `https://${fc.properties.hostNameSslStates.find(s => s.hostType === 0 && s.name.indexOf('azurewebsites.net') !== -1).name}`;
+            this.azureMainServer = this.mainSiteUrl;
+            this.azureScmServer = this.scmUrl
+            this.localServer = 'https://localhost:6061';
             this.siteName = fc.name;
         });
         this.appSettings = {};
@@ -390,6 +395,26 @@ export class FunctionsService {
     getVfsObjects(fi: FunctionInfo | string) {
         return this._http.get(typeof fi === 'string' ? fi : fi.script_root_path_href, { headers: this.getHeaders() })
             .map<VfsObject[]>(e => e.json());
+    }
+
+    checkLocalFunctionsServer() {
+        return this._http.get(this.localServer)
+            .map<boolean>(r => true)
+            .catch(e => Observable.of(false));
+    }
+
+    switchToLocalServer() {
+        this.mainSiteUrl = this.localServer;
+        this.scmUrl = this.localServer;
+    }
+
+    switchToAzure() {
+        this.mainSiteUrl = this.azureMainServer;
+        this.scmUrl = this.azureScmServer;
+    }
+
+    launchVsCode() {
+        return this._http.post(`${this.localServer}/admin/run/vscode`, '');
     }
 
     @ClearCache('clearAllCachedData')

@@ -30,6 +30,8 @@ import {LocalDevelopmentInstructionsComponent} from './local-development-instruc
 export class AppComponent implements OnInit, AfterViewInit {
     @ViewChild(BusyStateComponent) busyState: BusyStateComponent;
     @ViewChild(LocalDevelopmentInstructionsComponent) localDevelopment: LocalDevelopmentInstructionsComponent;
+    @ViewChild(DashboardComponent) dashboardComponent: DashboardComponent;
+
     public gettingStarted: boolean;
     public ready: boolean;
     public functionContainer: FunctionContainer;

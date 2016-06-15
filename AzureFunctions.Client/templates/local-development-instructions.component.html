@@ -2,7 +2,8 @@
     <div class="background">
     </div>
 
-    <div class="wrapper" tabindex="0" (blur)="onBlur($event)">
+    <div class="wrapper">
+        <div class="clickable close-button" (click)="hide()">x</div>
         <div class="steps">
             <div class="step">
                 <h3>1) Download your functions</h3>
@@ -25,18 +26,20 @@
                 <h3>4) Switch portal to local dev mode: </h3>
                 <div class="mode-container">
                     <div class="mode"
-                        (click)="selectedMode = 'Azure'"
+                        (click)="switchToAzure()"
                         [class.mode-selected]="selectedMode === 'Azure'">
 
                         <div>Azure</div>
                     </div>
                     <div class="mode"
-                        (click)="selectedMode = 'Local'"
+                        (click)="switchToLocal()"
+                        [class.disable-mode]="!isLocalServerRunning"
                         [class.mode-selected]="selectedMode === 'Local'">
 
                         <div>Local</div>
                     </div>
                 </div>
+                <span *ngIf="!isLocalServerRunning">You need to have the local server running on <a href="https://localhost:6061">https://localhost:6061</a></span>
             </div>
             <div class="step">
                 <h2>5) Launch Visual Studio Code</h2>
