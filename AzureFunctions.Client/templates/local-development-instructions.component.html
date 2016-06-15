@@ -2,24 +2,47 @@
     <div class="background">
     </div>
 
-    <div class="wrapper" tabindex="1000" (blur)="onBlur($event)">
+    <div class="wrapper" tabindex="0" (blur)="onBlur($event)">
         <div class="steps">
             <div class="step">
-                <h2>1) Download your functions</h2>
+                <h3>1) Download your functions</h3>
                 <span>Click here to download a zip file containing your files.</span>
                 <br>
                 <span>Alternatively, you can clone your site locally using git.</span>
             </div>
             <div class="step">
-                <h2>2) Install Azure Functions CLI</h2>
+                <h3>2) Install Azure Functions CLI</h3>
                 <span>Run:</span>
                 <pre>npm install -g azurefunctions</pre>
                 <span>You need to run as an Admin on OSX and Linux</span>
             </div>
             <div class="step">
-                <h2>3) Run: </h2>
+                <h3>3) Run: </h3>
                 <span>Run the CLI in the same directory you have your function files</span>
                 <pre>azurefunctions</pre>
+            </div>
+            <div class="step">
+                <h3>4) Switch portal to local dev mode: </h3>
+                <div class="mode-container">
+                    <div class="mode"
+                        (click)="selectedMode = 'Azure'"
+                        [class.mode-selected]="selectedMode === 'Azure'">
+
+                        <div>Azure</div>
+                    </div>
+                    <div class="mode"
+                        (click)="selectedMode = 'Local'"
+                        [class.mode-selected]="selectedMode === 'Local'">
+
+                        <div>Local</div>
+                    </div>
+                </div>
+            </div>
+            <div class="step">
+                <h2>5) Launch Visual Studio Code</h2>
+                <div class="mode-container">
+                    <button class="custom-button" (click)="launchVsCode()" [disabled]="selectedMode == 'Azure'">Launch Visual Studio Code</button>
+                </div>
             </div>
         </div>
     </div>

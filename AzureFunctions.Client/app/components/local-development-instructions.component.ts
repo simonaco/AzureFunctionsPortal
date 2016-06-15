@@ -7,6 +7,7 @@ import {Component, OnInit, Inject, ElementRef} from '@angular/core';
 })
 export class LocalDevelopmentInstructionsComponent implements OnInit {
     private shown: boolean = false;
+    private selectedMode: string = 'Azure';
     constructor(@Inject(ElementRef) private _elementRef: ElementRef) { }
 
     ngOnInit() { }

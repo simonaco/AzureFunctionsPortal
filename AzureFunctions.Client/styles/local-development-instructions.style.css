@@ -35,3 +35,23 @@
 .step > pre {
     margin-left: 30px;
 }
+
+.mode:hover{
+    border: 3px solid #C2C5C9;
+}
+
+.mode-selected, .mode-selected:hover{
+    border: 3px solid #419BF3;
+}
+
+.mode {
+    padding: 10px;
+    display: inline-block;
+    font-size: 16px;
+    width: 156px;
+}
+
+.mode-container{
+    padding-top:10px;
+    text-align: center;
+}
