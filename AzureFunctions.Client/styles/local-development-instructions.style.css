@@ -71,3 +71,8 @@
 .disable-mode {
     cursor: not-allowed !important;
 }
+
+a {
+    color: #419BF3;
+    text-decoration: underline;
+}

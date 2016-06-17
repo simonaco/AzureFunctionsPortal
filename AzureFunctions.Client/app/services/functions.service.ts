@@ -36,6 +36,9 @@ export class FunctionsService {
     private azureMainServer: string;
     private localServer: string;
 
+    private localAdminKey: string = '';
+    private azureAdminKey: string;
+
     // https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
     private statusCodeMap = {
         100: 'Continue',
@@ -318,8 +321,8 @@ export class FunctionsService {
     getHostSecrets() {
         if (this.scmUrl.indexOf("localhost:6061") != -1) {
             this.hostSecrets = {
-                masterKey: '',
-                functionKey: ''
+                masterKey: this.localAdminKey,
+                functionKey: this.localAdminKey
             };
             return null;
         }
@@ -406,11 +409,14 @@ export class FunctionsService {
     switchToLocalServer() {
         this.mainSiteUrl = this.localServer;
         this.scmUrl = this.localServer;
+        this.azureAdminKey = this.hostSecrets.masterKey;
+        this.hostSecrets.masterKey = this.localAdminKey;
     }
 
     switchToAzure() {
         this.mainSiteUrl = this.azureMainServer;
         this.scmUrl = this.azureScmServer;
+        this.hostSecrets.masterKey = this.azureAdminKey;
     }
 
     launchVsCode() {

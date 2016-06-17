@@ -21,8 +21,17 @@ export class LocalDevelopmentInstructionsComponent implements OnInit {
 
     show() {
         this.shown = true;
+        this.checkLocalFunctionsServer();
+    }
+
+    checkLocalFunctionsServer() {
         this._globalStateService.checkLocalFunctionsServer()
-            .subscribe(v => this.isLocalServerRunning = v);
+            .subscribe(v => {
+                this.isLocalServerRunning = v;
+                if (this.show && !this.isLocalServerRunning) {
+                    setTimeout(() => this.checkLocalFunctionsServer(), 200);
+                }
+        });
     }
 
     hide() {

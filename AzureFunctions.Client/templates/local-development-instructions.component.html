@@ -7,7 +7,7 @@
         <div class="steps">
             <div class="step">
                 <h3>1) Download your functions</h3>
-                <span>Click here to download a zip file containing your files.</span>
+                <span><a href="#">Click here</a> to download a zip file containing your files.</span>
                 <br>
                 <span>Alternatively, you can clone your site locally using git.</span>
             </div>
@@ -47,6 +47,12 @@
                     <button class="custom-button" (click)="launchVsCode()" [disabled]="selectedMode == 'Azure'">Launch Visual Studio Code</button>
                 </div>
             </div>
+            <div class="step">
+                <div class="mode-container" style="padding-top: 70px">
+                    <button class="custom-button" (click)="hide()">Dismiss</button>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
