@@ -19,13 +19,20 @@
                 [selectedFile]="scriptFile"
                 (selectedFileChange)="selectedFileStream.next($event)">
             </file-explorer>
-            <div class="ace_editor dev-code-flex" aceEditor id="editor"
+            <!--<div class="ace_editor dev-code-flex" aceEditor id="editor"
                 (onSave)="saveScript()"
                 (onContentChanged)="contentChanged($event)"
                 [content]="content"
                 [fileName]="fileName"
                 [height]="600"
                 [readOnly]="disabled">
+            </div>-->
+
+            <div id="container" monacoEditor style="width:1200px;height:300px;border:1px solid grey"
+                 [content]="content"
+                 [fileName]="fileName"
+                 [disabled]="disabled"
+                 >
             </div>
         </div>
         <span class="clickable link-action" *ngIf="!showFileExplorer" (click)="toggleShowHideFileExplorer()">
