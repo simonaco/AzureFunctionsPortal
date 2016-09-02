@@ -132,7 +132,10 @@ export class SideBarComponent implements OnDestroy, OnInit {
             this._broadcastService.clearDirtyState('function_integrate', true);
             this.selectedFunction = fi;
             this._broadcastService.broadcast(BroadcastEvent.FunctionSelected, fi);
-            this.trackPage(this.tabId);
+            if (fi.clientOnly) {
+                this.trackPage('NewFunction');
+                this.tabId = 'Develop';
+            }
         }
     }
 
