@@ -135,6 +135,8 @@ export class SideBarComponent implements OnDestroy, OnInit {
             if (fi.clientOnly) {
                 this.trackPage('NewFunction');
                 this.tabId = 'Develop';
+            } else {
+                this.trackPage(this.tabId);
             }
         }
     }
