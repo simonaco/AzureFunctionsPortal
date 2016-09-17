@@ -21,16 +21,14 @@ declare var jQuery: any;
 @Component({
     selector: 'function-integrate-v2',
     templateUrl: './templates/function-integrate-v2.component.html',
-    directives: [BindingComponent, TemplatePickerComponent, PopOverComponent],
     styleUrls: ['styles/integrate.style.css'],
     inputs: ['selectedFunction'],
-    pipes: [TranslatePipe]
 })
 
 
 export class FunctionIntegrateV2Component {
     @Output() save = new EventEmitter<FunctionInfo>();
-    @Output() changeEditor = new EventEmitter<string>();    
+    @Output() changeEditor = new EventEmitter<string>();
 
     public disabled: boolean;
     public model: BindingList = new BindingList();
@@ -87,7 +85,7 @@ export class FunctionIntegrateV2Component {
                     jQuery(this._elementRef.nativeElement).find('[data-toggle="popover"]').popover({ html: true, container: 'body' });
                 });
             });
-            
+
         }
     }
 

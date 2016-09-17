@@ -6,7 +6,6 @@ import {Observable} from 'rxjs/Rx';
 import {UsageVolume} from '../models/app-monitoring-usage'
 import {nvD3} from 'ng2-nvd3';
 import {GlobalStateService} from '../services/global-state.service';
-import {TranslateService, TranslatePipe} from 'ng2-translate/ng2-translate';
 import {PortalResources} from '../models/portal-resources';
 
 declare let d3: any;
@@ -18,7 +17,6 @@ declare let moment: any;
     templateUrl: 'templates/app-monitoring.component.html',
     styleUrls: ['styles/app-monitoring.style.css'],
     directives: [nvD3],
-    pipes: [TranslatePipe]
 })
 
 export class AppMonitoringComponent implements OnInit {

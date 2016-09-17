@@ -22,8 +22,6 @@ import {AiService} from '../services/ai.service';
     selector: 'getting-started',
     templateUrl: 'templates/getting-started.component.html',
     styleUrls: ['styles/getting-started.style.css'],
-    directives: [DropDownComponent, TopBarComponent],
-    pipes: [TranslatePipe]
 })
 export class GettingStartedComponent implements OnInit {
     @Output() userReady: EventEmitter<FunctionContainer>;

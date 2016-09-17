@@ -20,8 +20,6 @@ import {PortalResources} from '../models/portal-resources';
     selector: 'try-landing',
     templateUrl: 'templates/try-landing.component.html',
     styleUrls: ['styles/try-landing.style.css'],
-    directives: [BusyStateComponent],
-    pipes: [TranslatePipe]
 })
 
 export class TryLandingComponent implements OnInit {

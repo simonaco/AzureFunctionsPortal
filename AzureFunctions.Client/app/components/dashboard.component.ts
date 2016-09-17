@@ -37,22 +37,7 @@ import {ArmService} from '../services/arm.service';
 @Component({
     selector: 'functions-dashboard',
     templateUrl: 'templates/dashboard.component.html',
-    styleUrls: ['styles/dashboard.style.css'],
-    directives: [
-        SideBarComponent,
-        TopBarComponent,
-        FunctionEditComponent,
-        DropDownComponent,
-        AppMonitoringComponent,
-        AppSettingsComponent,
-        FunctionNewComponent,
-        IntroComponent,
-        TutorialComponent,
-        SourceControlComponent,
-        TrialExpiredComponent,
-        TryNowComponent
-    ],
-    pipes: [TranslatePipe]
+    styleUrls: ['styles/dashboard.style.css']
 })
 export class DashboardComponent implements OnChanges {
     @ViewChild(SideBarComponent) sideBar: SideBarComponent;

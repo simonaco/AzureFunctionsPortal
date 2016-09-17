@@ -16,8 +16,6 @@ import {AiService} from '../services/ai.service';
     selector: 'file-explorer',
     templateUrl: 'templates/file-explorer.component.html',
     styleUrls: ['styles/file-explorer.style.css'],
-    directives: [BusyStateComponent, FileSelectDirective, FileDropDirective],
-    pipes: [TranslatePipe]
 })
 export class FileExplorerComponent implements OnChanges {
     @ViewChild(BusyStateComponent) busyState: BusyStateComponent;

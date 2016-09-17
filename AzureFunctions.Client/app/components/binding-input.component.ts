@@ -23,8 +23,6 @@ declare var prettyCron: any;
     //changeDetection: ChangeDetectionStrategy.CheckAlways,
     inputs: ["input"],
     styleUrls: ['styles/binding.style.css'],
-    directives: [TooltipContentComponent, TooltipComponent, DropDownComponent, PopOverComponent],
-    pipes: [TranslatePipe]
 })
 
 export class BindingInputComponent {
@@ -49,7 +47,7 @@ export class BindingInputComponent {
             var picker = <PickerInput>input;
             if (!input.value && picker.items) {
                 input.value = picker.items[0];
-            }            
+            }
         }
 
         this._input = input;
@@ -144,7 +142,7 @@ export class BindingInputComponent {
                 this._input.errorText = this._input.isValid ? "" : this._translateService.instant(PortalResources.filedRequired);
 
             } else {
-                this._input.isValid = true;                
+                this._input.isValid = true;
                 this._input.errorText = "";
             }
 

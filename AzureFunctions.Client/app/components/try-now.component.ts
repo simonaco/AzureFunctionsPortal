@@ -13,8 +13,6 @@ import {TooltipComponent} from './tooltip.component';
     selector: 'try-now',
     templateUrl: 'templates/try-now.component.html',
     styleUrls: ['styles/try-now.styles.css'],
-    pipes: [TranslatePipe],
-    directives: [TooltipContentComponent, TooltipComponent]
 })
 
 export class TryNowComponent implements OnInit {

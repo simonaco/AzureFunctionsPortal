@@ -1,7 +1,6 @@
 import {Component, Input, OnChanges, SimpleChange} from '@angular/core';
 import {FunctionInfo} from '../models/function-info';
 import {FunctionsService} from '../services/functions.service';
-import {CORE_DIRECTIVES} from '@angular/common';
 import {TableFunctionMonitor} from './table-function-monitor.component';
 import {AggregateBlock} from './aggregate-block.component';
 import {FunctionMonitorService} from '../services/function-monitor.service';
@@ -15,8 +14,6 @@ import {PortalResources} from '../models/portal-resources';
 @Component({
     selector: 'function-monitor',
     templateUrl: 'templates/function-monitoring.component.html',
-    directives: [CORE_DIRECTIVES, TableFunctionMonitor, AggregateBlock],
-    pipes: [TranslatePipe]
 })
 export class FunctionMonitorComponent implements OnChanges {
     @Input() selectedFunction: FunctionInfo;

@@ -16,8 +16,6 @@ import {GlobalStateService} from '../services/global-state.service';
     selector: 'log-streaming',
     templateUrl: 'templates/log-streaming.component.html',
     styleUrls: ['styles/function-dev.style.css'],
-    directives: [PopOverComponent],
-    pipes: [TranslatePipe]
 })
 export class LogStreamingComponent implements OnDestroy, OnChanges {
     public log: string;

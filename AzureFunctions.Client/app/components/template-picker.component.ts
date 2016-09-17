@@ -19,8 +19,6 @@ import {TooltipComponent} from './tooltip.component';
     templateUrl: './templates/template-picker.component.html',
     inputs: ['type', 'template'],
     styleUrls: ['styles/template-picker.style.css'],
-    directives: [TooltipContentComponent, TooltipComponent, DropDownComponent],
-    pipes: [TranslatePipe]
 })
 
 export class TemplatePickerComponent {
@@ -247,7 +245,7 @@ export class TemplatePickerComponent {
                 result.push({
                     name: binding.displayName.toString(),
                     value: binding.type.toString(),
-                    enabledInTryMode: binding.enabledInTryMode 
+                    enabledInTryMode: binding.enabledInTryMode
             });
 
             }

@@ -23,13 +23,11 @@ declare var marked: any;
     styleUrls: ['styles/binding.style.css'],
     //changeDetection: ChangeDetectionStrategy.OnPush,
     inputs: ['binding', 'clickSave'],
-    directives: [BindingInputComponent],
-    pipes: [TranslatePipe]
 })
 
 export class BindingComponent {
     @Input() canDelete: boolean = true;
-    @Input() canSave: boolean = true;    
+    @Input() canSave: boolean = true;
     @Input() saveClick = new EventEmitter<void>();
 
     @Output() remove = new EventEmitter<UIFunctionBinding>();
@@ -38,7 +36,7 @@ export class BindingComponent {
     @Output() hasInputsToShowEvent = new EventEmitter<boolean>();
     @Output() go = new EventEmitter<Action>();
 
-    
+
     public newFunction: boolean = false;
     public disabled: boolean;
     public model = new BindingInputList();
@@ -174,7 +172,7 @@ export class BindingComponent {
                                 input.label = this.replaceVariables(setting.label, bindings.variables);
                                 input.required = setting.required;
                                 input.value = settigValue;
-                                input.help = this.replaceVariables(setting.help, bindings.variables) || this.replaceVariables(setting.label, bindings.variables);                                
+                                input.help = this.replaceVariables(setting.help, bindings.variables) || this.replaceVariables(setting.label, bindings.variables);
                                 input.validators = setting.validators;
                                 input.placeholder = this.replaceVariables(setting.placeholder, bindings.variables) || input.label;
                                 this.model.inputs.push(input);
@@ -269,7 +267,7 @@ export class BindingComponent {
                                 });
                                 //http://stackoverflow.com/questions/35515254/what-is-a-dehydrated-detector-and-how-am-i-using-one-here
                                 setTimeout(() => this.model.orderInputs(), 0);
-                                
+
 
                             };
                             if (isHidden) {

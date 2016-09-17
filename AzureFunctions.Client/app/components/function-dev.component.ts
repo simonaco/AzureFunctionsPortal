@@ -28,15 +28,6 @@ import {BindingManager} from '../models/binding-manager';
     selector: 'function-dev',
     templateUrl: 'templates/function-dev.component.html',
     styleUrls: ['styles/function-dev.style.css'],
-    directives: [
-        FunctionDesignerComponent,
-        LogStreamingComponent,
-        CopyPreComponent,
-        FileExplorerComponent,
-        BusyStateComponent,
-        MonacoEditorDirective
-    ],
-    pipes: [TranslatePipe]
 })
 export class FunctionDevComponent implements OnChanges, OnDestroy {
     @ViewChild(FileExplorerComponent) fileExplorer: FileExplorerComponent;
@@ -104,7 +95,7 @@ export class FunctionDevComponent implements OnChanges, OnDestroy {
                     this._functionsService.getFunction(fi),
                     (s, f) => ({ secrets: s, functionInfo: f}))
             })
-            .subscribe((res: {secrets: any, functionInfo: FunctionInfo}) => {
+            .subscribe((res: {secrets: FunctionSecrets, functionInfo: FunctionInfo}) => {
                 this._globalStateService.clearBusyState();
                 this.fileName = res.functionInfo.script_href.substring(res.functionInfo.script_href.lastIndexOf('/') + 1);
                 this.scriptFile = this.scriptFile && this.functionInfo && this.functionInfo.href === res.functionInfo.href

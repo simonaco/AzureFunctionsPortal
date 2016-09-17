@@ -28,7 +28,6 @@ enum TopbarButton {
     templateUrl: 'templates/sidebar.component.html',
     styleUrls: ['styles/sidebar.style.css'],
     inputs: ['functionsInfo', 'tabId'],
-    pipes: [SideBarFilterPipe, TranslatePipe],
 })
 export class SideBarComponent implements OnDestroy, OnInit {
     public functionsInfo: FunctionInfo[];

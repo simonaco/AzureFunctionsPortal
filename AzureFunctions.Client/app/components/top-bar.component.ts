@@ -26,8 +26,6 @@ enum TopbarButton {
     templateUrl: 'templates/top-bar.component.html',
     styleUrls: ['styles/top-bar.style.css'],
     inputs: ['isFunctionSelected', 'quickStartSelected'],
-    pipes: [TranslatePipe],
-    directives: [TryNowComponent]
 })
 
 export class TopBarComponent implements OnInit {

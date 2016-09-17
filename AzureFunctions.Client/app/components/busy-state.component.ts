@@ -5,7 +5,6 @@ import {TryNowBusyStateComponent} from './try-now-busy-state.component';
     selector: 'busy-state',
     templateUrl: 'templates/busy-state.component.html',
     styleUrls: ['styles/busy-state.style.css'],
-    directives: [TryNowBusyStateComponent]
 })
 export class BusyStateComponent implements OnInit {
     public busy: boolean = false;

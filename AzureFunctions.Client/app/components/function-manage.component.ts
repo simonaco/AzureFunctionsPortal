@@ -17,8 +17,6 @@ import {PortalResources} from '../models/portal-resources';
     templateUrl: 'templates/function-manage.component.html',
     styleUrls: ['styles/function-manage.style.css'],
     inputs: ['selectedFunction'],
-    directives: [RadioSelectorComponent],
-    pipes: [TranslatePipe]
 })
 export class FunctionManageComponent {
     public selectedFunction: FunctionInfo;

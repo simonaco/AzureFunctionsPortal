@@ -5,7 +5,6 @@ import {TranslatePipe} from 'ng2-translate/ng2-translate';
     selector: 'try-now-busy-state',
     templateUrl: 'templates/try-now-busy-state.component.html',
     styleUrls: ['styles/try-now-busy-state.style.css'],
-    pipes: [TranslatePipe]
 })
 export class TryNowBusyStateComponent implements OnInit {
     private inputBoltClass: string;
@@ -97,7 +96,7 @@ export class TryNowBusyStateComponent implements OnInit {
                     this.outerFlashClass = "fillNone";
                     this.leftBracketClass = "fillNone";
                     this.rightBracketClass = "fillNone";
-                   
+
                     this.outputArrowClass = "orangeFill";
                     this.outputStoreClass = "orangeFill";
                     this.frame++;

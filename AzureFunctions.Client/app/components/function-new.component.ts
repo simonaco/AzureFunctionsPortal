@@ -25,16 +25,14 @@ declare var jQuery: any;
     selector: 'function-new',
     templateUrl: './templates/function-new.component.html',
     styleUrls: ['styles/function-new.style.css'],
-    directives: [TemplatePickerComponent, BindingComponent, NgClass, PopOverComponent],
     outputs: ['functionAdded'],
-    pipes: [TranslatePipe],
     inputs: ['action', 'functionsInfo']
 })
 
 export class FunctionNewComponent {
     set functionsInfo(value: FunctionInfo[]) {
         this._functionsInfo = value;
-        if (this._action && this._functionsInfo && !this.selectedTemplate) {            
+        if (this._action && this._functionsInfo && !this.selectedTemplate) {
             this.selectedTemplateId = this._action.templateId;
         }
     }
@@ -49,7 +47,7 @@ export class FunctionNewComponent {
             //this.onTemplatePickUpComplete(this._action.templateId);
             this.selectedTemplateId = this._action.templateId;
         }
-    }    
+    }
 
     elementRef: ElementRef;
     type: TemplatePickerType = TemplatePickerType.template;

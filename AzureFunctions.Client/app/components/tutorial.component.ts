@@ -10,7 +10,6 @@ import {PortalResources} from '../models/portal-resources';
     selector: 'tutorial',
     styleUrls: ['styles/tutorial.style.css'],
     templateUrl: 'templates/tutorial.component.html',
-    pipes: [TranslatePipe]
 })
 
 export class TutorialComponent {
@@ -25,7 +24,7 @@ export class TutorialComponent {
             // Gets called only from intro after a template has been selected
             if (event.step === TutorialStep.Waiting) {
                 this.currentStep = event.step;
-                this.initialFunction = event.functionInfo;                
+                this.initialFunction = event.functionInfo;
                 var t = new FunctionInfoHelper();
                 this.lang = FunctionInfoHelper.getLanguage(event.functionInfo);
             }

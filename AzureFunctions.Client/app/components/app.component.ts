@@ -20,7 +20,6 @@ import {TryLandingComponent} from './try-landing.component';
 @Component({
     selector: 'azure-functions-app',
     templateUrl: 'templates/app.component.html',
-    directives: [BusyStateComponent, DashboardComponent, GettingStartedComponent, ErrorListComponent, TryLandingComponent]
 })
 export class AppComponent implements OnInit, AfterViewInit {
     @ViewChild(BusyStateComponent) busyState: BusyStateComponent;

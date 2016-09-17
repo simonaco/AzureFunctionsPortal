@@ -14,8 +14,6 @@ import {GlobalStateService} from '../services/global-state.service';
     selector: 'table-function-monitor',
     templateUrl: 'templates/table-function-monitor.html',
     styleUrls: ['styles/table-function-monitor.style.css'],
-    pipes: [Format, TranslatePipe],
-    directives: [BusyStateComponent, TooltipContentComponent, TooltipComponent]
 })
 
 export class TableFunctionMonitor implements OnChanges {

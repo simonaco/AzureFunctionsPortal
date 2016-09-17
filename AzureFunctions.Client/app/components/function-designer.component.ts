@@ -8,7 +8,6 @@ import {BindingDesignerComponent} from './binding-designer.component';
     selector: 'function-designer',
     templateUrl: 'templates/function-designer.component.html',
     inputs: ['functionConfigString'],
-    directives: [BindingDesignerComponent]
 })
 export class FunctionDesignerComponent implements OnInit {
     public functionConfig: FunctionConfig;

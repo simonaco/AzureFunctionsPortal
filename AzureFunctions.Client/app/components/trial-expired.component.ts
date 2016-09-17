@@ -6,7 +6,6 @@ import {PortalResources} from '../models/portal-resources';
     selector: 'trial-expired',
     templateUrl: 'templates/trial-expired.component.html',
     styleUrls: ['styles/trial-expired.styles.css'],
-    pipes: [TranslatePipe]
 })
 export class TrialExpiredComponent implements OnInit {
 

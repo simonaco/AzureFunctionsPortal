@@ -17,7 +17,6 @@ import {PortalResources} from '../models/portal-resources';
     selector: 'intro',
     templateUrl: './templates/intro.component.html',
     styleUrls: ['styles/intro.style.css'],
-    pipes: [TranslatePipe]
 })
 
 export class IntroComponent {

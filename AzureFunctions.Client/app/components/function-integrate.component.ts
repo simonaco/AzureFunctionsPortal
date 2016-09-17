@@ -16,8 +16,6 @@ import {MonacoEditorDirective} from '../directives/monaco-editor.directive';
     templateUrl: 'templates/function-integrate.component.html',
     styleUrls: ['styles/function-integrate.style.css'],
     inputs: ['selectedFunction'],
-    directives: [MonacoEditorDirective],
-    pipes: [TranslatePipe]
 })
 export class FunctionIntegrateComponent implements OnDestroy {
     @Output() changeEditor = new EventEmitter<string>();
@@ -48,7 +46,7 @@ export class FunctionIntegrateComponent implements OnDestroy {
         try {
             this._bindingManager.validateConfig(this._selectedFunction.config, this._translateService);
         } catch (e) {
-            this._broadcastService.broadcast<ErrorEvent>(BroadcastEvent.Error, { message: this._translateService.instant(PortalResources.errorParsingConfig, { error: e }) });                        
+            this._broadcastService.broadcast<ErrorEvent>(BroadcastEvent.Error, { message: this._translateService.instant(PortalResources.errorParsingConfig, { error: e }) });
         }
     }
 

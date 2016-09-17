@@ -7,8 +7,6 @@ import {TranslateService, TranslatePipe} from 'ng2-translate/ng2-translate';
     selector: 'copy-pre',
     templateUrl: 'templates/copy-pre.component.html',
     styleUrls: ['styles/copy-pre.style.css'],
-    directives: [PopOverComponent],
-    pipes: [TranslatePipe]
 })
 export class CopyPreComponent {
     @Input() selectOnClick: boolean = true;

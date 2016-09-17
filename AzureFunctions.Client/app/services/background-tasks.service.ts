@@ -25,13 +25,15 @@ export class BackgroundTasksService {
         private _armService: ArmService,
         private _aiService: AiService,
         private _applicationRef: ApplicationRef) {
-            if (!this._userService.inIFrame) {
-                this.runPreIFrameTasks();
-            }
-            if (this.isIE()) {
-                console.log('Detected IE, running zone.js workaround');
-                setInterval(() => this._applicationRef.tick(), 1000)
-            }
+
+        if (!this._userService.inIFrame) {
+            this.runPreIFrameTasks();
+        }
+
+        if (this.isIE()) {
+            console.log('Detected IE, running zone.js workaround');
+            setInterval(() => this._applicationRef.tick(), 1000)
+        }
     }
 
     runPreIFrameTasks() {
@@ -71,9 +73,9 @@ export class BackgroundTasksService {
                     if (!this._isResourcesReceived) {
                         this._functionsService.getResources().subscribe(() => {
                             this._isResourcesReceived = true;
-                        });                        
+                        });
                     }
-                    
+
                     this._broadcastService.broadcast(BroadcastEvent.VersionUpdated);
                 });
         } else if (this._globalStateService.FunctionContainer.tryScmCred !== null) {

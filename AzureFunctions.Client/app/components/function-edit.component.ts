@@ -24,16 +24,6 @@ import {TutorialEvent, TutorialStep} from '../models/tutorial';
     templateUrl: 'templates/function-edit.component.html',
     styleUrls: ['styles/function-edit.style.css'],
     inputs: ['selectedFunction', 'tabId'],
-    directives: [
-        FunctionDevComponent,
-        FunctionIntegrateComponent,
-        FunctionDesignerComponent,
-        LogStreamingComponent,
-        FunctionManageComponent,
-        FunctionIntegrateV2Component,
-        FunctionMonitorComponent
-    ],
-    pipes: [TranslatePipe]
 })
 export class FunctionEditComponent {
 
@@ -63,7 +53,7 @@ export class FunctionEditComponent {
         private _userService: UserService,
         private _broadcastService: BroadcastService,
         private _portalService: PortalService,
-        private _translateService: TranslateService) {        
+        private _translateService: TranslateService) {
         this.inIFrame = this._userService.inIFrame;
 
         this.disabled = _broadcastService.getDirtyState("function_disabled");
