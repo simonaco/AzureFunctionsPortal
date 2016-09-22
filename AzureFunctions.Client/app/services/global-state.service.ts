@@ -6,16 +6,23 @@ import {ArmService} from './arm.service';
 import {Constants} from '../models/constants';
 import {BusyStateComponent} from '../components/busy-state.component';
 import {AiService} from './ai.service';
+import {LocalDevelopmentInstructionsComponent} from '../components/local-development-instructions.component';
+import {DashboardComponent} from '../components/dashboard.component';
+import {FunctionsService} from './functions.service';
 
 @Injectable()
 export class GlobalStateService {
     private _functionContainer: FunctionContainer;
     private _appSettings: { [key: string]: string };
     private _globalBusyStateComponent: BusyStateComponent;
+    private _localDevelopmentInstructions: LocalDevelopmentInstructionsComponent;
+    private _dashboardComponent: DashboardComponent;
     private _shouldBeBusy: boolean;
     private _token: string;
     private _tryAppServicetoken: string;
     private _scmCreds: string;
+    private _localMode: boolean = false;
+    public _functionsService: FunctionsService
 
     public showTryView: boolean;
 
@@ -153,5 +160,31 @@ export class GlobalStateService {
                break;
        }
        return result;
+   }
+
+   showLocalDevelopInstructions() {
+       this._localDevelopmentInstructions.show();
+   }
+
+   set LocalDevelopmentInstructionsComponent(value: LocalDevelopmentInstructionsComponent) {
+       this._localDevelopmentInstructions = value;
+   }
+
+   set DashboardComponent(value: DashboardComponent) {
+       this._dashboardComponent = value;
+   }
+
+   checkLocalFunctionsServer() {
+       return this._functionsService.checkLocalFunctionsServer();
+   }
+
+   switchToLocalServer() {
+       this._functionsService.switchToLocalServer();
+       this._dashboardComponent.onRefreshClicked();
+   }
+
+   switchToAzure() {
+       this._functionsService.switchToAzure();
+       this._dashboardComponent.onRefreshClicked();
    }
 }
