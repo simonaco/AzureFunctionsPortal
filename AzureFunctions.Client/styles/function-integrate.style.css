@@ -24,3 +24,7 @@ div.dev-block-header{
     padding: 7px;
     color: #419BF3;
 }
+
+.gutter-container {
+    padding-bottom: 10px;
+}

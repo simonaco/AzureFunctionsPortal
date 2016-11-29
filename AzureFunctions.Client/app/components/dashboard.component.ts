@@ -37,7 +37,6 @@ import {ArmService} from '../services/arm.service';
 @Component({
     selector: 'functions-dashboard',
     templateUrl: 'templates/dashboard.component.html',
-    styleUrls: ['styles/dashboard.style.css'],
     directives: [
         SideBarComponent,
         TopBarComponent,

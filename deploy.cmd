@@ -150,6 +150,9 @@ IF EXIST "%DEPLOYMENT_TARGET%\package.json" (
   call :ExecuteCmd gulp
   IF !ERRORLEVEL! NEQ 0 goto error
 
+  call :ExecuteCmd gulp inline
+  IF !ERRORLEVEL! NEQ 0 goto error
+
   call :ExecuteCmd npm run tsc
   IF !ERRORLEVEL! NEQ 0 goto error
 

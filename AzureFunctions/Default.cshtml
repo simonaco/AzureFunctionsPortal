@@ -127,6 +127,9 @@
                 System.config(config);
                 System.import('app')
                     .then(null, console.error.bind(console));
+
+                // Force chrome debugger to name my JS consistently as a file
+                //# sourceURL=functionsIndex.js
             </script>
         }
     }

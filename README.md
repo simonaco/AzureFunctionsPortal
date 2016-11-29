@@ -26,7 +26,7 @@ AADClientSecret = <string>
 
 3. Create a new IIS site from `inetmgr` with `https` binding on `44300` that points to `..\\AzureFunctionsPortal\\AzureFunctions.Client` for root path.
 
-4. Create `App_Data\\Templates` folder under `..\\AzureFunctionsPortal\\AzureFunctions.Client` and clone `git@github.com:Azure/azure-webjobs-sdk-templates.git` in there.
+4. Create `App_Data\\Templates\\default` folder under `..\\AzureFunctionsPortal\\AzureFunctions.Client` and clone `git@github.com:Azure/azure-webjobs-sdk-templates.git` in there.
 
 5. Run `iisrest` from an elevated cmd.
 
