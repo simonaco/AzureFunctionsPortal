@@ -1,29 +1,11 @@
-// $font-stack:    Helvetica, sans-serif;
-// $primary-color: #333;
+$button-bg-color : #539CF6;
 
-$danger-color: #d9534f;
-$success-color: #30D00F;
-$warning-color: #FFA81E;
+$body-bg-color : #fff;
 
-$frame-color: #E6E7E8;
-$dashboard-color: #FFFFFF;
+$chrome-color : #E6E7E8;
 
+$link-color : #419BF3;
 
-$border-color: #DEDEDE;
-$border-selection-color: #419BF3;
+$danger-color : #d43f3a;
 
-$input-bg-color: #FFFFFF;
-$input-border: 2px solid $border-color;
-
-$button-bg-color: #539CF6;
-$button-font-color: #fff;
-$button-dull-color: darken($frame-color, 20%);
-$button-dirty-color: $danger-color;
-$button-disabled-color: darken($frame-color, 20%);
-
-$link-color: #419BF3;
-
-$topbar-height: 40px;
-$sidebar-width: 300px;
-$sidebar-menu-height: 95px;
-$treeview-root-height: 40px;
+$border-color: #ccc;

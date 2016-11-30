@@ -5,19 +5,19 @@
             <div class="header-code">
                 <h2>{{ 'functionDev_code' | translate }}</h2>
                 <span>({{fileName}})</span>
-                <button class="custom-button" [class.dirty]="scriptFile.isDirty" (click)="saveScript()" [disabled]="disabled">{{ 'save' | translate }}</button>
+                <button class="custom-button" [class.custom-button-danger]="scriptFile.isDirty" (click)="saveScript()" [disabled]="disabled">{{ 'save' | translate }}</button>
                 <span>
                     <button *ngIf="scriptFile.isDirty"
                             [class.custom-button]="runValid"
                             [class.custom-button-disabled]="!runValid"
-                            [class.dirty]="scriptFile.isDirty"
+                            [class.custom-button-danger]="scriptFile.isDirty"
                             (click)="runFunction()">
                         {{ 'functionDev_saveAndRun' | translate }}
                     </button>
                     <button *ngIf="!scriptFile.isDirty"
                             [class.custom-button]="runValid"
                             [class.custom-button-disabled]="!runValid"
-                            [class.dirty]="scriptFile.isDirty"
+                            [class.custom-button-danger]="scriptFile.isDirty"
                             (click)="runFunction()">
                         {{ 'run' | translate }}
                     </button>

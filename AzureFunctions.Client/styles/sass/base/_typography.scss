@@ -9,7 +9,7 @@ body {
     margin: 0;
     height: 100%;
     font-family: "Segoe UI", "Segoe UI", "Segoe", Tahoma, Helvetica, Arial, sans-serif;
-    background-color: #FFF;
+    background-color: $body-bg-color;
 }
 
 a {
@@ -25,17 +25,12 @@ pre {
     color: #333;
     word-break: break-all;
     word-wrap: break-word;
-    background-color: #f5f5f5;
-    border: 1px solid #ccc;
+    background-color: darken($body-bg-color, 5%);
+    border: 1px solid $border-color;
     font-family: Consolas, 'Lucida Console', 'Courier New', monospace;
     border-radius: 0;
 }
 
-.dirty {
-    background-color: #d9534f;
-    border-color: #d43f3a;
-}
-
 .error-output {
-    color: red;
+    color: $danger-color;
 }
