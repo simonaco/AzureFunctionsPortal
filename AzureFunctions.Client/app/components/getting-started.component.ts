@@ -70,10 +70,10 @@ export class GettingStartedComponent implements OnInit {
 
     ngOnInit() {
         this._globalStateService.setBusyState();
-        this._userService.getToken().subscribe(() =>
+        this._userService.getStartupInfo().subscribe(() =>
             this._userService.getTenants().subscribe(tenants => {
 
-                    this._armService.getSubscriptions().subscribe(subs => {
+                    this._armService.subscriptions.subscribe(subs => {
                         this.subscriptions = subs
                             .map(e => ({ displayLabel: e.displayName, value: e }))
                             .sort((a, b) => a.displayLabel.localeCompare(b.displayLabel));

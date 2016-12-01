@@ -44,7 +44,7 @@ export class GlobalStateService {
                       .subscribe(a => this._appSettings = a);
               }
             });
-        this._userService.getToken().subscribe(t => this._token = t);
+        this._userService.getStartupInfo().subscribe(info => this._token = info.token);
     }
 
     get FunctionContainer(): FunctionContainer {

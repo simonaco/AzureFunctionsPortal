@@ -2,7 +2,7 @@ import {Http, Headers, Response} from '@angular/http';
 import {Injectable, EventEmitter} from '@angular/core';
 import {Subscription} from '../models/subscription';
 import {FunctionContainer} from '../models/function-container';
-import {Observable, Subscription as RxSubscription, Subject} from 'rxjs/Rx';
+import {Observable, Subscription as RxSubscription, Subject, ReplaySubject} from 'rxjs/Rx';
 import {StorageAccount} from '../models/storage-account';
 import {ResourceGroup} from '../models/resource-group';
 import {UserService} from './user.service';
@@ -12,9 +12,12 @@ import {ClearCache} from '../decorators/cache.decorator';
 import {AiService} from './ai.service';
 import {TranslateService, TranslatePipe} from 'ng2-translate/ng2-translate';
 import {PortalResources} from '../models/portal-resources';
+import {ArmObj} from '../models/arm/arm-obj';
 
 @Injectable()
 export class ArmService {
+    public subscriptions = new ReplaySubject<Subscription[]>(1);
+
     private token: string;
     private armUrl = 'https://management.azure.com';
     private armApiVersion = '2014-04-01'
@@ -28,15 +31,41 @@ export class ArmService {
         private _translateService: TranslateService) {
         //Cant Get Angular to accept GlobalStateService as input param
         if ( !window.location.pathname.endsWith('/try')) {
-            _userService.getToken().subscribe(t => this.token = t);
+            _userService.getStartupInfo().flatMap(info => {
+                this.token = info.token;
+                if(info.subscriptions && info.subscriptions.length > 0){
+                    return Observable.of(info.subscriptions);
+                }
+                else{
+                    return this.getSubscriptions();
+                }
+            })
+            .subscribe(subs => this.subscriptions.next(subs));
         }
     }
 
-    getSubscriptions() {
+    private getSubscriptions() {
         var url = `${this.armUrl}/subscriptions?api-version=2014-04-01`;
         return this._http.get(url, { headers: this.getHeaders() })
         .map<Subscription[]>(r => r.json().value);
     }
+
+    getArmCacheResources(sub: string, type1 : string, type2? : string) {
+        let url : string;
+        if(!type2){
+            url = `${this.armUrl}/subscriptions/${sub}/resources?api-version=${this.armApiVersion}&$filter=resourceType eq '${type1}'`;
+        }
+        else{
+            url = `${this.armUrl}/subscriptions/${sub}/resources?api-version=${this.armApiVersion}&$filter=resourceType eq '${type1}' or resourceType eq '${type2}'`;
+        }
+
+        return this._http.get(url, { headers: this.getHeaders() })
+        .map<ArmObj<any>[]>(r => {
+            return r.json().value;
+        });
+    }
+
+    ///////////////////
 
     getFunctionContainers(subscription: string) {
         var url = `${this.armUrl}/subscriptions/${subscription}/resources?api-version=${this.armApiVersion}&$filter=resourceType eq 'Microsoft.Web/sites'`;

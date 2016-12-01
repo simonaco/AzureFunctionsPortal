@@ -43,7 +43,7 @@ export class LogStreamingComponent implements OnDestroy, OnChanges {
         private _broadcastService: BroadcastService,
         private _utilities: UtilitiesService,
         private _globalStateService: GlobalStateService) {
-        this.tokenSubscription = this._userService.getToken().subscribe(t => this.token = t);
+        this.tokenSubscription = this._userService.getStartupInfo().subscribe(s => this.token = s.token);
         this.log = '';
         this.timeouts = [];
     }

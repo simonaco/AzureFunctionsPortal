@@ -17,7 +17,7 @@ export class MonitoringService {
         private _globalStateService: GlobalStateService
     ) {
         if (!this._globalStateService.showTryView) {
-            this._userService.getToken().subscribe(t => this.token = t);
+            this._userService.getStartupInfo().subscribe(s => this.token = s.token);
         }
     }
 

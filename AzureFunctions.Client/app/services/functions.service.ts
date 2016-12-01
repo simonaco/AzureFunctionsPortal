@@ -31,6 +31,7 @@ import {BroadcastEvent} from '../models/broadcast-event';
 import {ErrorEvent} from '../models/error-event';
 import {HttpRunModel} from '../models/http-run';
 import {FunctionKeys, FunctionKey} from '../models/function-key';
+import {StartupInfo} from '../models/portal';
 
 declare var mixpanel: any;
 
@@ -128,7 +129,7 @@ export class FunctionsService {
         }
 
         if (!_globalStateService.showTryView) {
-            this._userService.getToken().subscribe(t => this.token = t);
+            this._userService.getStartupInfo().subscribe(info => this.token = info.token);
             this._userService.getFunctionContainer().subscribe(fc => {
                 this.functionContainer = fc;
                 this.scmUrl = `https://${fc.properties.hostNameSslStates.find(s => s.hostType === 1).name}/api`;
@@ -628,9 +629,12 @@ export class FunctionsService {
         var runtime = this._globalStateService.ExtensionVersion ? this._globalStateService.ExtensionVersion : "default";
 
         if (this._userService.inIFrame) {
-            return this._userService.getLanguage()
-                .flatMap((language: string) => {
-                    return this.getLocolizedResources(language, runtime);
+            return this._userService.getStartupInfo()
+                .flatMap((info : StartupInfo) => {
+
+                    // Effective language has language and formatting information eg: "en.en-us"
+                    let lang = info.effectiveLocale.split(".")[0];
+                    return this.getLocolizedResources(lang, runtime);
                 });
 
         } else {

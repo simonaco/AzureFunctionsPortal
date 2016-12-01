@@ -12,21 +12,22 @@ export class PortalService {
     public sessionId = "";
 
     private portalSignature: string = "FxAppBlade";
-    private resourceIdObservable: ReplaySubject<string>;
+    private startupInfoObservable : ReplaySubject<StartupInfo>;
     private getAppSettingCallback: (appSettingName: string) => void;
     private shellSrc: string;
 
     constructor(private _broadcastService : BroadcastService,
-     private _userService: UserService,
      private _aiService: AiService) {
-        this.resourceIdObservable = new ReplaySubject<string>(1);
+
+        this.startupInfoObservable = new ReplaySubject<StartupInfo>(1);
+
         if (this.inIFrame()){
             this.initializeIframe();
         }
     }
 
-    getResourceId() {
-        return this.resourceIdObservable;
+    getStartupInfo(){
+        return this.startupInfoObservable;
     }
 
     initializeIframe(): void {
@@ -101,26 +102,18 @@ export class PortalService {
 
         console.log("[iFrame] Received mesg: " + methodName);
 
-        if (methodName === Verbs.sendResourceId) {
-            this.resourceIdObservable.next(data);
-        }
-        else if(methodName === Verbs.sendStartupInfo){
+        if(methodName === Verbs.sendStartupInfo){
             let startupInfo = <StartupInfo>data;
             this.sessionId = startupInfo.sessionId;
-            this._userService.setToken(startupInfo.token);
+            // this._userService.setToken(startupInfo.token);
             this._aiService.setSessionId(this.sessionId);
 
-            // Effective language has language and formatting information eg: "en.en-us"
-            let lang = startupInfo.effectiveLocale.split(".")[0];
-            this._userService.setLanguage(lang);
-
+            this.startupInfoObservable.next(startupInfo);
         } else if (methodName === Verbs.sendAppSettingName) {
             if(this.getAppSettingCallback){
                 this.getAppSettingCallback(data);
                 this.getAppSettingCallback = null;
             }
-        } else if (methodName === Verbs.sendToken) {
-            this._userService.setToken(data);
         }
     }
 

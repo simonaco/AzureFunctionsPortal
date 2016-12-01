@@ -1,4 +1,6 @@
-﻿export interface Event {
+﻿import {Subscription} from './subscription';
+
+export interface Event {
     data: Data;
 }
 
@@ -9,8 +11,10 @@ export interface Data{
 }
 
 export interface StartupInfo{
-    sessionId : string,
-    token : string,
+    token : string;
+    subscriptions : Subscription[];
+    sessionId: string;
+    acceptLanguage : string,
     effectiveLocale : string
 }
 
