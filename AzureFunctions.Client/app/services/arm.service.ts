@@ -1,4 +1,4 @@
-import {Http, Headers, Response} from '@angular/http';
+import {Http, Headers, Response, Request} from '@angular/http';
 import {Injectable, EventEmitter} from '@angular/core';
 import {Subscription} from '../models/subscription';
 import {FunctionContainer} from '../models/function-container';
@@ -17,13 +17,13 @@ import {ArmObj} from '../models/arm/arm-obj';
 @Injectable()
 export class ArmService {
     public subscriptions = new ReplaySubject<Subscription[]>(1);
+    public armUrl = 'https://management.azure.com';
 
     private token: string;
-    private armUrl = 'https://management.azure.com';
     private armApiVersion = '2014-04-01'
     private armLocksApiVersion = '2015-01-01';
     private storageApiVersion = '2015-05-01-preview';
-    private websiteApiVersion = '2015-08-01';
+    public websiteApiVersion = '2015-08-01';
 
     constructor(private _http: Http,
         private _userService: UserService,
@@ -64,6 +64,19 @@ export class ArmService {
             return r.json().value;
         });
     }
+
+    send(method : string, url : string, body? : any, etag? : string, headers? : Headers){
+        let request = new Request({
+            url : url,
+            method : method,
+            search : null,
+            headers :  headers ? headers : this.getHeaders(etag),
+            body : body
+        });
+
+        return this._http.request(request);
+    }
+
 
     ///////////////////
 
@@ -373,10 +386,16 @@ export class ArmService {
         o.error(error);
     }
 
-    private getHeaders(): Headers {
+    private getHeaders(etag?: string): Headers {
         var headers = new Headers();
         headers.append('Content-Type', 'application/json');
+        headers.append('Accept', 'application/json');
         headers.append('Authorization', `Bearer ${this.token}`);
+
+        if(etag){
+            headers.append('If-None-Match', etag);
+        }
+
         return headers;
     }
 

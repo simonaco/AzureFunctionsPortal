@@ -18,6 +18,8 @@ import {BackgroundTasksService} from './services/background-tasks.service';
 import {GlobalStateService} from './services/global-state.service';
 import {TRANSLATE_PROVIDERS} from 'ng2-translate/ng2-translate';
 import {AiService} from './services/ai.service';
+import {RBACService} from './services/rbac.service';
+import {CacheService} from './services/cache.service';
 import 'rxjs/Rx';
 
 declare var mixpanel: any;
@@ -37,6 +39,8 @@ bootstrap(
         UserService,
         PortalService,
         provide(ExceptionHandler, {useClass: FunctionsExceptionHandler}),
+        RBACService,
+        CacheService,
         ArmService,
         MonitoringService,
         TelemetryService,

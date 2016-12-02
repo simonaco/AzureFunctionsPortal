@@ -4,6 +4,11 @@ import {TreeNode} from '../treeview/tree-node';
 import {AppsNode} from '../treeview/apps-node';
 import {TreeViewComponent} from '../treeview/tree-view.component';
 import {ArmService} from '../../services/arm.service';
+import {CacheService} from '../../services/cache.service';
+import {FunctionsService} from '../../services/functions.service';
+import {GlobalStateService} from '../../services/global-state.service';
+import {BroadcastService} from '../../services/broadcast.service';
+import {TranslateService} from 'ng2-translate/ng2-translate';
 import {DropDownComponent} from '../drop-down.component';
 import {DropDownElement} from '../../models/drop-down-element';
 import {TreeViewInfo} from '../treeview/models/tree-view-info';
@@ -24,7 +29,14 @@ export class SideNavComponent{
 
     private _viewInfo : TreeViewInfo;
 
-    constructor(public armService : ArmService){
+    constructor(
+        public armService : ArmService,
+        public cacheService : CacheService,
+        public functionsService : FunctionsService,
+        // public globalStateService : GlobalStateService,
+        // public broadcastService : BroadcastService,
+        public translateService : TranslateService){
+
         this.rootNode = new TreeNode(this, null);
         this.rootNode.children = [new AppsNode(this, null, this.subscriptionIdObs)];
 

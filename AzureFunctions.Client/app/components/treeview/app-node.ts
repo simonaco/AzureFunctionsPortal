@@ -4,6 +4,7 @@ import {SideNavComponent} from '../sidenav/sidenav.component';
 import {ArmObj} from '../../models/arm/arm-obj';
 import {Site} from '../../models/arm/site';
 import {SlotsNode} from './slots-node';
+import {FunctionsNode} from './functions-node';
 
 export class AppNode extends TreeNode{
     public supportsAdvanced = true;
@@ -27,7 +28,11 @@ export class AppNode extends TreeNode{
     }
 
     protected _loadChildren(){
-        this.children = [new SlotsNode(this.sideNav, this._siteArmObj)];
+        this.children = [
+            new FunctionsNode(this.sideNav, this._siteArmObj),
+            new SlotsNode(this.sideNav, this._siteArmObj)
+        ];
+
         this._doneLoading();
     }
 

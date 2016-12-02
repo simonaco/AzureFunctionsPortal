@@ -32,6 +32,9 @@ import {ErrorEvent} from '../models/error-event';
 import {HttpRunModel} from '../models/http-run';
 import {FunctionKeys, FunctionKey} from '../models/function-key';
 import {StartupInfo} from '../models/portal';
+import {CacheService} from './cache.service';
+import {ArmObj} from '../models/arm/arm-obj';
+import {Site} from '../models/arm/site';
 
 declare var mixpanel: any;
 
@@ -120,7 +123,8 @@ export class FunctionsService {
         private _globalStateService: GlobalStateService,
         private _translateService: TranslateService,
         private _broadcastService: BroadcastService,
-        private _armService: ArmService) {
+        private _armService: ArmService,
+        private _cacheService: CacheService) {
 
         if (!Constants.runtimeVersion) {
             this.getLatestRuntime().subscribe((runtime: any) => {
@@ -179,6 +183,21 @@ export class FunctionsService {
             .map<FunctionInfo[]>((r) => {
                 try {
                     return r.json();
+                } catch (e) {
+                    this._broadcastService.broadcast<ErrorEvent>(BroadcastEvent.Error, { message: this._translateService.instant(PortalResources.errorParsingConfig, { error: e }) })
+                    return [];
+                }
+            });
+    }
+
+    getFunctions2(fc : ArmObj<Site>) : Observable<FunctionInfo[]>{
+        let functionsScmUrl = `https://${fc.properties.hostNameSslStates.find(s => s.hostType === 1).name}/api/functions`;
+        return this._cacheService.get(functionsScmUrl, false, this.getScmSiteHeaders())
+            .retryWhen(this.retryAntares)
+            .catch(e => this.checkCorsOrDnsErrors(e))
+            .map<FunctionInfo[]>((r : any) => {
+                try {
+                    return r;
                 } catch (e) {
                     this._broadcastService.broadcast<ErrorEvent>(BroadcastEvent.Error, { message: this._translateService.instant(PortalResources.errorParsingConfig, { error: e }) })
                     return [];

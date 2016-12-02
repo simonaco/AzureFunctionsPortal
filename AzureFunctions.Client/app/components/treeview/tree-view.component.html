@@ -1,5 +1,5 @@
-<ul class="tree" [class.tree-root]="level === 1">
-  <li *ngFor="let child of node.children" [class.tree-node-root]="level === 1 && !inSearchMode">
+<ul class="tree" [class.tree-root]="level === 0">
+  <li *ngFor="let child of node.children" [class.tree-node-root]="level === 0 && !inSearchMode">
 
     <div (mouseenter)="child.showMenu = true"
          (mouseleave)="child.showMenu = false"
