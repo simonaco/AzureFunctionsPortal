@@ -4,7 +4,11 @@ export enum DashboardType{
     app,
     // plan,
     // environment,
-    // createApp,
+    createApp,
     // advanced,
-    // advancedWrite
+    // advancedWrite,
+    functionDevelop,
+    functionIntegrate,
+    functionManage,
+    functionMonitor
 }

@@ -26,6 +26,7 @@ export class SideNavComponent{
     public subscriptions: DropDownElement<Subscription>[] = [];
     public subscriptionIdObs = new ReplaySubject<string>(1);
     public subscriptionId : string;
+    public resourceId : string;
 
     private _viewInfo : TreeViewInfo;
 
@@ -37,6 +38,7 @@ export class SideNavComponent{
         // public broadcastService : BroadcastService,
         public translateService : TranslateService){
 
+        this.treeViewInfoEvent = new EventEmitter<TreeViewInfo>();
         this.rootNode = new TreeNode(this, null);
         this.rootNode.children = [new AppsNode(this, null, this.subscriptionIdObs)];
 
@@ -44,6 +46,12 @@ export class SideNavComponent{
             this.subscriptions = subs.map(e =>({displayLabel: e.displayName, value: e}))
                 .sort((a, b) => a.displayLabel.localeCompare(b.displayLabel));
         })
+    }
+
+    updateViewInfo(viewInfo : TreeViewInfo){
+        this._viewInfo = viewInfo;
+        this.resourceId = viewInfo.resourceId;
+        this.treeViewInfoEvent.emit(viewInfo);
     }
 
     onSubscriptionSelect(subscription: Subscription) {

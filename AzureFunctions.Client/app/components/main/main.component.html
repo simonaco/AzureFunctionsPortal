@@ -1,4 +1,8 @@
 <!--<top-bar></top-bar>-->
 <div class="content">
-    <sidenav></sidenav>
+    <sidenav (treeViewInfoEvent)="updateViewInfo($event)"></sidenav>
+
+    <div *ngIf="!!viewInfo">
+
+    </div>
 </div>

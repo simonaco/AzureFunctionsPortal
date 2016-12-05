@@ -3,9 +3,9 @@
 // import {Site} from '../site';
 import {Subject} from 'rxjs/Rx';
 // import {SideBarComponent} from '../../components/main/sidebar.component';
-// import {TreeViewInfo, DashboardType} from './tree-view-info';
 import {SideNavComponent} from '../sidenav/sidenav.component';
 import {DashboardType} from './models/dashboard-type';
+import {TreeViewInfo} from './models/tree-view-info';
 
 export class TreeNode{
     public isExpanded : boolean;
@@ -29,10 +29,10 @@ export class TreeNode{
             return;
         }
 
-        // this.sideNav.updateViewInfo(<TreeViewInfo>{
-        //     resourceId : this.resourceId,
-        //     dashboardType : this.dashboardType
-        // });
+        this.sideNav.updateViewInfo(<TreeViewInfo>{
+            resourceId : this.resourceId,
+            dashboardType : this.dashboardType
+        });
     }
 
     public toggle(event){

@@ -57,3 +57,10 @@ export enum LogEntryLevel {
     Warning = 1,
     Error = 2,
 }
+
+// Mainly used for Ibiza legacy reasons
+export interface WebsiteId {
+    Name: string;
+    ResourceGroup: string;
+    SubscriptionId: string;
+}
