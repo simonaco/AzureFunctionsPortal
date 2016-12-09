@@ -53,7 +53,7 @@ export class BackgroundTasksService {
         if (!this._globalStateService.showTryView && !this._globalStateService.GlobalDisabled) {
             let tasks = () => Observable.zip(
                         this._functionsService.getHostErrors().catch(e => Observable.of([])),
-                        this._armService.getConfig(this._globalStateService.FunctionContainer),
+                        this._armService.getConfig(this._globalStateService.FunctionContainer.id),
                         this._armService.getFunctionContainerAppSettings(this._globalStateService.FunctionContainer),
                         this._armService.getAuthSettings(this._globalStateService.FunctionContainer),
                         (e, c, a, auth) => ({ errors: e, config: c, appSettings: a, authSettings: auth }));

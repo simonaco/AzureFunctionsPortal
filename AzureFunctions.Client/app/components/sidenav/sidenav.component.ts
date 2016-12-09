@@ -5,6 +5,7 @@ import {AppsNode} from '../treeview/apps-node';
 import {TreeViewComponent} from '../treeview/tree-view.component';
 import {ArmService} from '../../services/arm.service';
 import {CacheService} from '../../services/cache.service';
+import {UserService} from '../../services/user.service';
 import {FunctionsService} from '../../services/functions.service';
 import {GlobalStateService} from '../../services/global-state.service';
 import {BroadcastService} from '../../services/broadcast.service';
@@ -13,6 +14,7 @@ import {DropDownComponent} from '../drop-down.component';
 import {DropDownElement} from '../../models/drop-down-element';
 import {TreeViewInfo} from '../treeview/models/tree-view-info';
 import {Subscription} from '../../models/subscription';
+import {Http, Headers, Response, Request} from '@angular/http';
 
 @Component({
     selector: 'sidenav',
@@ -34,9 +36,11 @@ export class SideNavComponent{
         public armService : ArmService,
         public cacheService : CacheService,
         public functionsService : FunctionsService,
-        // public globalStateService : GlobalStateService,
-        // public broadcastService : BroadcastService,
-        public translateService : TranslateService){
+        public http : Http,
+        public globalStateService : GlobalStateService,
+        public broadcastService : BroadcastService,
+        public translateService : TranslateService,
+        public userService : UserService){
 
         this.treeViewInfoEvent = new EventEmitter<TreeViewInfo>();
         this.rootNode = new TreeNode(this, null);

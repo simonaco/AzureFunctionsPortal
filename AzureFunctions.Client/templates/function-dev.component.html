@@ -48,7 +48,8 @@
                      (onContentChanged)="contentChanged($event)"
                      [content]="content"
                      [fileName]="fileName"
-                     [disabled]="disabled">
+                     [disabled]="disabled"
+                     [functionAppInput]="functionApp">
                 </div>
                 <!---->
                 <div #bottomContainer [hidden]="bottomTab!=='logs'" *ngIf="functionInfo">
@@ -86,7 +87,8 @@
                                  (onSave)="saveTestData()"
                                  (onContentChanged)="testContentChanged($event)"
                                  [content]="testContent"
-                                 fileName="sample.dat">
+                                 fileName="sample.dat"
+                                 [functionAppInput]="functionApp">
                             </div>
                         </div>
 

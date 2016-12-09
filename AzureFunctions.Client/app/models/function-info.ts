@@ -1,7 +1,9 @@
 import {FunctionConfig} from '../models/function-config';
 import {VfsObject} from '../models/vfs-object';
+import {FunctionApp} from '../services/function-app';
 
 export interface FunctionInfo {
+    id : string;
     name: string;
     script_root_path_href: string;
     script_href: string;
@@ -13,6 +15,7 @@ export interface FunctionInfo {
     isDeleted: boolean;
     test_data: string;
     config_href: string;
+    functionApp : FunctionApp;
 }
 
 export class FunctionInfoHelper {

@@ -2,7 +2,7 @@ import {Component, OnInit, OnChanges, SimpleChange, Input, Output, EventEmitter,
 import {FunctionInfo} from '../models/function-info';
 import {VfsObject} from '../models/vfs-object';
 import {BusyStateComponent} from './busy-state.component';
-import {FunctionsService} from '../services/functions.service';
+import {FunctionApp} from '../services/function-app';
 import {FileSelectDirective, FileDropDirective, FileUploader} from 'ng2-file-upload/ng2-file-upload';
 import {GlobalStateService} from '../services/global-state.service';
 import {BroadcastService} from '../services/broadcast.service';
@@ -41,9 +41,9 @@ export class FileExplorerComponent implements OnChanges {
     private binaryExtensions = ['.zip', '.exe', '.dll', '.png', '.jpeg', '.jpg', '.gif', '.bmp', '.ico', '.pdf', '.so', '.ttf', '.bz2', '.gz', '.jar', '.cab', '.tar', '.iso', '.img', '.dmg'];
 
     public uploader: FileUploader;
+    public functionApp : FunctionApp;
 
     constructor(
-        private _functionsService: FunctionsService,
         private _globalStateService: GlobalStateService,
         private _broadcastService: BroadcastService,
         private _translateService: TranslateService,
@@ -51,7 +51,10 @@ export class FileExplorerComponent implements OnChanges {
         this.selectedFileChange = new EventEmitter<VfsObject>();
         this.selectedFunctionChange = new EventEmitter<FunctionInfo>();
         this.selectedFunctionChange
-            .switchMap(e =>  this._functionsService.getVfsObjects(e))
+            .switchMap(e =>  {
+                this.functionApp = e.functionApp;
+                return this.functionApp.getVfsObjects(e)
+            })
             .subscribe(r => {
                     this.folders = this.getFolders(r);
                     this.files = this.getFiles(r);
@@ -77,7 +80,7 @@ export class FileExplorerComponent implements OnChanges {
 
         this.uploader.onCompleteAll = () => {
             this.uploader.clearQueue();
-            this._functionsService.ClearAllFunctionCache(this.functionInfo);
+            this.functionApp.ClearAllFunctionCache(this.functionInfo);
             this.refresh();
             this._aiService.trackEvent('/actions/file_explorer/upload_file');
         };
@@ -130,7 +133,7 @@ export class FileExplorerComponent implements OnChanges {
                 this.currentVfsObject = vfsObject;
             }
 
-            this._functionsService.getVfsObjects(typeof vfsObject === 'string' ? vfsObject : vfsObject.href)
+            this.functionInfo.functionApp.getVfsObjects(typeof vfsObject === 'string' ? vfsObject : vfsObject.href)
                 .subscribe(r => {
                     this.folders = this.getFolders(r);
                     this.files = this.getFiles(r)
@@ -174,11 +177,11 @@ export class FileExplorerComponent implements OnChanges {
             ? `${this.trim(this.currentVfsObject.href)}/${this.newFileName}`
             : `${this.trim(this.functionInfo.script_root_path_href)}/${this.newFileName}`;
         this.setBusyState();
-        var saveFileObservable = this._functionsService.saveFile(href, content || '', this.functionInfo);
+        var saveFileObservable = this.functionApp.saveFile(href, content || '', this.functionInfo);
         saveFileObservable
             .subscribe(r => {
                 if (this.newFileName.indexOf('\\') !== -1 || this.newFileName.indexOf('/') !== -1) {
-                    this._functionsService.ClearAllFunctionCache(this.functionInfo);
+                    this.functionApp.ClearAllFunctionCache(this.functionInfo);
                     this.refresh();
                     this._aiService.trackEvent('/actions/file_explorer/create_directory');
                 } else {
@@ -208,7 +211,7 @@ export class FileExplorerComponent implements OnChanges {
 
     renameFile() {
         this.setBusyState();
-        this._functionsService.getFileContent(this.selectedFile)
+        this.functionApp.getFileContent(this.selectedFile)
             .subscribe(content => {
                 var bypassConfirm = true;
                 this.addFile(content)
@@ -253,9 +256,9 @@ export class FileExplorerComponent implements OnChanges {
         if (this.selectedFile.href.toLocaleLowerCase() === this.functionInfo.config_href.toLocaleLowerCase()) return;
         if (bypassConfirm !== true && !confirm(this._translateService.instant(PortalResources.fileExplorer_deletePromt, { fileName: this.selectedFile.name }) )) return;
         this.setBusyState();
-        this._functionsService.deleteFile(this.selectedFile, this.functionInfo)
+        this.functionApp.deleteFile(this.selectedFile, this.functionInfo)
             .subscribe((deleted : VfsObject) => {
-                this._functionsService.ClearAllFunctionCache(this.functionInfo);
+                this.functionApp.ClearAllFunctionCache(this.functionInfo);
                 this.clearBusyState();
                 var fileIndex = this.files.map(e => e.href).indexOf(deleted.href);
                 if (fileIndex === -1 || this.files.length == 1) {

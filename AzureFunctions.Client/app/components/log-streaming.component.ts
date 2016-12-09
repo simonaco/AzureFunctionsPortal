@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnChanges, Input, Inject, ElementRef, Output, Even
 import {FunctionInfo} from '../models/function-info';
 import {UserService} from '../services/user.service';
 import {FunctionContainer} from '../models/function-container';
-import {FunctionsService} from '../services/functions.service';
+import {FunctionApp} from '../services/function-app';
 import {BroadcastService} from '../services/broadcast.service';
 import {BroadcastEvent} from '../models/broadcast-event'
 import {ErrorEvent} from '../models/error-event';
@@ -39,7 +39,6 @@ export class LogStreamingComponent implements OnDestroy, OnChanges {
     constructor(
         @Inject(ElementRef) private _elementRef: ElementRef,
         private _userService: UserService,
-        private _functionsService: FunctionsService,
         private _broadcastService: BroadcastService,
         private _utilities: UtilitiesService,
         private _globalStateService: GlobalStateService) {
@@ -137,7 +136,7 @@ export class LogStreamingComponent implements OnDestroy, OnChanges {
             this.xhReq.setRequestHeader('FunctionsPortal', '1');
             this.xhReq.send(null);
             if (!clear) {
-                this._functionsService.getOldLogs(this.functionInfo, 10000).subscribe(r => oldLogs = r);
+                this.functionInfo.functionApp.getOldLogs(this.functionInfo, 10000).subscribe(r => oldLogs = r);
             }
 
             var callBack = () => {

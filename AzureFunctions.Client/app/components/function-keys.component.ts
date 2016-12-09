@@ -1,6 +1,5 @@
 import {Component, Input, Output, OnChanges, SimpleChange, OnDestroy, ViewChild, EventEmitter, OnInit} from '@angular/core';
 import {Subject} from 'rxjs/Rx';
-import {FunctionsService} from '../services/functions.service';
 import {FunctionInfo} from '../models/function-info';
 import {TranslateService, TranslatePipe} from 'ng2-translate/ng2-translate';
 import {FunctionKey} from '../models/function-key';
@@ -33,7 +32,7 @@ export class FunctionKeysComponent implements OnChanges, OnDestroy, OnInit {
     private newKeyValue: string;
     private validKey: boolean;
 
-    constructor(private _functionsService: FunctionsService,
+    constructor(
         private _broadcastService: BroadcastService,
         private _translateService: TranslateService) {
         this.validKey = false;
@@ -44,8 +43,8 @@ export class FunctionKeysComponent implements OnChanges, OnDestroy, OnInit {
                 this.setBusyState();
                 this.resetState();
                 return fi
-                 ? this._functionsService.getFunctionKeys(fi)
-                 : this._functionsService.getFunctionHostKeys();
+                 ? fi.functionApp.getFunctionKeys(fi)
+                 : fi.functionApp.getFunctionHostKeys();
             })
             .subscribe(keys => {
                 this.clearBusyState();
@@ -131,7 +130,7 @@ export class FunctionKeysComponent implements OnChanges, OnDestroy, OnInit {
 
     saveNewKey() {
         this.setBusyState();
-        this._functionsService
+        this.functionInfo.functionApp
             .createKey(this.newKeyName, this.newKeyValue, this.functionInfo)
             .subscribe(key => {
                 this.clearBusyState();
@@ -142,7 +141,7 @@ export class FunctionKeysComponent implements OnChanges, OnDestroy, OnInit {
     revokeKey(key: FunctionKey) {
         if (confirm(this._translateService.instant(PortalResources.functionKeys_revokeConfirmation, {name: key.name}))) {
             this.setBusyState();
-            this._functionsService
+            this.functionInfo.functionApp
                 .deleteKey(key, this.functionInfo)
                 .subscribe(r => {
                     this.clearBusyState();
@@ -153,7 +152,7 @@ export class FunctionKeysComponent implements OnChanges, OnDestroy, OnInit {
 
     renewKey(key: FunctionKey) {
         this.setBusyState();
-        this._functionsService
+        this.functionInfo.functionApp
             .renewKey(key, this.functionInfo)
             .subscribe(r => {
                 this.clearBusyState();

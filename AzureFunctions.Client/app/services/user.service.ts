@@ -12,7 +12,7 @@ import {StartupInfo} from '../models/portal';
 @Injectable()
 export class UserService {
     public inIFrame: boolean;
-    private functionContainerSubject: ReplaySubject<FunctionContainer>;
+    // private functionContainerSubject: ReplaySubject<FunctionContainer>;
     // private tokenSubject: ReplaySubject<string>;
     private startupInfoSubject : ReplaySubject<StartupInfo>;
     private currentStartupInfo : StartupInfo;
@@ -25,7 +25,7 @@ export class UserService {
         this.startupInfoSubject = new ReplaySubject<StartupInfo>(1);
         // this.languageSubject = new ReplaySubject<string>(1);
         this.inIFrame = window.parent !== window;
-        this.functionContainerSubject = new ReplaySubject<FunctionContainer>(1);
+        // this.functionContainerSubject = new ReplaySubject<FunctionContainer>(1);
 
         this.currentStartupInfo = {
             token : null,
@@ -107,11 +107,11 @@ export class UserService {
     //     return this.languageSubject;
     // }
 
-    getFunctionContainer() {
-        return this.functionContainerSubject;
-    }
+    // getFunctionContainer() {
+    //     return this.functionContainerSubject;
+    // }
 
-    setFunctionContainer(fc: FunctionContainer) {
-        this.functionContainerSubject.next(fc);
-    }
+    // setFunctionContainer(fc: FunctionContainer) {
+    //     this.functionContainerSubject.next(fc);
+    // }
 }

@@ -32,12 +32,15 @@ export class FunctionNode extends TreeNode{
 
         this._doneLoading();
     }
+
+    protected _getViewData() : any{
+        return this._function;
+    }
 }
 
 export class FunctionDevelopNode extends TreeNode{
     public title = "Develop";
-    public dashboardType = DashboardType.functionDevelop;
-
+    public dashboardType = DashboardType.function;
 
     constructor(
         sideNav : SideNavComponent,
@@ -46,11 +49,15 @@ export class FunctionDevelopNode extends TreeNode{
 
         super(sideNav, _siteArmObj.id + "/functions/" + _function.name + "/develop");
     }
+
+    protected _getViewData() : any{
+        return this._function;
+    }
 }
 
 export class FunctionIntegrateNode extends TreeNode{
     public title = "Integrate";
-    public dashboardType = DashboardType.functionIntegrate;
+    public dashboardType = DashboardType.function;
 
     constructor(
         sideNav : SideNavComponent,
@@ -59,11 +66,15 @@ export class FunctionIntegrateNode extends TreeNode{
 
         super(sideNav, _siteArmObj.id + "/functions/" + _function.name + "/integrate");
     }
+    
+    protected _getViewData() : any{
+        return this._function;
+    }
 }
 
 export class FunctionManageNode extends TreeNode{
     public title = "Manage";
-    public dashboardType = DashboardType.functionManage;
+    public dashboardType = DashboardType.function;
 
     constructor(
         sideNav : SideNavComponent,
@@ -72,12 +83,15 @@ export class FunctionManageNode extends TreeNode{
 
         super(sideNav, _siteArmObj.id + "/functions/" + _function.name + "/manage");
     }
+
+    protected _getViewData() : any{
+        return this._function;
+    }
 }
 
 export class FunctionMonitorNode extends TreeNode{
     public title = "Monitor";
-    public dashboardType = DashboardType.functionMonitor;
-
+    public dashboardType = DashboardType.function;
 
     constructor(
         sideNav : SideNavComponent,
@@ -85,5 +99,9 @@ export class FunctionMonitorNode extends TreeNode{
         private _function : FunctionInfo){
 
         super(sideNav, _siteArmObj.id + "/functions/" + _function.name + "/monitor");
+    }
+
+    protected _getViewData() : any{
+        return this._function;
     }
 }

@@ -7,8 +7,5 @@ export enum DashboardType{
     createApp,
     // advanced,
     // advancedWrite,
-    functionDevelop,
-    functionIntegrate,
-    functionManage,
-    functionMonitor
+    function
 }

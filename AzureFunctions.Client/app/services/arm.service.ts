@@ -132,8 +132,8 @@ export class ArmService {
                 .map<{ [key: string]: string }>(r => r.json().properties);
     }
 
-    getConfig(functionContainer: FunctionContainer) {
-        var url = `${this.armUrl}${functionContainer.id}/config/web?api-version=${this.websiteApiVersion}`;
+    getConfig(resourceId : string) {
+        var url = `${this.armUrl}${resourceId}/config/web?api-version=${this.websiteApiVersion}`;
         return this._http.get(url, { headers: this.getHeaders() })
             .map<{ [key: string]: string }>(r => r.json().properties);
     }

@@ -1,14 +1,15 @@
 import {Directive, EventEmitter, ElementRef} from '@angular/core';
 import {MonacoModel} from '../models/monaco-model';
 import {GlobalStateService} from '../services/global-state.service';
-import {FunctionsService} from '../services/functions.service';
+import {FunctionApp} from '../services/function-app';
+import {Observable, Subject} from 'rxjs/Rx';
 
 declare var monaco;
 declare var require;
 
 @Directive({
     selector: '[monacoEditor]',
-    inputs: ['content', 'fileName', 'disabled'],
+    inputs: ['content', 'fileName', 'disabled', 'functionAppInput'],
     outputs: ['onContentChanged', 'onSave']
 })
 export class MonacoEditorDirective {
@@ -22,15 +23,27 @@ export class MonacoEditorDirective {
     private _containerName: string;    
     private _silent: boolean = false;
     private _fileName: string;
+    private _functionAppStream : Subject<FunctionApp>;
+    private _functionApp : FunctionApp;
 
     constructor(public elementRef: ElementRef,
-        private _globalStateService: GlobalStateService,
-        private _functionsService: FunctionsService
+        private _globalStateService: GlobalStateService
         ) {
+
         this.onContentChanged = new EventEmitter<string>();
         this.onSave = new EventEmitter<string>();
 
-        this.init();
+        this._functionAppStream = new Subject<FunctionApp>();
+        this._functionAppStream
+            .distinctUntilChanged()
+            .subscribe(functionApp =>{
+                this._functionApp = functionApp;
+                this.init();
+            });
+    }
+
+    set functionAppInput(functionApp : FunctionApp){
+        this._functionAppStream.next(functionApp);
     }
 
     set content(str: string) {
@@ -126,7 +139,7 @@ export class MonacoEditorDirective {
                 }
 
                 if (that._fileName.toLowerCase() === "project.json") {
-                    that._functionsService.getJson("/schemas/" + that._fileName.toLowerCase()).subscribe((schema) => {
+                    that._functionApp.getJson("/schemas/" + that._fileName.toLowerCase()).subscribe((schema) => {
                         monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
                             schemas: [{
                                 fileMatch: ["*"],

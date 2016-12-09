@@ -4,11 +4,12 @@ import {ResourceType, Descriptor, SiteDescriptor} from '../../common/resourceDes
 import {TreeViewInfo} from '../treeview/models/tree-view-info';
 import {DashboardType} from '../treeview/models/dashboard-type';
 import {UserService} from '../../services/user.service';
+import {FunctionEditComponent} from '../function-edit.component';
 
 @Component({
     selector: 'main',
     templateUrl: 'app/components/main/main.component.html',
-    directives: [SideNavComponent]
+    directives: [SideNavComponent, FunctionEditComponent]
 })
 export class MainComponent {
     public viewInfo : TreeViewInfo;

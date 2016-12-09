@@ -77,4 +77,26 @@ export class SiteDescriptor extends Descriptor{
             ResourceGroup : this.resourceGroup
         }
     }
+
+    public static getSiteDescriptor(resourceId : string) : SiteDescriptor{
+        let parts = resourceId.split("/").filter(part => !!part);
+        let siteId = "";
+        let maxIndex : number;
+
+        if(parts.length >= 10 && parts[8].toLowerCase() === "slots"){
+            maxIndex = 9;
+        }
+        else if(parts.length >= 8 && parts[6].toLowerCase() === "sites"){
+            maxIndex = 7;
+        }
+        else{
+            throw 'Not enough segments in site or slot id';
+        }
+
+        for(let i = 0; i <= maxIndex; i++){
+            siteId = siteId + "/" + parts[i];
+        }
+
+        return new SiteDescriptor(siteId);
+    }
 }

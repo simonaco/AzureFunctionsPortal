@@ -31,7 +31,8 @@ export class TreeNode{
 
         this.sideNav.updateViewInfo(<TreeViewInfo>{
             resourceId : this.resourceId,
-            dashboardType : this.dashboardType
+            dashboardType : this.dashboardType,
+            data : this._getViewData()
         });
     }
 
@@ -62,6 +63,11 @@ export class TreeNode{
     // Abstract
     protected _loadChildren(){
         this._doneLoading();
+    }
+
+    // Abstract
+    protected _getViewData() : any{
+        return null;
     }
 
     protected _doneLoading(){

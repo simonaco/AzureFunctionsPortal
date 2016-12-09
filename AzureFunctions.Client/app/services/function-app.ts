@@ -35,13 +35,10 @@ import {StartupInfo} from '../models/portal';
 import {CacheService} from './cache.service';
 import {ArmObj} from '../models/arm/arm-obj';
 import {Site} from '../models/arm/site';
-import {FunctionApp} from './function-app';
-import {SiteDescriptor} from '../common/resourceDescriptors';
 
 declare var mixpanel: any;
 
-@Injectable()
-export class FunctionsService {
+export class FunctionApp {
     private masterKey: string;
     private token: string;
     private scmUrl: string;
@@ -61,7 +58,7 @@ export class FunctionsService {
     private localAdminKey: string = '';
     private azureAdminKey: string;
     public isMultiKeySupported: boolean = false;
-
+    
     // https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
     private statusCodeMap = {
         100: 'Continue',
@@ -117,9 +114,10 @@ export class FunctionsService {
     }
 
     private tryAppServiceUrl = "https://tryappservice.azure.com";
-    private functionContainer: FunctionContainer;
+    // private functionContainer: FunctionContainer;
 
     constructor(
+        private _site : ArmObj<Site>,
         private _http: Http,
         private _userService: UserService,
         private _globalStateService: GlobalStateService,
@@ -136,14 +134,16 @@ export class FunctionsService {
 
         if (!_globalStateService.showTryView) {
             this._userService.getStartupInfo().subscribe(info => this.token = info.token);
+
+
             // this._userService.getFunctionContainer().subscribe(fc => {
-            //     this.functionContainer = fc;
-            //     this.scmUrl = `https://${fc.properties.hostNameSslStates.find(s => s.hostType === 1).name}/api`;
-            //     this.mainSiteUrl = `https://${fc.properties.hostNameSslStates.find(s => s.hostType === 0 && s.name.indexOf('azurewebsites.net') !== -1).name}`;
-            //     this.siteName = fc.name;
-            //     this.azureMainServer = this.mainSiteUrl;
-            //     this.azureScmServer = `https://${fc.properties.hostNameSslStates.find(s => s.hostType === 1).name}`;
-            //     this.localServer = 'https://localhost:6061';
+                // this.functionContainer = fc;
+                this.scmUrl = `https://${this._site.properties.hostNameSslStates.find(s => s.hostType === 1).name}/api`;
+                this.mainSiteUrl = `https://${this._site.properties.hostNameSslStates.find(s => s.hostType === 0 && s.name.indexOf('azurewebsites.net') !== -1).name}`;
+                this.siteName = this._site.name;
+                this.azureMainServer = this.mainSiteUrl;
+                this.azureScmServer = `https://${this._site.properties.hostNameSslStates.find(s => s.hostType === 1).name}`;
+                this.localServer = 'https://localhost:6061';
             // });
         }
         if (Cookie.get('TryAppServiceToken')) {
@@ -155,40 +155,6 @@ export class FunctionsService {
             this.selectedFunctionName = Cookie.get('functionName');
         }
     }
-
-//////////////
-    // getFunctionApp(resourceId : string | siteObj : ArmObj<Site>) : Observable<FunctionApp>{
-    //     let siteDescriptor = SiteDescriptor.getSiteDescriptor(resourceId);
-    //     return this._cacheService.getArmResource(siteDescriptor.resourceId)
-    //     .map((site : ArmObj<Site>) =>{
-    //         return new FunctionApp(
-    //             site,
-    //             this._http,
-    //             this._userService,
-    //             this._globalStateService,
-    //             this._translateService,
-    //             this._broadcastService,
-    //             this._armService,
-    //             this._cacheService
-    //         );
-    //     })
-    // }
-
-    getFunctions2(fc : ArmObj<Site>) : Observable<FunctionInfo[]>{
-        let functionsScmUrl = `https://${fc.properties.hostNameSslStates.find(s => s.hostType === 1).name}/api/functions`;
-        return this._cacheService.get(functionsScmUrl, false, this.getScmSiteHeaders())
-            .retryWhen(this.retryAntares)
-            .catch(e => this.checkCorsOrDnsErrors(e))
-            .map<FunctionInfo[]>((r : any) => {
-                try {
-                    return r;
-                } catch (e) {
-                    this._broadcastService.broadcast<ErrorEvent>(BroadcastEvent.Error, { message: this._translateService.instant(PortalResources.errorParsingConfig, { error: e }) })
-                    return [];
-                }
-            });
-    }
-///////////////
 
     getParameterByName(url, name) {
         if (url === null)
@@ -219,6 +185,21 @@ export class FunctionsService {
             .map<FunctionInfo[]>((r) => {
                 try {
                     return r.json();
+                } catch (e) {
+                    this._broadcastService.broadcast<ErrorEvent>(BroadcastEvent.Error, { message: this._translateService.instant(PortalResources.errorParsingConfig, { error: e }) })
+                    return [];
+                }
+            });
+    }
+
+    getFunctions2(fc : ArmObj<Site>) : Observable<FunctionInfo[]>{
+        let functionsScmUrl = `https://${fc.properties.hostNameSslStates.find(s => s.hostType === 1).name}/api/functions`;
+        return this._cacheService.get(functionsScmUrl, false, this.getScmSiteHeaders())
+            .retryWhen(this.retryAntares)
+            .catch(e => this.checkCorsOrDnsErrors(e))
+            .map<FunctionInfo[]>((r : any) => {
+                try {
+                    return r;
                 } catch (e) {
                     this._broadcastService.broadcast<ErrorEvent>(BroadcastEvent.Error, { message: this._translateService.instant(PortalResources.errorParsingConfig, { error: e }) })
                     return [];
@@ -549,12 +530,12 @@ export class FunctionsService {
             .map<FunctionInfo>(r => r.json());
     }
 
-    @Cache('href')
-    getFunction(fi: FunctionInfo) {
-        return this._http.get(fi.href, { headers: this.getScmSiteHeaders() })
-            .retryWhen(this.retryAntares)
-            .map<FunctionInfo>(r => r.json());
-    }
+    // @Cache('href')
+    // getFunction(fi: FunctionInfo) {
+    //     return this._http.get(fi.href, { headers: this.getScmSiteHeaders() })
+    //         .retryWhen(this.retryAntares)
+    //         .map<FunctionInfo>(r => r.json());
+    // }
 
     getScmUrl() {
         return this.azureScmServer;
@@ -1044,7 +1025,7 @@ export class FunctionsService {
 
     private checkCorsOrDnsErrors(error: Response): Observable<Response> {
         if (error.status < 404 && error.type === ResponseType.Error) {
-            this._armService.getConfig(this.functionContainer.id)
+            this._armService.getConfig(this._site.id)
                 .subscribe(config => {
                     let cors: {allowedOrigins: string[]} = <any>config['cors'];
                     let isConfigured = (cors && cors.allowedOrigins && cors.allowedOrigins.length > 0)
@@ -1066,7 +1047,7 @@ export class FunctionsService {
                 }, (error: Response) => {
                         this._broadcastService.broadcast<ErrorEvent>(
                             BroadcastEvent.Error,
-                            { message: this._translateService.instant(PortalResources.error_UnableToRetriveFunctionApp, {functionApp: this.functionContainer.name}), details: JSON.stringify(error) }
+                            { message: this._translateService.instant(PortalResources.error_UnableToRetriveFunctionApp, {functionApp: this._site.name}), details: JSON.stringify(error) }
                         );
                 });
         } else {

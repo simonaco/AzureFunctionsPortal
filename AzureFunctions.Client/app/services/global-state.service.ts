@@ -36,14 +36,14 @@ export class GlobalStateService {
       private _aiService: AiService) {
         this._appSettings = {};
         this.showTryView = window.location.pathname.endsWith('/try');
-        this._userService.getFunctionContainer()
-            .subscribe(fc => {
-                this._functionContainer = fc;
-                if (!this.showTryView && !this.GlobalDisabled) {
-                    this._armService.getFunctionContainerAppSettings(this._functionContainer)
-                      .subscribe(a => this._appSettings = a);
-              }
-            });
+        // this._userService.getFunctionContainer()
+        //     .subscribe(fc => {
+        //         this._functionContainer = fc;
+        //         if (!this.showTryView && !this.GlobalDisabled) {
+        //             this._armService.getFunctionContainerAppSettings(this._functionContainer)
+        //               .subscribe(a => this._appSettings = a);
+        //       }
+        //     });
         this._userService.getStartupInfo().subscribe(info => this._token = info.token);
     }
 
