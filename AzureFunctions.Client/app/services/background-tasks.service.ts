@@ -16,7 +16,7 @@ export class BackgroundTasksService {
 
     private _preIFrameTasks: RxSubscription;
     private _tasks: RxSubscription;
-    private _isResourcesReceived = false;
+    // private _isResourcesReceived = false;
     constructor(private _http: Http,
         private _userService: UserService,
         private _functionsService: FunctionsService,
@@ -68,11 +68,6 @@ export class BackgroundTasksService {
                         (this._globalStateService.FunctionContainer.properties && this._globalStateService.FunctionContainer.properties.sku === "Dynamic") ? true : false;
                     this._functionsService.setEasyAuth(result.authSettings);
                     this._globalStateService.AppSettings = result.appSettings;
-                    if (!this._isResourcesReceived) {
-                        this._functionsService.getResources().subscribe(() => {
-                            this._isResourcesReceived = true;
-                        });
-                    }
                     this._broadcastService.broadcast(BroadcastEvent.VersionUpdated);
             };
             this._tasks = Observable.timer(1, 60000)

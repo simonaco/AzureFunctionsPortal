@@ -98,6 +98,8 @@ export class FunctionDevComponent implements OnChanges, OnDestroy {
                 private _aiService: AiService,
                 private _el: ElementRef) {
 
+        let dev = _translateService.instant(PortalResources.functionDev_run);
+
         this.selectedFileStream = new Subject<VfsObject>();
         this.selectedFileStream
             .switchMap(file => {

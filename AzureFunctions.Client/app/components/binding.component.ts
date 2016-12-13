@@ -1,20 +1,21 @@
-﻿import {Component, ChangeDetectionStrategy, Input, Output, EventEmitter, OnInit, OnDestroy, ElementRef, OnChanges, Inject, AfterContentChecked} from '@angular/core';
+﻿import {Component, ChangeDetectionStrategy, SimpleChange, Input, Output, EventEmitter, OnInit, OnDestroy, ElementRef, OnChanges, Inject, AfterContentChecked} from '@angular/core';
 import {BindingInputBase, CheckboxInput, TextboxInput, TextboxIntInput, LabelInput, SelectInput, PickerInput, CheckBoxListInput} from '../models/binding-input';
 import {Binding, DirectionType, SettingType, BindingType, UIFunctionBinding, UIFunctionConfig, Rule, Setting, Action, ResourceType} from '../models/binding';
 import {BindingManager} from '../models/binding-manager';
 import {BindingInputComponent} from './binding-input.component'
-import {FunctionsService} from '../services/functions.service';
 import {BindingInputList} from '../models/binding-input-list';
 import {BroadcastService} from '../services/broadcast.service';
 import {BroadcastEvent} from '../models/broadcast-event'
 import {PortalService} from '../services/portal.service';
-import {Subscription} from 'rxjs/Rx';
+import {Subscription, Subject} from 'rxjs/Rx';
 import {GlobalStateService} from '../services/global-state.service';
 import {TranslateService, TranslatePipe} from 'ng2-translate/ng2-translate';
 import {PortalResources} from '../models/portal-resources';
 import {Validator} from '../models/binding';
 import {SecretsBoxInput} from './secrets-box-input';
 import {SecretsBoxContainer} from './secrets-box-container';
+import {FunctionInfo} from '../models/function-info';
+
 declare var jQuery: any;
 declare var marked: any;
 
@@ -23,12 +24,12 @@ declare var marked: any;
     templateUrl: './templates/binding.component.html',
     styleUrls: ['styles/binding.style.css'],
     //changeDetection: ChangeDetectionStrategy.OnPush,
-    inputs: ['binding', 'clickSave'],
+    inputs: ['selectedFunction', 'binding', 'clickSave'],
     directives: [BindingInputComponent, SecretsBoxInput, SecretsBoxContainer],
     pipes: [TranslatePipe]
 })
 
-export class BindingComponent {
+export class BindingComponent{
     @Input() canDelete: boolean = true;
     @Input() canSave: boolean = true;
     @Input() canCancel: boolean = true;
@@ -53,18 +54,25 @@ export class BindingComponent {
     public hasInputsToShow = false;
     public isDirty: boolean = false;
     public isDocShown: boolean = false;
+    private _functionSelectStream = new Subject<FunctionInfo>();
+    private _functionInfo : FunctionInfo;
     private _elementRef: ElementRef;
     private _bindingManager: BindingManager = new BindingManager();
     private _subscription: Subscription;
     private _newBinding;
 
     constructor( @Inject(ElementRef) elementRef: ElementRef,
-        private _functionsService: FunctionsService,
         private _broadcastService: BroadcastService,
         private _portalService: PortalService,
         private _globalStateService: GlobalStateService,
         private _translateService: TranslateService) {
         var renderer = new marked.Renderer();
+
+        this._functionSelectStream
+            .distinctUntilChanged()
+            .subscribe(fi =>{
+                this._functionInfo = fi;
+            })
 
         renderer.link = function (href, title, text) {
             return '<a target="_blank" href="' + href + (title ? '" title="' + title : '') + '">' + text + '</a>'
@@ -104,6 +112,10 @@ export class BindingComponent {
         this._subscription.unsubscribe();
     }
 
+    set selectedFunction(fi : FunctionInfo){
+        this._functionSelectStream.next(fi);
+    }
+
     set clickSave(value: boolean) {
         if (value) {
             this.saveClicked();
@@ -113,7 +125,7 @@ export class BindingComponent {
     set binding(value: UIFunctionBinding) {
         this.isDirty = false;
         var that = this;
-        this._functionsService.getBindingConfig().subscribe((bindings) => {
+        this._functionInfo.functionApp.getBindingConfig().subscribe((bindings) => {
             this.bindingValue = value;
             this.setDirtyIfNewBinding();
             // Convert settings to input conotrls

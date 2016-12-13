@@ -4,7 +4,6 @@ import {UIFunctionConfig, UIFunctionBinding, DirectionType, BindingType, Action}
 import {BindingManager} from '../models/binding-manager';
 import {BindingComponent} from './binding.component';
 import {TemplatePickerComponent} from './template-picker.component';
-import {FunctionsService} from '../services/functions.service';
 import {FunctionInfo, FunctionInfoHelper} from '../models/function-info';
 import {TemplatePickerType} from '../models/template-picker';
 import {BroadcastService} from '../services/broadcast.service';
@@ -38,63 +37,59 @@ export class FunctionIntegrateV2Component {
     public behavior: DirectionType;
     public currentBinding: UIFunctionBinding = null;
     public currentBindingId: string = "";
+    public functionInfo: FunctionInfo;
 
     private _elementRef: ElementRef;
-    private  _functionInfo: FunctionInfo;
     private _bindingManager: BindingManager = new BindingManager();
 
     set selectedFunction(fi: FunctionInfo) {
         this.pickerType = TemplatePickerType.none;
         this.disabled = this._broadcastService.getDirtyState("function_disabled");
 
-        //if (!this._functionInfo || this._functionInfo.name !== fi.name) {
-            this.currentBinding = null;
-            this.currentBindingId = "";
-            this._functionInfo = fi;
+        this.currentBinding = null;
+        this.currentBindingId = "";
+        this.functionInfo = fi;
 
-            try {
-                this._bindingManager.validateConfig(this._functionInfo.config, this._translateService);
-            } catch (e) {
-                this._broadcastService.broadcast<ErrorEvent>(BroadcastEvent.Error, { message: this._translateService.instant(PortalResources.errorParsingConfig, { error: e }) });
-                this.onEditorChange('advanced');
-                return;
-            }
+        try {
+            this._bindingManager.validateConfig(this.functionInfo.config, this._translateService);
+        } catch (e) {
+            this._broadcastService.broadcast<ErrorEvent>(BroadcastEvent.Error, { message: this._translateService.instant(PortalResources.errorParsingConfig, { error: e }) });
+            this.onEditorChange('advanced');
+            return;
+        }
 
-            this._functionsService.getBindingConfig().subscribe((bindings) => {
-                this._functionsService.getTemplates().subscribe((templates) => {
+        fi.functionApp.getBindingConfig().subscribe((bindings) => {
+            fi.functionApp.getTemplates().subscribe((templates) => {
 
-                    bindings.bindings.forEach((b) => {
-                        if (b.actions) {
-                            var filteredActions = [];
-                            b.actions.forEach((a) => {
-                                var lang = FunctionInfoHelper.getLanguage(this._functionInfo);
-                                var templateId = a.template + "-" + lang;
-                                var actionTemplate = templates.find((t) => {
-                                    return t.id === templateId;
-                                });
-                                a.templateId = (actionTemplate) ? templateId : null;
+                bindings.bindings.forEach((b) => {
+                    if (b.actions) {
+                        var filteredActions = [];
+                        b.actions.forEach((a) => {
+                            var lang = FunctionInfoHelper.getLanguage(this.functionInfo);
+                            var templateId = a.template + "-" + lang;
+                            var actionTemplate = templates.find((t) => {
+                                return t.id === templateId;
                             });
-                        }
-                    });
-
-                    this.model.config = this._bindingManager.functionConfigToUI(fi.config, bindings.bindings);
-                    if (this.model.config.bindings.length > 0) {
-                        this.currentBinding = this.model.config.bindings[0];
-                        this.currentBindingId = this.currentBinding.id;
+                            a.templateId = (actionTemplate) ? templateId : null;
+                        });
                     }
-
-                    this.model.setBindings();
-
-                    jQuery(this._elementRef.nativeElement).find('[data-toggle="popover"]').popover({ html: true, container: 'body' });
                 });
+
+                this.model.config = this._bindingManager.functionConfigToUI(fi.config, bindings.bindings);
+                if (this.model.config.bindings.length > 0) {
+                    this.currentBinding = this.model.config.bindings[0];
+                    this.currentBindingId = this.currentBinding.id;
+                }
+
+                this.model.setBindings();
+
+                jQuery(this._elementRef.nativeElement).find('[data-toggle="popover"]').popover({ html: true, container: 'body' });
             });
-            
-        //}
+        });
     }
 
     constructor(
         @Inject(ElementRef) elementRef: ElementRef,
-        private _functionsService: FunctionsService,
         private _broadcastService: BroadcastService,
         private _portalService: PortalService,
         private _globalStateService: GlobalStateService,
@@ -127,7 +122,7 @@ export class FunctionIntegrateV2Component {
     }
 
     onBindingCreateComplete(behavior: DirectionType, templateName: string) {
-        this._functionsService.getBindingConfig().subscribe((bindings) => {
+        this.functionInfo.functionApp.getBindingConfig().subscribe((bindings) => {
             this._broadcastService.setDirtyState("function_integrate");
             this._portalService.setDirtyState(true);
 
@@ -199,17 +194,17 @@ export class FunctionIntegrateV2Component {
     }
 
     private updateFunction() {
-        this._functionInfo.config = this._bindingManager.UIToFunctionConfig(this.model.config);
-        this._bindingManager.validateConfig(this._functionInfo.config, this._translateService);
+        this.functionInfo.config = this._bindingManager.UIToFunctionConfig(this.model.config);
+        this._bindingManager.validateConfig(this.functionInfo.config, this._translateService);
 
         // Update test_data only from develop tab
-        var functionInfoCopy: FunctionInfo = Object.assign({}, this._functionInfo);
+        var functionInfoCopy: FunctionInfo = Object.assign({}, this.functionInfo);
         delete functionInfoCopy.test_data;
 
         this._globalStateService.setBusyState();
-        this._functionsService.updateFunction(functionInfoCopy).subscribe((result) => {
+        this.functionInfo.functionApp.updateFunction(functionInfoCopy).subscribe((result) => {
             this._globalStateService.clearBusyState();
-            this._broadcastService.broadcast(BroadcastEvent.FunctionUpdated, this._functionInfo);
+            this._broadcastService.broadcast(BroadcastEvent.FunctionUpdated, this.functionInfo);
         });
     }
 
@@ -228,7 +223,7 @@ export class FunctionIntegrateV2Component {
     private switchIntegrate() {
         var result = true;
         if ((this._broadcastService.getDirtyState('function') || this._broadcastService.getDirtyState('function_integrate'))) {
-            result = confirm(this._translateService.instant(PortalResources.functionIntegrate_changesLost2, {name: this._functionInfo.name}));
+            result = confirm(this._translateService.instant(PortalResources.functionIntegrate_changesLost2, {name: this.functionInfo.name}));
         }
         return result;
     }

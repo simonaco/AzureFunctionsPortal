@@ -3,8 +3,8 @@ import {TemplatePickerType, Template} from '../models/template-picker';
 import {BindingComponent} from './binding.component';
 import {DirectionType, Binding} from '../models/binding';
 import {BindingManager} from '../models/binding-manager';
+import {FunctionInfo} from '../models/function-info';
 import {LanguageType, TemplateFilterItem, FunctionTemplate} from '../models/template';
-import {FunctionsService} from '../services/functions.service';
 import {GlobalStateService} from '../services/global-state.service';
 import {BroadcastEvent} from '../models/broadcast-event'
 import {DropDownComponent} from './drop-down.component';
@@ -13,11 +13,12 @@ import {TranslateService, TranslatePipe} from 'ng2-translate/ng2-translate';
 import {PortalResources} from '../models/portal-resources';
 import {TooltipContentComponent} from './tooltip-content.component';
 import {TooltipComponent} from './tooltip.component';
+import {Subject} from 'rxjs/Rx';
 
 @Component({
     selector: 'template-picker',
     templateUrl: './templates/template-picker.component.html',
-    inputs: ['type', 'template'],
+    inputs: ['selectedFunction', 'type', 'template'],
     styleUrls: ['styles/template-picker.style.css'],
     directives: [TooltipContentComponent, TooltipComponent, DropDownComponent],
     pipes: [TranslatePipe]
@@ -38,6 +39,8 @@ export class TemplatePickerComponent {
     private _type: TemplatePickerType;
     private _initialized = false;
     private _orderedCategoties = [];
+    private _selectedFunctionStream = new Subject<FunctionInfo>();
+    private _functionInfo : FunctionInfo;
 
     set template(value: string) {
         if (value) {
@@ -49,9 +52,15 @@ export class TemplatePickerComponent {
     @Output() complete: EventEmitter<string> = new EventEmitter<string>();
     @Output() cancel: EventEmitter<string> = new EventEmitter<string>();
 
-    constructor(private _functionsService: FunctionsService,
+    constructor(
         private _globalStateService: GlobalStateService,
         private _translateService: TranslateService) {
+
+        this._selectedFunctionStream
+            .distinctUntilChanged()
+            .subscribe(fi =>{
+                this._functionInfo = fi;
+            })
 
         this.showTryView = this._globalStateService.showTryView;
         this._language = this._translateService.instant("temp_category_api");
@@ -66,12 +75,16 @@ export class TemplatePickerComponent {
         ];
     }
 
+    set selectedFunction(fi : FunctionInfo){
+        this._selectedFunctionStream.next(fi);
+    }
+
     set type(type: TemplatePickerType) {
         var that = this;
         this._type = type;
         this._globalStateService.setBusyState();
-        this._functionsService.getTemplates().subscribe((templates) => {
-            this._functionsService.getBindingConfig().subscribe((config) => {
+        this._functionInfo.functionApp.getTemplates().subscribe((templates) => {
+            this._functionInfo.functionApp.getBindingConfig().subscribe((config) => {
                 var that = this;
                 this._globalStateService.clearBusyState();
                 this.bindings = config.bindings;

@@ -135,7 +135,26 @@ export class FunctionsService {
         }
 
         if (!_globalStateService.showTryView) {
-            this._userService.getStartupInfo().subscribe(info => this.token = info.token);
+            this._userService.getStartupInfo()
+            .flatMap(info =>{
+                this.token = info.token;
+                
+                let runtime = this._globalStateService.ExtensionVersion ? this._globalStateService.ExtensionVersion : "default";
+                if (this._userService.inIFrame) {
+                    return this._userService.getStartupInfo()
+                        .flatMap((info : StartupInfo) => {
+
+                            // TODO: ellhamai Need to update language whenever you choose a different function app
+                            // Effective language has language and formatting information eg: "en.en-us"
+                            let lang = info.effectiveLocale.split(".")[0];
+                            return this.getLocolizedResources(lang, runtime);
+                        });
+
+                } else {
+                    return this.getLocolizedResources("en", runtime);
+                }
+
+            }).subscribe(result => {});
             // this._userService.getFunctionContainer().subscribe(fc => {
             //     this.functionContainer = fc;
             //     this.scmUrl = `https://${fc.properties.hostNameSslStates.find(s => s.hostType === 1).name}/api`;
@@ -669,22 +688,22 @@ export class FunctionsService {
             });
     }
 
-    getResources(): Observable<any> {
-        var runtime = this._globalStateService.ExtensionVersion ? this._globalStateService.ExtensionVersion : "default";
+    // getResources(): Observable<any> {
+    //     var runtime = this._globalStateService.ExtensionVersion ? this._globalStateService.ExtensionVersion : "default";
 
-        if (this._userService.inIFrame) {
-            return this._userService.getStartupInfo()
-                .flatMap((info : StartupInfo) => {
+    //     if (this._userService.inIFrame) {
+    //         return this._userService.getStartupInfo()
+    //             .flatMap((info : StartupInfo) => {
 
-                    // Effective language has language and formatting information eg: "en.en-us"
-                    let lang = info.effectiveLocale.split(".")[0];
-                    return this.getLocolizedResources(lang, runtime);
-                });
+    //                 // Effective language has language and formatting information eg: "en.en-us"
+    //                 let lang = info.effectiveLocale.split(".")[0];
+    //                 return this.getLocolizedResources(lang, runtime);
+    //             });
 
-        } else {
-            return this.getLocolizedResources("en", runtime);
-        }
-    }
+    //     } else {
+    //         return this.getLocolizedResources("en", runtime);
+    //     }
+    // }
 
     get HostSecrets() {
         return this.masterKey;

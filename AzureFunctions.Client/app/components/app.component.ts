@@ -3,6 +3,7 @@ import {DashboardComponent} from './dashboard.component';
 import {PortalService} from '../services/portal.service';
 import {ArmService} from '../services/arm.service';
 import {UserService} from '../services/user.service';
+import {FunctionsService} from '../services/functions.service';
 import {Observable} from 'rxjs/Rx';
 import {ErrorListComponent} from './error-list.component';
 import {MainComponent} from './main/main.component';
@@ -21,7 +22,8 @@ export class AppComponent implements OnInit {
     constructor(
         private _portalService: PortalService,
         private _armService: ArmService,
-        private _userService: UserService
+        private _userService: UserService,
+        private _functionsService : FunctionsService
     ) {
         this.ready = false;
         if (_userService.inIFrame ||

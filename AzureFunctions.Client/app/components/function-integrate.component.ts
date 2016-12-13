@@ -1,6 +1,5 @@
 ﻿import {Component, OnDestroy, Output, EventEmitter, Input} from '@angular/core';
 import {FunctionInfo} from '../models/function-info';
-import {FunctionsService} from '../services/functions.service';
 import {PortalService} from '../services/portal.service';
 import {BroadcastService} from '../services/broadcast.service';
 import {BroadcastEvent} from '../models/broadcast-event'
@@ -31,7 +30,6 @@ export class FunctionIntegrateComponent implements OnDestroy {
     private _bindingManager: BindingManager = new BindingManager();
 
     constructor(
-        private _functionsService: FunctionsService,
         private _portalService: PortalService,
         private _broadcastService: BroadcastService,
         private _globalStateService: GlobalStateService,
@@ -79,7 +77,7 @@ export class FunctionIntegrateComponent implements OnDestroy {
                 this.configContent = this._currentConent;
                 this._selectedFunction.config = JSON.parse(this.configContent);
                 this._globalStateService.setBusyState();
-                this._functionsService.updateFunction(this._selectedFunction)
+                this._selectedFunction.functionApp.updateFunction(this._selectedFunction)
                 .subscribe(fi => {
                     this._originalContent = this.configContent;
                     this.clearDirty();

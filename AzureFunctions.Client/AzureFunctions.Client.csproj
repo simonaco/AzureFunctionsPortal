@@ -22,6 +22,9 @@
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app\components\main\main.component.html" />
+    <Content Include="app\components\sidenav\sidenav.component.html" />
+    <Content Include="app\components\treeview\tree-view.component.html" />
     <Content Include="health.html" />
     <Content Include="images\arrow-right.svg" />
     <Content Include="images\azure-logo.svg" />
@@ -120,6 +123,7 @@
     <Content Include="templates\top-bar.component.html" />
     <None Include="schemas\project.json" />
     <TypeScriptCompile Include="app\boot.ts" />
+    <TypeScriptCompile Include="app\common\resourceDescriptors.ts" />
     <TypeScriptCompile Include="app\components\aggregate-block.component.ts" />
     <TypeScriptCompile Include="app\components\app-monitoring.component.ts" />
     <TypeScriptCompile Include="app\components\app.component.ts" />
@@ -128,11 +132,23 @@
     <TypeScriptCompile Include="app\components\binding-input.component.ts" />
     <TypeScriptCompile Include="app\components\function-keys.component.ts" />
     <TypeScriptCompile Include="app\components\local-development-instructions.component.ts" />
+    <TypeScriptCompile Include="app\components\main\main.component.ts" />
     <TypeScriptCompile Include="app\components\run-http.component.ts" />
     <TypeScriptCompile Include="app\components\secrets-box-container.ts" />
     <TypeScriptCompile Include="app\components\secrets-box-input.ts" />
+    <TypeScriptCompile Include="app\components\sidenav\sidenav.component.ts" />
     <TypeScriptCompile Include="app\components\tooltip.component.ts" />
     <TypeScriptCompile Include="app\components\tooltip-content.component.ts" />
+    <TypeScriptCompile Include="app\components\treeview\app-node.ts" />
+    <TypeScriptCompile Include="app\components\treeview\apps-node.ts" />
+    <TypeScriptCompile Include="app\components\treeview\function-node.ts" />
+    <TypeScriptCompile Include="app\components\treeview\functions-node.ts" />
+    <TypeScriptCompile Include="app\components\treeview\models\dashboard-type.ts" />
+    <TypeScriptCompile Include="app\components\treeview\models\tree-view-info.ts" />
+    <TypeScriptCompile Include="app\components\treeview\slot-node.ts" />
+    <TypeScriptCompile Include="app\components\treeview\slots-node.ts" />
+    <TypeScriptCompile Include="app\components\treeview\tree-node.ts" />
+    <TypeScriptCompile Include="app\components\treeview\tree-view.component.ts" />
     <TypeScriptCompile Include="app\components\try-now-busy-state.component.ts" />
     <TypeScriptCompile Include="app\components\copy-pre.component.ts" />
     <TypeScriptCompile Include="app\components\error-list.component.ts" />
@@ -148,7 +164,6 @@
     <TypeScriptCompile Include="app\components\function-dev.component.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="app\components\function-designer.component.ts" />
     <TypeScriptCompile Include="app\components\function-edit.component.ts" />
     <TypeScriptCompile Include="app\components\function-integrate.component.ts" />
     <TypeScriptCompile Include="app\components\getting-started.component.ts" />
@@ -169,6 +184,9 @@
     <TypeScriptCompile Include="app\directives\monaco-editor.directive.ts" />
     <TypeScriptCompile Include="app\handlers\functions.exception-handler.ts" />
     <TypeScriptCompile Include="app\models\app-insights.ts" />
+    <TypeScriptCompile Include="app\models\arm\arm-obj.ts" />
+    <TypeScriptCompile Include="app\models\arm\permission.ts" />
+    <TypeScriptCompile Include="app\models\arm\site.ts" />
     <TypeScriptCompile Include="app\models\function-key.ts" />
     <TypeScriptCompile Include="app\models\http-run.ts" />
     <TypeScriptCompile Include="app\models\monaco-model.ts" />

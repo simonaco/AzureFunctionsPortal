@@ -700,7 +700,15 @@ export class FunctionApp {
 
     updateFunction(fi: FunctionInfo) {
         ClearAllFunctionCache(fi);
-        return this._http.put(fi.href, JSON.stringify(fi), { headers: this.getScmSiteHeaders() })
+
+        let fiCopy = <FunctionInfo>{};
+        for(let prop in fi){
+            if(fi.hasOwnProperty(prop) && prop !== "functionApp"){
+                fiCopy[prop] = fi[prop];
+            }
+        }
+
+        return this._http.put(fi.href, JSON.stringify(fiCopy), { headers: this.getScmSiteHeaders() })
             .retryWhen(this.retryAntares)
             .catch(e => this.checkCorsOrDnsErrors(e))
             .map<FunctionInfo>(r => r.json());
