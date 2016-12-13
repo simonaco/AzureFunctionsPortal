@@ -1,7 +1,7 @@
 <div class="wrapper" [class.wrapper-border]="showBorders">
     <busy-state></busy-state>
-    <h4 *ngIf="functionInfo"> {{'functionKeys_title' | translate}} </h4>
-    <h4 *ngIf="!functionInfo"> {{'adminKeys_title' | translate}} </h4>
+    <h4 *ngIf="!getAdminKeys"> {{'functionKeys_title' | translate}} </h4>
+    <h4 *ngIf="getAdminKeys"> {{'adminKeys_title' | translate}} </h4>
     <table class="table-function">
         <thead>
             <tr class="not-clickable">
@@ -30,10 +30,10 @@
         </tbody>
     </table>
     <div class="custom-button" (click)="showOrHideNewKeyUi()">
-        <span *ngIf="!addingNew && functionInfo">
+        <span *ngIf="!addingNew && !getAdminKeys">
             {{ 'functionKeys_addNewFunctionKey' | translate}}
         </span>
-        <span *ngIf="!addingNew && !functionInfo">
+        <span *ngIf="!addingNew && getAdminKeys">
             {{ 'functionKeys_addNewAdminKey' | translate}}
         </span>
         <span *ngIf="addingNew">
