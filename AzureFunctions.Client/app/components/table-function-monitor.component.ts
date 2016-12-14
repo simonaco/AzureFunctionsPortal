@@ -26,6 +26,7 @@ export class TableFunctionMonitor implements OnChanges {
     @Input() invocation: any;
     @Input() pulseUrl: string;
     @Input() selectedFuncId: string;
+    @Input() selectedFunction: FunctionInfo;
 
     public outputLog: string;
     public selectedRowId: string;
@@ -36,7 +37,9 @@ export class TableFunctionMonitor implements OnChanges {
         private _globalStateService: GlobalStateService) { }
 
     showDetails(rowData: FunctionInvocations) {
-        this._functionMonitorService.getInvocationDetailsForSelectedInvocation(rowData.id).subscribe(results => {
+        this._functionMonitorService.getInvocationDetailsForSelectedInvocation(this.selectedFunction.functionApp, rowData.id)
+            .subscribe(results => {
+
             if (!!results) {
                 this.invocation = results.invocation;
                 this.details = results.parameters;
@@ -48,7 +51,8 @@ export class TableFunctionMonitor implements OnChanges {
     }
 
     setOutputLogInfo(rowId: string) {
-        this._functionMonitorService.getOutputDetailsForSelectedInvocation(rowId).subscribe(outputData => {
+        this._functionMonitorService.getOutputDetailsForSelectedInvocation(this.selectedFunction.functionApp, rowId)
+        .subscribe(outputData => {
             this.outputLog = outputData;
         });
     }
@@ -61,7 +65,9 @@ export class TableFunctionMonitor implements OnChanges {
 
     refreshFuncMonitorGridData() {
         this.setBusyState();
-        this._functionMonitorService.getInvocationsDataForSelctedFunction(this.selectedFuncId).subscribe(result => {
+        this._functionMonitorService.getInvocationsDataForSelctedFunction(this.selectedFunction.functionApp, this.selectedFuncId)
+        .subscribe(result => {
+
             this.data = result;
             this.clearBusyState();
         });

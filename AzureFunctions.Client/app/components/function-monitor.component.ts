@@ -1,6 +1,5 @@
 import {Component, Input, OnChanges, SimpleChange} from '@angular/core';
 import {FunctionInfo} from '../models/function-info';
-import {FunctionsService} from '../services/functions.service';
 import {CORE_DIRECTIVES} from '@angular/common';
 import {TableFunctionMonitor} from './table-function-monitor.component';
 import {AggregateBlock} from './aggregate-block.component';
@@ -30,10 +29,7 @@ export class FunctionMonitorComponent implements OnChanges {
     public columns: any[];
     public functionId: string;
 
-    public _funcName: string;
-
     constructor(
-        private _functionsService: FunctionsService,
         private _functionMonitorService: FunctionMonitorService,
         private _portalService: PortalService,
         private _globalStateService: GlobalStateService,
@@ -65,13 +61,12 @@ export class FunctionMonitorComponent implements OnChanges {
                 formatTo: "number"
             }
         ];
-        let site = this._functionsService.getSiteName();
+        let site = this.selectedFunction.functionApp.getSiteName();
         this.successAggregateHeading = this._translateService.instant(PortalResources.functionMonitor_successAggregate);
         this.errorsAggregateHeading = this._translateService.instant(PortalResources.functionMonitor_errorsAggregate);
-        this._funcName = this.selectedFunction.name;
-        this._functionsService.getFunctionAppId().subscribe(host => {
+        this.selectedFunction.functionApp.getFunctionAppId().subscribe(host => {
             var hostId = !!host ? host : "";
-            this._functionMonitorService.getDataForSelectedFunction(this._funcName, hostId).subscribe(data => {
+            this._functionMonitorService.getDataForSelectedFunction(this.selectedFunction, hostId).subscribe(data => {
                 this.functionId = !!data ? data.functionId : "";
                 this.successAggregate = !!data ? data.successCount.toString() : 
                     this._translateService.instant(PortalResources.appMonitoring_noData);
@@ -80,7 +75,7 @@ export class FunctionMonitorComponent implements OnChanges {
 
                 // if no data from function monitoring we don't call the Invocations API since this will return 404
                 if (!!data) {
-                    this._functionMonitorService.getInvocationsDataForSelctedFunction(this.functionId).subscribe(result => {
+                    this._functionMonitorService.getInvocationsDataForSelctedFunction(this.selectedFunction.functionApp, this.functionId).subscribe(result => {
                         this.rows = result;
                         this._globalStateService.clearBusyState();
                     });
@@ -90,6 +85,6 @@ export class FunctionMonitorComponent implements OnChanges {
             });
         });
 
-        this.pulseUrl = `https://support-bay.scm.azurewebsites.net/Support.functionsmetrics/#/${site}/${this._funcName}`;
+        this.pulseUrl = `https://support-bay.scm.azurewebsites.net/Support.functionsmetrics/#/${site}/${this.selectedFunction.name}`;
     }
 }

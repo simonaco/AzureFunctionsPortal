@@ -324,7 +324,6 @@ export class FunctionApp {
             test_data: null,
             script_root_path_href: null,
             config_href: null,
-            id : "",
             functionApp : null
         };
     }
@@ -342,7 +341,6 @@ export class FunctionApp {
             test_data: null,
             script_root_path_href: null,
             config_href: null,
-            id : "",
             functionApp : null
         };
     }
