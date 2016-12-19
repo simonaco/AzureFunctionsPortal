@@ -38,70 +38,67 @@ export class FunctionNode extends TreeNode{
     }
 }
 
-export class FunctionDevelopNode extends TreeNode{
-    public title = "Develop";
+export class FunctionEditNode extends TreeNode{
     public dashboardType = DashboardType.function;
-
-    constructor(
-        sideNav : SideNavComponent,
-        private _siteArmObj : ArmObj<Site>,
-        private _function : FunctionInfo){
-
-        super(sideNav, _siteArmObj.id + "/functions/" + _function.name + "/develop");
-    }
-
-    protected _getViewData() : any{
-        return this._function;
-    }
-}
-
-export class FunctionIntegrateNode extends TreeNode{
-    public title = "Integrate";
-    public dashboardType = DashboardType.function;
-
-    constructor(
-        sideNav : SideNavComponent,
-        private _siteArmObj : ArmObj<Site>,
-        private _function : FunctionInfo){
-
-        super(sideNav, _siteArmObj.id + "/functions/" + _function.name + "/integrate");
-    }
+    public showIcon = false;
     
+    constructor(
+        sideNav : SideNavComponent,
+        private _functionInfo : FunctionInfo,
+        resourceId : string){
+
+        super(sideNav, resourceId);
+    }
+
     protected _getViewData() : any{
-        return this._function;
+        return this._functionInfo;
     }
 }
 
-export class FunctionManageNode extends TreeNode{
+export class FunctionDevelopNode extends FunctionEditNode{
+    public title = "Develop";
+
+    constructor(
+        sideNav : SideNavComponent,
+        siteArmObj : ArmObj<Site>,
+        functionInfo : FunctionInfo){
+
+        super(sideNav, functionInfo, siteArmObj.id + "/functions/" + functionInfo.name + "/develop");
+    }
+}
+
+export class FunctionIntegrateNode extends FunctionEditNode{
+    public title = "Integrate";
+
+    constructor(
+        sideNav : SideNavComponent,
+        siteArmObj : ArmObj<Site>,
+        functionInfo : FunctionInfo){
+
+        super(sideNav, functionInfo, siteArmObj.id + "/functions/" + functionInfo.name + "/integrate");
+    }
+}
+
+export class FunctionManageNode extends FunctionEditNode{
     public title = "Manage";
-    public dashboardType = DashboardType.function;
 
     constructor(
         sideNav : SideNavComponent,
-        private _siteArmObj : ArmObj<Site>,
-        private _function : FunctionInfo){
+        siteArmObj : ArmObj<Site>,
+        functionInfo : FunctionInfo){
 
-        super(sideNav, _siteArmObj.id + "/functions/" + _function.name + "/manage");
-    }
-
-    protected _getViewData() : any{
-        return this._function;
+        super(sideNav, functionInfo, siteArmObj.id + "/functions/" + functionInfo.name + "/manage");
     }
 }
 
-export class FunctionMonitorNode extends TreeNode{
+export class FunctionMonitorNode extends FunctionEditNode{
     public title = "Monitor";
-    public dashboardType = DashboardType.function;
 
     constructor(
         sideNav : SideNavComponent,
-        private _siteArmObj : ArmObj<Site>,
-        private _function : FunctionInfo){
+        siteArmObj : ArmObj<Site>,
+        functionInfo : FunctionInfo){
 
-        super(sideNav, _siteArmObj.id + "/functions/" + _function.name + "/monitor");
-    }
-
-    protected _getViewData() : any{
-        return this._function;
+        super(sideNav, functionInfo, siteArmObj.id + "/functions/" + functionInfo.name + "/monitor");
     }
 }

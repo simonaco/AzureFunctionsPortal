@@ -6,7 +6,8 @@
 @import 'controls/buttons', 
         'controls/log-streaming',
         'controls/monaco',
-        'controls/radio';
+        'controls/radio',
+        'controls/breadcrumbs';
 //         'controls/copy-pre',
 //         'controls/input',
 //         'controls/drop-down',
@@ -20,7 +21,8 @@
 //         'layout/side-bar',
 //         'layout/tree-view';
 
-@import 'pages/binding-designer';
+@import 'pages/binding-designer',
+        'pages/site-dashboard';
 //         'pages/site-dashboard',
 //         'pages/create-app',
 //         'pages/deployment-source';

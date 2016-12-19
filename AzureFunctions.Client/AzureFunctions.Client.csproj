@@ -22,8 +22,19 @@
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app\components\breadcrumbs\breadcrumbs.component.html" />
     <Content Include="app\components\main\main.component.html" />
     <Content Include="app\components\sidenav\sidenav.component.html" />
+    <Content Include="app\components\site\dashboard\site-dashboard.component.html" />
+    <Content Include="app\components\site\dashboard\site-enabled-features.component.html" />
+    <Content Include="app\components\site\dashboard\site-manage.component.html" />
+    <Content Include="app\components\site\dashboard\site-monitor.component.html" />
+    <Content Include="app\components\site\dashboard\site-notifications.component.html" />
+    <Content Include="app\components\site\dashboard\site-summary.component.html" />
+    <Content Include="app\components\site\deploymentSource\deployment-source-setup.component.html" />
+    <Content Include="app\components\site\deploymentSource\deployment-source.component.html" />
+    <Content Include="app\components\tabs\tab.component.html" />
+    <Content Include="app\components\tabs\tabs.component.html" />
     <Content Include="app\components\treeview\tree-view.component.html" />
     <Content Include="health.html" />
     <Content Include="images\arrow-right.svg" />
@@ -130,6 +141,7 @@
     <TypeScriptCompile Include="app\components\app-settings.component.ts" />
     <TypeScriptCompile Include="app\components\binding-designer.component.ts" />
     <TypeScriptCompile Include="app\components\binding-input.component.ts" />
+    <TypeScriptCompile Include="app\components\breadcrumbs\breadcrumbs.component.ts" />
     <TypeScriptCompile Include="app\components\function-keys.component.ts" />
     <TypeScriptCompile Include="app\components\local-development-instructions.component.ts" />
     <TypeScriptCompile Include="app\components\main\main.component.ts" />
@@ -137,6 +149,18 @@
     <TypeScriptCompile Include="app\components\secrets-box-container.ts" />
     <TypeScriptCompile Include="app\components\secrets-box-input.ts" />
     <TypeScriptCompile Include="app\components\sidenav\sidenav.component.ts" />
+    <TypeScriptCompile Include="app\components\site\dashboard\site-dashboard.component.ts" />
+    <TypeScriptCompile Include="app\components\site\dashboard\site-enabled-features.component.ts" />
+    <TypeScriptCompile Include="app\components\site\dashboard\site-enabled-features.spec.ts" />
+    <TypeScriptCompile Include="app\components\site\dashboard\site-manage.component.ts" />
+    <TypeScriptCompile Include="app\components\site\dashboard\site-monitor.component.ts" />
+    <TypeScriptCompile Include="app\components\site\dashboard\site-notifications.component.ts" />
+    <TypeScriptCompile Include="app\components\site\dashboard\site-summary.component.ts" />
+    <TypeScriptCompile Include="app\components\site\deploymentSource\deployment-source-setup.component.ts" />
+    <TypeScriptCompile Include="app\components\site\deploymentSource\deployment-source.component.ts" />
+    <TypeScriptCompile Include="app\components\site\deploymentSource\deployment.ts" />
+    <TypeScriptCompile Include="app\components\tabs\tab.component.ts" />
+    <TypeScriptCompile Include="app\components\tabs\tabs.component.ts" />
     <TypeScriptCompile Include="app\components\tooltip.component.ts" />
     <TypeScriptCompile Include="app\components\tooltip-content.component.ts" />
     <TypeScriptCompile Include="app\components\treeview\app-node.ts" />
@@ -186,9 +210,12 @@
     <TypeScriptCompile Include="app\models\app-insights.ts" />
     <TypeScriptCompile Include="app\models\arm\arm-obj.ts" />
     <TypeScriptCompile Include="app\models\arm\permission.ts" />
+    <TypeScriptCompile Include="app\models\arm\site-config.ts" />
     <TypeScriptCompile Include="app\models\arm\site.ts" />
     <TypeScriptCompile Include="app\models\function-key.ts" />
     <TypeScriptCompile Include="app\models\http-run.ts" />
+    <TypeScriptCompile Include="app\models\localStorage\enabled-features.ts" />
+    <TypeScriptCompile Include="app\models\localStorage\local-storage.ts" />
     <TypeScriptCompile Include="app\models\monaco-model.ts" />
     <TypeScriptCompile Include="app\models\function-monitor.ts" />
     <TypeScriptCompile Include="app\models\portal-resources.ts" />
@@ -237,6 +264,8 @@
     <TypeScriptCompile Include="app\pipes\aggregate-block.pipe.ts" />
     <TypeScriptCompile Include="app\pipes\sidebar.pipe.ts" />
     <TypeScriptCompile Include="app\pipes\table-function-monitor.pipe.ts" />
+    <TypeScriptCompile Include="app\polyfills\array.ts" />
+    <TypeScriptCompile Include="app\polyfills\string.ts" />
     <TypeScriptCompile Include="app\services\ai.service.ts" />
     <TypeScriptCompile Include="app\services\app-monitoring.service.ts" />
     <TypeScriptCompile Include="app\services\arm.service.ts" />
@@ -245,6 +274,8 @@
     <TypeScriptCompile Include="app\services\function-monitor.service.ts" />
     <TypeScriptCompile Include="app\services\functions.service.ts" />
     <TypeScriptCompile Include="app\services\global-state.service.ts" />
+    <TypeScriptCompile Include="app\services\local-storage.service.ts" />
+    <TypeScriptCompile Include="app\services\local-storage.spec.ts" />
     <TypeScriptCompile Include="app\services\portal.service.ts" />
     <TypeScriptCompile Include="app\services\telemetry.service.ts" />
     <TypeScriptCompile Include="app\services\user.service.ts" />

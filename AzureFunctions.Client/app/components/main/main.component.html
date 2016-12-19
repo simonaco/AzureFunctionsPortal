@@ -4,7 +4,8 @@
 
     <div *ngIf="!!viewInfo">
 
-        <function-edit [viewInfoInput]="viewInfo"></function-edit>
+        <site-dashboard [viewInfoInput]="viewInfo" *ngIf="dashboardType === 'app'"></site-dashboard>
+        <function-edit [viewInfoInput]="viewInfo" *ngIf="dashboardType === 'function'"></function-edit>
 
     </div>
 </div>

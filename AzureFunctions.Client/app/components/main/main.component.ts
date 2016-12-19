@@ -5,11 +5,15 @@ import {TreeViewInfo} from '../treeview/models/tree-view-info';
 import {DashboardType} from '../treeview/models/dashboard-type';
 import {UserService} from '../../services/user.service';
 import {FunctionEditComponent} from '../function-edit.component';
+import {SiteDashboardComponent} from '../site/dashboard/site-dashboard.component';
 
 @Component({
     selector: 'main',
     templateUrl: 'app/components/main/main.component.html',
-    directives: [SideNavComponent, FunctionEditComponent]
+    directives: [
+        SideNavComponent,
+        FunctionEditComponent,
+        SiteDashboardComponent]
 })
 export class MainComponent {
     public viewInfo : TreeViewInfo;
