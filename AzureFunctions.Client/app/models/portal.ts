@@ -38,6 +38,7 @@ export class Verbs{
     // Requests from iframe
     public static getStartupInfo = "get-startup-info";
     public static openBlade = "open-blade";
+    public static closeBlades = "close-blades";
     public static openBladeWithInputs = "open-blade-inputs";
     public static logAction = "log-action";
     public static logMessage = "log-message";
@@ -63,4 +64,10 @@ export interface WebsiteId {
     Name: string;
     ResourceGroup: string;
     SubscriptionId: string;
+}
+
+export interface OpenBladeInfo{
+    detailBlade: string,
+    detailBladeInputs: any,
+    extension? : string
 }

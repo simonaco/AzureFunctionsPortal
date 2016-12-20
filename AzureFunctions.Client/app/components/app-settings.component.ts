@@ -79,7 +79,7 @@ export class AppSettingsComponent implements OnInit {
     }
 
     openBlade(name : string) {
-        this._portalService.openBlade(name, "app-settings");
+        // this._portalService.openBlade(name, "app-settings");
         this._aiService.trackEvent(`/actions/app_settings/open_${name}_blade`);
     }
 

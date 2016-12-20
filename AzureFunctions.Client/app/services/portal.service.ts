@@ -1,6 +1,6 @@
 ﻿import {Injectable} from '@angular/core';
 import {Observable, ReplaySubject} from 'rxjs/Rx';
-import {Event, Data, Verbs, Action, LogEntryLevel, Message, StartupInfo} from '../models/portal';
+import {Event, Data, Verbs, Action, LogEntryLevel, Message, StartupInfo, OpenBladeInfo} from '../models/portal';
 import {ErrorEvent} from '../models/error-event';
 import {BroadcastService} from './broadcast.service';
 import {BroadcastEvent} from '../models/broadcast-event'
@@ -47,9 +47,9 @@ export class PortalService {
         });
     }
 
-    openBlade(name: string, source: string) : void{
-        this.logAction(source, "open blade " + name, null);
-        this.postMessage(Verbs.openBlade, name);
+    openBlade(bladeInfo : OpenBladeInfo, source : string){
+        this.logAction(source, 'open-blade ' + bladeInfo.detailBlade);
+        this.postMessage(Verbs.openBlade, JSON.stringify(bladeInfo));
     }
 
     openCollectorBlade(name: string, source: string, getAppSettingCallback: (appSettingName: string) => void): void {
@@ -65,6 +65,10 @@ export class PortalService {
         let inputStr = JSON.stringify(obj);
 
         this.postMessage(Verbs.openBladeWithInputs, inputStr);
+    }
+
+    closeBlades(){
+        this.postMessage(Verbs.closeBlades, "");
     }
 
     logAction(subcomponent: string, action: string, data?: any): void{

@@ -111,6 +111,6 @@ export class IntroComponent {
     }
 
     startFromSC() {
-        this._portalService.openBlade("ContinuousDeploymentListBlade", "intro");
+        // this._portalService.openBlade("ContinuousDeploymentListBlade", "intro");
     }
 }

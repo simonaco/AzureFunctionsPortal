@@ -51,9 +51,9 @@ export class AppMonitoringComponent implements OnInit {
         });
     }
 
-    openBlade(name: string) {
-        this._portalService.openBlade(name, 'app-monitoring');
-    }
+    // openBlade(name: string) {
+    //     this._portalService.openBlade(name, 'app-monitoring');
+    // }
 
     convertToUsageInfoForChart(appUsage: UsageVolume) {
         let xValuesForChart = appUsage.times;

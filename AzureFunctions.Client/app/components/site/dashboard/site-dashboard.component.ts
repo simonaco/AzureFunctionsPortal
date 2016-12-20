@@ -6,7 +6,7 @@ import {SiteTabNames} from '../../../models/constants';
 import {BreadcrumbsComponent} from '../../breadcrumbs/breadcrumbs.component';
 import {SiteSummaryComponent} from '../summary/site-summary.component';
 // import {SiteMonitorComponent} from './site-monitor.component';
-// import {SiteManageComponent} from './site-manage.component';
+import {SiteManageComponent} from '../manage/site-manage.component';
 // import {DeploymentSourceComponent} from '../deploymentSource/deployment-source.component';
 import {CacheService} from '../../../services/cache.service';
 // import {BusyService} from '../../../services/busy.service';
@@ -24,7 +24,7 @@ import {Site} from '../../../models/arm/site';
         TabComponent,
         SiteSummaryComponent,
         // SiteMonitorComponent,
-        // SiteManageComponent,
+        SiteManageComponent,
         // DeploymentSourceComponent,
         BreadcrumbsComponent
     ],

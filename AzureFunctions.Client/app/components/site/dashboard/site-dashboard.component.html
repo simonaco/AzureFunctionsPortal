@@ -5,11 +5,11 @@
                       [siteInput]="site"
                       (openTabEvent)="openTab($event)"></site-summary>
     </tab>
-    <tab [tabTitle]="TabNames.monitor">
-        <!--<site-monitor *ngIf="selectedTabTitle === TabNames.monitor" [siteInput]="site"></site-monitor>-->
-    </tab>
+    <!--<tab [tabTitle]="TabNames.monitor">
+        <site-monitor *ngIf="selectedTabTitle === TabNames.monitor" [siteInput]="site"></site-monitor>
+    </tab>-->
     <tab [tabTitle]="TabNames.manage">
-        <!--<site-manage *ngIf="selectedTabTitle === TabNames.manage" [siteInput]="site" (openTabEvent)="openTab($event)"></site-manage>-->
+        <site-manage *ngIf="selectedTabTitle === TabNames.manage" [siteInput]="site" (openTabEvent)="openTab($event)"></site-manage>
     </tab>
     <tab [tabTitle]="TabNames.troubleshoot">
         Troubleshoot

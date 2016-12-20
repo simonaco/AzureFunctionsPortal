@@ -22,17 +22,16 @@
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app\components\accordian\accordion.component.html" />
     <Content Include="app\components\breadcrumbs\breadcrumbs.component.html" />
+    <Content Include="app\components\feature-group\feature-group.component.html" />
     <Content Include="app\components\main\main.component.html" />
     <Content Include="app\components\sidenav\sidenav.component.html" />
     <Content Include="app\components\site\dashboard\site-dashboard.component.html" />
-    <Content Include="app\components\site\dashboard\site-enabled-features.component.html" />
-    <Content Include="app\components\site\dashboard\site-manage.component.html" />
-    <Content Include="app\components\site\dashboard\site-monitor.component.html" />
-    <Content Include="app\components\site\dashboard\site-notifications.component.html" />
-    <Content Include="app\components\site\dashboard\site-summary.component.html" />
-    <Content Include="app\components\site\deploymentSource\deployment-source-setup.component.html" />
-    <Content Include="app\components\site\deploymentSource\deployment-source.component.html" />
+    <Content Include="app\components\site\enabledFeatures\site-enabled-features.component.html" />
+    <Content Include="app\components\site\manage\site-manage.component.html" />
+    <Content Include="app\components\site\notifications\site-notifications.component.html" />
+    <Content Include="app\components\site\summary\site-summary.component.html" />
     <Content Include="app\components\tabs\tab.component.html" />
     <Content Include="app\components\tabs\tabs.component.html" />
     <Content Include="app\components\treeview\tree-view.component.html" />
@@ -135,6 +134,8 @@
     <None Include="schemas\project.json" />
     <TypeScriptCompile Include="app\boot.ts" />
     <TypeScriptCompile Include="app\common\resourceDescriptors.ts" />
+    <TypeScriptCompile Include="app\components\accordian\accordion-element.ts" />
+    <TypeScriptCompile Include="app\components\accordian\accordion.component.ts" />
     <TypeScriptCompile Include="app\components\aggregate-block.component.ts" />
     <TypeScriptCompile Include="app\components\app-monitoring.component.ts" />
     <TypeScriptCompile Include="app\components\app.component.ts" />
@@ -142,6 +143,7 @@
     <TypeScriptCompile Include="app\components\binding-designer.component.ts" />
     <TypeScriptCompile Include="app\components\binding-input.component.ts" />
     <TypeScriptCompile Include="app\components\breadcrumbs\breadcrumbs.component.ts" />
+    <TypeScriptCompile Include="app\components\feature-group\feature-group.component.ts" />
     <TypeScriptCompile Include="app\components\function-keys.component.ts" />
     <TypeScriptCompile Include="app\components\local-development-instructions.component.ts" />
     <TypeScriptCompile Include="app\components\main\main.component.ts" />
@@ -150,15 +152,12 @@
     <TypeScriptCompile Include="app\components\secrets-box-input.ts" />
     <TypeScriptCompile Include="app\components\sidenav\sidenav.component.ts" />
     <TypeScriptCompile Include="app\components\site\dashboard\site-dashboard.component.ts" />
-    <TypeScriptCompile Include="app\components\site\dashboard\site-enabled-features.component.ts" />
-    <TypeScriptCompile Include="app\components\site\dashboard\site-enabled-features.spec.ts" />
-    <TypeScriptCompile Include="app\components\site\dashboard\site-manage.component.ts" />
-    <TypeScriptCompile Include="app\components\site\dashboard\site-monitor.component.ts" />
-    <TypeScriptCompile Include="app\components\site\dashboard\site-notifications.component.ts" />
-    <TypeScriptCompile Include="app\components\site\dashboard\site-summary.component.ts" />
-    <TypeScriptCompile Include="app\components\site\deploymentSource\deployment-source-setup.component.ts" />
-    <TypeScriptCompile Include="app\components\site\deploymentSource\deployment-source.component.ts" />
-    <TypeScriptCompile Include="app\components\site\deploymentSource\deployment.ts" />
+    <TypeScriptCompile Include="app\components\site\enabledFeatures\site-enabled-features.component.ts" />
+    <TypeScriptCompile Include="app\components\site\enabledFeatures\site-enabled-features.spec.ts" />
+    <TypeScriptCompile Include="app\components\site\manage\site-manage.component.ts" />
+    <TypeScriptCompile Include="app\components\site\notifications\notifications.ts" />
+    <TypeScriptCompile Include="app\components\site\notifications\site-notifications.component.ts" />
+    <TypeScriptCompile Include="app\components\site\summary\site-summary.component.ts" />
     <TypeScriptCompile Include="app\components\tabs\tab.component.ts" />
     <TypeScriptCompile Include="app\components\tabs\tabs.component.ts" />
     <TypeScriptCompile Include="app\components\tooltip.component.ts" />
@@ -271,6 +270,7 @@
     <TypeScriptCompile Include="app\services\arm.service.ts" />
     <TypeScriptCompile Include="app\services\background-tasks.service.ts" />
     <TypeScriptCompile Include="app\services\broadcast.service.ts" />
+    <TypeScriptCompile Include="app\services\function-app.ts" />
     <TypeScriptCompile Include="app\services\function-monitor.service.ts" />
     <TypeScriptCompile Include="app\services\functions.service.ts" />
     <TypeScriptCompile Include="app\services\global-state.service.ts" />
