@@ -9,7 +9,8 @@ import {TreeViewInfo} from './models/tree-view-info';
 
 export class TreeNode{
     public isExpanded : boolean;
-    public showIcon : boolean = true;
+    public showExpandIcon : boolean = true;
+    public iconClass : string;
     public isLoading : boolean;
     public children : TreeNode[];
     public title : string;
@@ -34,6 +35,8 @@ export class TreeNode{
             dashboardType : this.dashboardType,
             data : this._getViewData()
         });
+
+        this.toggle(null);
     }
 
     public toggle(event){
@@ -73,7 +76,7 @@ export class TreeNode{
     protected _doneLoading(){
         this.isLoading = false;
         this.isExpanded = true;
-        this.showIcon = !!this.children && this.children.length > 0;
+        this.showExpandIcon = !!this.children && this.children.length > 0;
         if(this.children && this.children.length === 1){
             this.children[0].toggle(null);
         }
@@ -103,7 +106,7 @@ export class RootNode extends TreeNode{
 
 // export class AdvancedNode extends TreeNode{
 //     public dashboardType = DashboardType.advanced;
-//     public showIcon = false;
+//     public showExpandIcon = false;
 
 //     constructor(sideBar : SideBarComponent, resourceId : string){
 //         super(sideBar, resourceId);
@@ -112,7 +115,7 @@ export class RootNode extends TreeNode{
 
 // export class AdvancedWriteNode extends TreeNode{
 //     public dashboardType = DashboardType.advancedWrite;
-//     public showIcon = false;
+//     public showExpandIcon = false;
 
 //     constructor(sideBar : SideBarComponent, resourceId : string){
 //         super(sideBar, resourceId);

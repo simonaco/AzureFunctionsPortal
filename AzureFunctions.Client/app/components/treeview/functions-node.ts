@@ -18,7 +18,7 @@ export class FunctionsNode extends TreeNode{
     private _functions : FunctionInfo[]; 
 
     constructor(sideNav : SideNavComponent, private _siteArmObj : ArmObj<Site>){
-        super(sideNav, _siteArmObj.id);
+        super(sideNav, _siteArmObj.id + "/functions");
     }
 
     protected _loadChildren(){

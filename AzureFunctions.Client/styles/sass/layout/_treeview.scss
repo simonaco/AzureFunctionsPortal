@@ -52,10 +52,6 @@
     }
 }
 
-.tree-node-pivot{
-    padding: 5px;
-}
-
 .tree-node:hover{
     background-color: darken($border-color, 10%);
 }
@@ -75,4 +71,9 @@
 
 .tree-node-disabled{
     color : darken($border-color, 30%);
+}
+
+.tree-node-function-icon{
+    width: 15px;
+    color: $button-bg-color;
 }

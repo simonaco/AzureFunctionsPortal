@@ -5,31 +5,33 @@
          (mouseleave)="child.showMenu = false"
          class="tree-node"
          [class.clickable]="!child.disabled"
-         [class.tree-node-selected]="child.sideBar && child.sideBar.resourceId === child.resourceId"
+         [class.tree-node-selected]="child.sideNav && child.sideNav.resourceId === child.resourceId"
          (click)="child.select()">
 
         <span *ngIf="!child.isNewNode" class="tree-node-content" [style.margin-left]="margin">
 
             <i *ngIf="!child.isLoading"
-                class="fa tree-node-pivot"
-                [class.fa-caret-right]="child.showIcon && !child.isExpanded"
-                [class.fa-caret-down]="child.showIcon && child.isExpanded"
+                class="fa"
+                [class.fa-caret-right]="child.showExpandIcon && !child.isExpanded"
+                [class.fa-caret-down]="child.showExpandIcon && child.isExpanded"
                 (click)="child.toggle($event)"></i>
 
             <i *ngIf="child.isLoading" class="fa fa-refresh fa-spin fa-fw margin-bottom"></i>
+
+            <i *ngIf="child.iconClass" [class]="child.iconClass"></i>
 
             <span [class.tree-node-disabled]="child.disabled">
                   {{ child.title }}
             </span>
 
             <span class="tree-node-menu"
-                  *ngIf="child.showMenu || (child.sideBar && child.sideBar.resourceId === child.resourceId)">
+                  *ngIf="child.showMenu || (child.sideNav && child.sideNav.resourceId === child.resourceId)">
 
-              <i *ngIf="child.supportsAdvanced"
+              <!--<i *ngIf="child.supportsAdvanced"
                  (click)="child.toggleAdvanced($event)"
                  class="fa fa-cog"
                  [class.tree-node-advanced-enabled]="child.inAdvancedMode"
-                 title="Explore API"></i>
+                 title="Explore API"></i>-->
 
               <i *ngIf="child.disabled"
                  class="fa fa-info-circle warning"

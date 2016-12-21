@@ -10,21 +10,20 @@ import {PortalResources} from '../../models/portal-resources';
 import {FunctionInfo} from '../../models/function-info';
 
 export class FunctionNode extends TreeNode{
-    public title = "Functions";
-    public dashboardType = DashboardType.collection;
+    public title = "";
+    public dashboardType = DashboardType.function;
 
     constructor(
         sideNav : SideNavComponent,
         private _siteArmObj : ArmObj<Site>,
         private _function : FunctionInfo){
 
-        super(sideNav, _siteArmObj.id + "/functions/" + _function.name);
+        super(sideNav, _siteArmObj.id + "/functions/" + _function.name + "/develop");
         this.title = _function.name;
     }
 
     protected _loadChildren(){
         this.children = [
-            new FunctionDevelopNode(this.sideNav, this._siteArmObj, this._function),
             new FunctionIntegrateNode(this.sideNav, this._siteArmObj, this._function),
             new FunctionManageNode(this.sideNav, this._siteArmObj, this._function),
             new FunctionMonitorNode(this.sideNav, this._siteArmObj, this._function)
@@ -40,7 +39,7 @@ export class FunctionNode extends TreeNode{
 
 export class FunctionEditNode extends TreeNode{
     public dashboardType = DashboardType.function;
-    public showIcon = false;
+    public showExpandIcon = false;
     
     constructor(
         sideNav : SideNavComponent,
@@ -55,18 +54,6 @@ export class FunctionEditNode extends TreeNode{
     }
 }
 
-export class FunctionDevelopNode extends FunctionEditNode{
-    public title = "Develop";
-
-    constructor(
-        sideNav : SideNavComponent,
-        siteArmObj : ArmObj<Site>,
-        functionInfo : FunctionInfo){
-
-        super(sideNav, functionInfo, siteArmObj.id + "/functions/" + functionInfo.name + "/develop");
-    }
-}
-
 export class FunctionIntegrateNode extends FunctionEditNode{
     public title = "Integrate";
 
@@ -76,6 +63,8 @@ export class FunctionIntegrateNode extends FunctionEditNode{
         functionInfo : FunctionInfo){
 
         super(sideNav, functionInfo, siteArmObj.id + "/functions/" + functionInfo.name + "/integrate");
+
+        this.iconClass = "fa fa-flash tree-node-function-icon";
     }
 }
 
@@ -88,6 +77,8 @@ export class FunctionManageNode extends FunctionEditNode{
         functionInfo : FunctionInfo){
 
         super(sideNav, functionInfo, siteArmObj.id + "/functions/" + functionInfo.name + "/manage");
+
+        this.iconClass = "fa fa-cog tree-node-function-icon";
     }
 }
 
@@ -100,5 +91,7 @@ export class FunctionMonitorNode extends FunctionEditNode{
         functionInfo : FunctionInfo){
 
         super(sideNav, functionInfo, siteArmObj.id + "/functions/" + functionInfo.name + "/monitor");
+
+        this.iconClass = "fa fa-search tree-node-function-icon";
     }
 }

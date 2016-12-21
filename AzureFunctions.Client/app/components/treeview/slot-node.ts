@@ -5,7 +5,7 @@ import {ArmObj} from '../../models/arm/arm-obj';
 import {Site} from '../../models/arm/site';
 
 export class SlotNode extends TreeNode{
-    public showIcon = false;
+    public showExpandIcon = false;
     public dashboardType = DashboardType.app;
 
     constructor(sideBar : SideNavComponent, slot : ArmObj<Site>, isSearchResult : boolean){
