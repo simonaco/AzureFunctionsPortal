@@ -7,9 +7,9 @@ import {BreadcrumbsComponent} from '../../breadcrumbs/breadcrumbs.component';
 import {SiteSummaryComponent} from '../summary/site-summary.component';
 // import {SiteMonitorComponent} from './site-monitor.component';
 import {SiteManageComponent} from '../manage/site-manage.component';
-// import {DeploymentSourceComponent} from '../deploymentSource/deployment-source.component';
+import {DeploymentSourceComponent} from '../deploymentSource/deployment-source.component';
 import {CacheService} from '../../../services/cache.service';
-// import {BusyService} from '../../../services/busy.service';
+import {GlobalStateService} from '../../../services/global-state.service';
 import {TreeViewInfo} from '../../treeview/models/tree-view-info';
 import {DashboardType} from '../../treeview/models/dashboard-type';
 import {Descriptor, SiteDescriptor} from '../../../common/resourceDescriptors';
@@ -25,7 +25,7 @@ import {Site} from '../../../models/arm/site';
         SiteSummaryComponent,
         // SiteMonitorComponent,
         SiteManageComponent,
-        // DeploymentSourceComponent,
+        DeploymentSourceComponent,
         BreadcrumbsComponent
     ],
     inputs: ['viewInfoInput']
@@ -42,18 +42,19 @@ export class SiteDashboardComponent {
 
     public activeComponent = "";
 
-    constructor(private _cacheService : CacheService
-    // private _busyService : BusyService)
+    constructor(
+        private _cacheService : CacheService,
+        private _globalStateService : GlobalStateService
      ) {
         this._viewInfo = new Subject<TreeViewInfo>();
         this._viewInfo
             .distinctUntilChanged()
             .switchMap(viewInfo =>{
-                // this._busyService.isBusy = true;
+                this._globalStateService.setBusyState();
                 return this._cacheService.getArmResource(viewInfo.resourceId);
             })
             .subscribe((site : ArmObj<Site>) =>{
-                // this._busyService.isBusy = false;
+                this._globalStateService.clearBusyState();
                 this.site = site;
             })
     }

@@ -4,8 +4,10 @@ import {ResourceType, Descriptor, SiteDescriptor} from '../../common/resourceDes
 import {TreeViewInfo} from '../treeview/models/tree-view-info';
 import {DashboardType} from '../treeview/models/dashboard-type';
 import {UserService} from '../../services/user.service';
+import {GlobalStateService} from '../../services/global-state.service';
 import {FunctionEditComponent} from '../function-edit.component';
 import {SiteDashboardComponent} from '../site/dashboard/site-dashboard.component';
+import {BusyStateComponent} from '../busy-state.component';
 
 @Component({
     selector: 'main',
@@ -13,15 +15,19 @@ import {SiteDashboardComponent} from '../site/dashboard/site-dashboard.component
     directives: [
         SideNavComponent,
         FunctionEditComponent,
-        SiteDashboardComponent]
+        SiteDashboardComponent,
+        BusyStateComponent
+    ]
 })
-export class MainComponent {
+export class MainComponent implements AfterViewInit {
     public viewInfo : TreeViewInfo;
     public descriptor : Descriptor;
     public dashboardType : string;
     public inIFrame : boolean;
 
-    constructor(private _userService : UserService) {
+    @ViewChild(BusyStateComponent) busyStateComponent: BusyStateComponent;
+
+    constructor(private _userService : UserService, private _globalStateService : GlobalStateService) {
         this.inIFrame = _userService.inIFrame;
     }
 
@@ -37,4 +43,9 @@ export class MainComponent {
             this.descriptor = Descriptor.getDescriptor(viewInfo.resourceId);
         }
      }
+
+    ngAfterViewInit() {
+        this._globalStateService.GlobalBusyStateComponent  = this.busyStateComponent;
+        // this._globalStateService.LocalDevelopmentInstructionsComponent = this.localDevelopment;
+    }
 }

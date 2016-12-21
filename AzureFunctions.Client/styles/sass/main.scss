@@ -14,7 +14,6 @@
 //         'controls/copy-pre',
 //         'controls/input',
 //         'controls/drop-down',
-//         'controls/busy-state',
 
 @import 'layout/dashboard',
         'layout/sidenav',
@@ -24,10 +23,10 @@
 //         'layout/tree-view';
 
 @import 'pages/binding-designer',
-        'pages/site-dashboard';
+        'pages/site-dashboard',
+        'pages/deployment-source';
 //         'pages/site-dashboard',
 //         'pages/create-app',
-//         'pages/deployment-source';
 
 // common
 // vendors

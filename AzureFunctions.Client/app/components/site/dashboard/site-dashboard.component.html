@@ -15,6 +15,6 @@
         Troubleshoot
     </tab>
     <tab *ngIf="activeComponent === 'deployment-source'" [tabTitle]="TabNames.deploymentSource" [closeable]="true">
-        <!--<deployment-source *ngIf="selectedTabTitle === TabNames.deploymentSource" [siteInput]="site"></deployment-source>-->
+        <deployment-source *ngIf="selectedTabTitle === TabNames.deploymentSource" [siteInput]="site"></deployment-source>
     </tab>
 </tabs>

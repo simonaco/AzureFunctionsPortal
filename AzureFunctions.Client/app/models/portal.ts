@@ -43,12 +43,14 @@ export class Verbs{
     public static logAction = "log-action";
     public static logMessage = "log-message";
     public static setDirtyState = "set-dirtystate";
+    public static setupOAuth = "setup-oauth";
 
     // Requests from Ibiza
     public static sendStartupInfo = "send-startup-info";
     public static sendResourceId = "send-resourceId";
     public static sendAppSettingName = "send-appSettingName";
-    public static sendToken = "send-token";		
+    public static sendToken = "send-token";
+    public static sendOAuthInfo = "send-oauth-info";
 }
 
 export enum LogEntryLevel {

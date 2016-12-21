@@ -1,11 +1,12 @@
 ﻿import {Injectable} from '@angular/core';
-import {Observable, ReplaySubject} from 'rxjs/Rx';
+import {Observable, ReplaySubject, Subject} from 'rxjs/Rx';
 import {Event, Data, Verbs, Action, LogEntryLevel, Message, StartupInfo, OpenBladeInfo} from '../models/portal';
 import {ErrorEvent} from '../models/error-event';
 import {BroadcastService} from './broadcast.service';
 import {BroadcastEvent} from '../models/broadcast-event'
 import {UserService} from './user.service';
 import {AiService} from './ai.service';
+import {SetupOAuthRequest, SetupOAuthResponse} from '../components/site/deploymentSource/deployment'
 
 @Injectable()
 export class PortalService {
@@ -13,6 +14,7 @@ export class PortalService {
 
     private portalSignature: string = "FxAppBlade";
     private startupInfoObservable : ReplaySubject<StartupInfo>;
+    private setupOAuthObservable : Subject<SetupOAuthResponse>;
     private getAppSettingCallback: (appSettingName: string) => void;
     private shellSrc: string;
 
@@ -20,6 +22,7 @@ export class PortalService {
      private _aiService: AiService) {
 
         this.startupInfoObservable = new ReplaySubject<StartupInfo>(1);
+        this.setupOAuthObservable = new Subject<SetupOAuthResponse>();
 
         if (this.inIFrame()){
             this.initializeIframe();
@@ -28,6 +31,11 @@ export class PortalService {
 
     getStartupInfo(){
         return this.startupInfoObservable;
+    }
+
+    setupOAuth(input : SetupOAuthRequest){
+        this.postMessage(Verbs.setupOAuth, JSON.stringify(input));
+        return this.setupOAuthObservable;
     }
 
     initializeIframe(): void {
@@ -119,6 +127,11 @@ export class PortalService {
                 this.getAppSettingCallback = null;
             }
         }
+        else if(methodName === Verbs.sendOAuthInfo){
+            let info = <SetupOAuthResponse>data;
+            this.setupOAuthObservable.next(info);
+        }
+
     }
 
     private postMessage(verb: string, data: string){
