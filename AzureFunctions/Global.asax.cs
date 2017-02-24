@@ -226,18 +226,13 @@ namespace AzureFunctions
                 .As<ISettings>()
                 .SingleInstance();
 
-            builder.Register(c =>
-            {
-                var userSettings = c.Resolve<IUserSettings>();
-                var client = new HttpClient();
+            builder.Register(c => new HttpClient { BaseAddress = new Uri("https://management.azure.com") })
+                .As<HttpClient>()
+                .SingleInstance();
 
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userSettings.BearerToken);
-                client.DefaultRequestHeaders.Add("User-Agent", Constants.UserAgent);
-                client.DefaultRequestHeaders.Add("Accept", Constants.ApplicationJson);
-                return client;
-            })
-            .As<HttpClient>()
-            .InstancePerRequest();
+            builder.RegisterType<ArmClient>()
+                .As<IArmClient>()
+                .InstancePerRequest();
 
             builder.RegisterType<TemplatesManager>()
                 .As<ITemplatesManager>()
