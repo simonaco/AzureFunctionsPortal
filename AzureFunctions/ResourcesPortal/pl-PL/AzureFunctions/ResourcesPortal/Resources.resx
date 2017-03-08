@@ -784,10 +784,10 @@
   <data name="error_DnsResolution" xml:space="preserve">
     <value>Nie można nawiązać połączenia z aplikacją funkcji. Może to być tymczasowy problem z aplikacją lub nie można jej uruchomić. Sprawdź dzienniki lub spróbuj ponownie za kilka minut.</value>
   </data>
-  <data name="error_UnableToRetriveFunctionApp" xml:space="preserve">
+  <data name="error_UnableToRetrieveFunctionApp" xml:space="preserve">
     <value>Nie można pobrać aplikacji funkcji ({{functionApp}})</value>
   </data>
-  <data name="error_UnableToRetriveFunctions" xml:space="preserve">
+  <data name="error_UnableToRetrieveFunctions" xml:space="preserve">
     <value>Nie można nawiązać połączenia z aplikacją funkcji ({{statusText}}). Spróbuj ponownie później.</value>
   </data>
   <data name="tryNow_fewMoreSeconds" xml:space="preserve">

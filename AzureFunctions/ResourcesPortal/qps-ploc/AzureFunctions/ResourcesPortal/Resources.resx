@@ -784,10 +784,10 @@
   <data name="error_DnsResolution" xml:space="preserve">
     <value>[Kw2qm][ô@We are unable to reach your function app. Your app could be having a temporary issue or may be failing to start. You can check logs or try again in a couple of minutes. !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! ]</value>
   </data>
-  <data name="error_UnableToRetriveFunctionApp" xml:space="preserve">
+  <data name="error_UnableToRetrieveFunctionApp" xml:space="preserve">
     <value>[36sqx][óêUnable to retrieve Function App ({{functionApp}}) !!! !!! !!! !!! !!]</value>
   </data>
-  <data name="error_UnableToRetriveFunctions" xml:space="preserve">
+  <data name="error_UnableToRetrieveFunctions" xml:space="preserve">
     <value>[HnqIC][©íWe are unable to reach your function app ({{statusText}}). Please try again later. !!! !!! !!! !!! !!! !!! !!! !!]</value>
   </data>
   <data name="tryNow_fewMoreSeconds" xml:space="preserve">

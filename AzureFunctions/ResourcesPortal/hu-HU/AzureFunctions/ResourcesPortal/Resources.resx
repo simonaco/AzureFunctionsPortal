@@ -784,10 +784,10 @@
   <data name="error_DnsResolution" xml:space="preserve">
     <value>A függvényalkalmazás nem érhető el. Előfordulhat, hogy az alkalmazás átmeneti problémába ütközött, vagy lehet, hogy nem tudott elindulni. Ellenőrizheti a naplófájlokat, vagy újrapróbálkozhat néhány perc múlva.</value>
   </data>
-  <data name="error_UnableToRetriveFunctionApp" xml:space="preserve">
+  <data name="error_UnableToRetrieveFunctionApp" xml:space="preserve">
     <value>Nem sikerült beolvasni a(z) {{functionApp}} függvényalkalmazást</value>
   </data>
-  <data name="error_UnableToRetriveFunctions" xml:space="preserve">
+  <data name="error_UnableToRetrieveFunctions" xml:space="preserve">
     <value>A függvényalkalmazás nem érhető el ({{statusText}}). Próbálkozzon újra később.</value>
   </data>
   <data name="tryNow_fewMoreSeconds" xml:space="preserve">

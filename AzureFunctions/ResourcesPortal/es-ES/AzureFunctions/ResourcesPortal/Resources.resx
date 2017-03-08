@@ -784,10 +784,10 @@
   <data name="error_DnsResolution" xml:space="preserve">
     <value>No se puede establecer contacto con su aplicación de función. Puede que la aplicación tenga un problema temporal o que no pueda iniciarse. Puede comprobar los registros o volver a intentarlo en unos minutos.</value>
   </data>
-  <data name="error_UnableToRetriveFunctionApp" xml:space="preserve">
+  <data name="error_UnableToRetrieveFunctionApp" xml:space="preserve">
     <value>No se puede recuperar Function App ({{functionApp}})</value>
   </data>
-  <data name="error_UnableToRetriveFunctions" xml:space="preserve">
+  <data name="error_UnableToRetrieveFunctions" xml:space="preserve">
     <value>No hemos podido establecer contacto con su aplicación de función ({{statusText}}). Inténtelo de nuevo más tarde.</value>
   </data>
   <data name="tryNow_fewMoreSeconds" xml:space="preserve">

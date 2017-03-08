@@ -784,10 +784,10 @@
   <data name="error_DnsResolution" xml:space="preserve">
     <value>Não é possível alcançar a sua aplicação de funções. A sua aplicação pode ter um problema temporário ou pode estar a falhar ao iniciar. Pode verificar os registos ou tente novamente daqui a alguns minutos.</value>
   </data>
-  <data name="error_UnableToRetriveFunctionApp" xml:space="preserve">
+  <data name="error_UnableToRetrieveFunctionApp" xml:space="preserve">
     <value>Não foi possível obter a Function App ({{functionApp}})</value>
   </data>
-  <data name="error_UnableToRetriveFunctions" xml:space="preserve">
+  <data name="error_UnableToRetrieveFunctions" xml:space="preserve">
     <value>Não é possível alcançar a sua aplicação de funções ({{statusText}}). Tente novamente mais tarde.</value>
   </data>
   <data name="tryNow_fewMoreSeconds" xml:space="preserve">

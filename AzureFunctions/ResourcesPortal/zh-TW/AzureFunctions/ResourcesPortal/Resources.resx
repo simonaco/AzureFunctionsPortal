@@ -784,10 +784,10 @@
   <data name="error_DnsResolution" xml:space="preserve">
     <value>無法連接您的函數應用程式。您的應用程式可能發生暫時問題或無法啟動。您可以檢查記錄檔，或幾分鐘後再試一次。</value>
   </data>
-  <data name="error_UnableToRetriveFunctionApp" xml:space="preserve">
+  <data name="error_UnableToRetrieveFunctionApp" xml:space="preserve">
     <value>無法擷取函數應用程式 ({{functionApp}})</value>
   </data>
-  <data name="error_UnableToRetriveFunctions" xml:space="preserve">
+  <data name="error_UnableToRetrieveFunctions" xml:space="preserve">
     <value>無法連接您的函數應用程式 ({{statusText}})。請稍後再試。</value>
   </data>
   <data name="tryNow_fewMoreSeconds" xml:space="preserve">

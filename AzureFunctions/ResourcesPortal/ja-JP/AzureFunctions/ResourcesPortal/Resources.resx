@@ -784,10 +784,10 @@
   <data name="error_DnsResolution" xml:space="preserve">
     <value>Function App に到達できません。アプリで一時的な問題が発生しているか、アプリが起動に失敗していることが考えられます。ログを確認するか、数分後にもう一度やり直してください。</value>
   </data>
-  <data name="error_UnableToRetriveFunctionApp" xml:space="preserve">
+  <data name="error_UnableToRetrieveFunctionApp" xml:space="preserve">
     <value>Function App ({{functionApp}}) を取得できません</value>
   </data>
-  <data name="error_UnableToRetriveFunctions" xml:space="preserve">
+  <data name="error_UnableToRetrieveFunctions" xml:space="preserve">
     <value>Function App ({{statusText}}) に到達できません。後でもう一度やり直してください。</value>
   </data>
   <data name="tryNow_fewMoreSeconds" xml:space="preserve">

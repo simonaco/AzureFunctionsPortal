@@ -31,7 +31,7 @@ import {ApiProxy} from '../shared/models/api-proxy';
 @Component({
   selector: 'functions-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss']  
+  styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnChanges {
     @ViewChild(SidebarComponent) sideBar: SidebarComponent;
@@ -195,7 +195,7 @@ export class DashboardComponent implements OnChanges {
         });
 
         this._functionsService.warmupMainSite();
-        this._functionsService.getHostSecrets();
+        this._functionsService.getHostSecretsFromScm();
 
     }
 

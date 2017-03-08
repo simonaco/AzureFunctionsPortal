@@ -784,10 +784,10 @@
   <data name="error_DnsResolution" xml:space="preserve">
     <value>함수 앱에 연결할 수 없습니다. 앱에 일시적인 문제가 있거나 앱이 시작되지 않을 수 있습니다. 로그를 확인하거나 몇 분 후에 다시 시도하세요.</value>
   </data>
-  <data name="error_UnableToRetriveFunctionApp" xml:space="preserve">
+  <data name="error_UnableToRetrieveFunctionApp" xml:space="preserve">
     <value>함수 앱을 검색할 수 없음({{functionApp}})</value>
   </data>
-  <data name="error_UnableToRetriveFunctions" xml:space="preserve">
+  <data name="error_UnableToRetrieveFunctions" xml:space="preserve">
     <value>함수 앱에 연결할 수 없습니다({{statusText}}). 나중에 다시 시도하세요.</value>
   </data>
   <data name="tryNow_fewMoreSeconds" xml:space="preserve">

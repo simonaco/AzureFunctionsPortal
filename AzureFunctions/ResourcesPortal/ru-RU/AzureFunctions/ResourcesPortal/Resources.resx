@@ -784,10 +784,10 @@
   <data name="error_DnsResolution" xml:space="preserve">
     <value>Не удалось подключиться к приложению-функции. В приложении могла возникнуть временная проблема, или же оно может испытывать проблемы с запуском. Можно проверить журналы или повторить попытку через пару минут.</value>
   </data>
-  <data name="error_UnableToRetriveFunctionApp" xml:space="preserve">
+  <data name="error_UnableToRetrieveFunctionApp" xml:space="preserve">
     <value>Не удалось получить приложение-функцию ({{functionApp}})</value>
   </data>
-  <data name="error_UnableToRetriveFunctions" xml:space="preserve">
+  <data name="error_UnableToRetrieveFunctions" xml:space="preserve">
     <value>Не удалось подключиться к приложению-функции ({{statusText}}). Повторите попытку позже.</value>
   </data>
   <data name="tryNow_fewMoreSeconds" xml:space="preserve">

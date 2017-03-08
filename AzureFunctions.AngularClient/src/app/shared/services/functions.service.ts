@@ -29,79 +29,13 @@ declare var mixpanel: any;
 
 @Injectable()
 export class FunctionsService {
-    private masterKey: string;
     private token: string;
-    private scmUrl: string;
     private siteName: string;
-    private mainSiteUrl: string;
-    public isEasyAuthEnabled: boolean;
-    public selectedFunction: string;
-    public selectedLanguage: string;
-    public selectedProvider: string;
-    public selectedFunctionName: string;
 
-    private azureScmServer: string;
-    private azureMainServer: string;
-    private localServer: string;
-
-    private localAdminKey: string = '';
-    private azureAdminKey: string;
     public isMultiKeySupported: boolean = true;
 
     // https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
-    private statusCodeMap = {
-        0: 'Unknown HTTP Error',
-        100: 'Continue',
-        101: 'Switching Protocols',
-        102: 'Processing',
-        200: 'OK',
-        201: 'Created',
-        202: 'Accepted',
-        203: 'Non-Authoritative Information',
-        204: 'No Content',
-        205: 'Reset Content',
-        206: 'Partial Content',
-        300: 'Multiple Choices',
-        301: 'Moved Permanently',
-        302: 'Found',
-        303: 'See Other',
-        304: 'Not Modified',
-        305: 'Use Proxy',
-        306: '(Unused)',
-        307: 'Temporary Redirect',
-        400: 'Bad Request',
-        401: 'Unauthorized',
-        402: 'Payment Required',
-        403: 'Forbidden',
-        404: 'Not Found',
-        405: 'Method Not Allowed',
-        406: 'Not Acceptable',
-        407: 'Proxy Authentication Required',
-        408: 'Request Timeout',
-        409: 'Conflict',
-        410: 'Gone',
-        411: 'Length Required',
-        412: 'Precondition Failed',
-        413: 'Request Entity Too Large',
-        414: 'Request-URI Too Long',
-        415: 'Unsupported Media Type',
-        416: 'Requested Range Not Satisfiable',
-        417: 'Expectation Failed',
-        500: 'Internal Server Error',
-        501: 'Not Implemented',
-        502: 'Bad Gateway',
-        503: 'Service Unavailable',
-        504: 'Gateway Timeout',
-        505: 'HTTP Version Not Supported'
-    };
 
-    private genericStatusCodeMap = {
-        100: 'Informational',
-        200: 'Success',
-        300: 'Redirection',
-        400: 'Client Error',
-        500: 'Server Error'
-    };
 
     private tryAppServiceUrl = 'https://tryappservice.azure.com';
     private functionContainer: FunctionContainer;
@@ -178,85 +112,6 @@ export class FunctionsService {
         }
     }
 
-    @Cache()
-    getFunctions() {
-        return this._http.get(`${this.scmUrl}/functions`, { headers: this.getScmSiteHeaders() })
-            .retryWhen(this.retryAntares)
-            .catch(e => this.checkCorsOrDnsErrors(e))
-            .map<FunctionInfo[]>((r) => {
-                try {
-                    return r.json();
-                } catch (e) {
-                    this._broadcastService.broadcast<ErrorEvent>(BroadcastEvent.Error, {
-                        message: this._translateService.instant(PortalResources.errorParsingConfig, { error: e })
-                    });
-                    return [];
-                }
-            });
-    }
-
-    getApiProxies() {
-        return this._http.get(`${this.azureScmServer}/api/vfs/site/wwwroot/proxies.json`, { headers: this.getScmSiteHeaders() })
-            .retryWhen(e => e.scan<number>((errorCount, err: Response) => {
-                if (err.status === 404 || errorCount >= 10) {
-                    throw err;
-                }
-                return errorCount + 1;
-            }, 0).delay(200))
-            .catch(_ => Observable.of({
-                json: () => { return {}; }
-            }))
-            .map<any>(r => {
-                return r.json();
-            });
-    }
-
-    saveApiProxy(jsonString: string) {
-        let headers = this.getScmSiteHeaders();
-        // https://github.com/projectkudu/kudu/wiki/REST-API
-        headers.append('If-Match', '*');
-
-        return this._http.put(`${this.azureScmServer}/api/vfs/site/wwwroot/proxies.json`, jsonString, { headers: headers });
-    }
-
-    @Cache('href')
-    getFileContent(file: VfsObject | string) {
-        return this._http.get(typeof file === 'string' ? file : file.href, { headers: this.getScmSiteHeaders() })
-            .retryWhen(this.retryAntares)
-            .catch(e => this.checkCorsOrDnsErrors(e))
-            .map<string>(r => r.text());
-    }
-
-    @ClearCache('getFileContent', 'href')
-    saveFile(file: VfsObject | string, updatedContent: string, functionInfo?: FunctionInfo) {
-        let headers = this.getScmSiteHeaders('plain/text');
-        headers.append('If-Match', '*');
-
-        if (functionInfo) {
-            ClearAllFunctionCache(functionInfo);
-        }
-
-        return this._http.put(typeof file === 'string' ? file : file.href, updatedContent, { headers: headers })
-            .retryWhen(this.retryAntares)
-            .catch(e => this.checkCorsOrDnsErrors(e))
-            .map<VfsObject | string>(r => file);
-    }
-
-    @ClearCache('getFileContent', 'href')
-    deleteFile(file: VfsObject | string, functionInfo?: FunctionInfo) {
-        let headers = this.getScmSiteHeaders('plain/text');
-        headers.append('If-Match', '*');
-
-        if (functionInfo) {
-            ClearAllFunctionCache(functionInfo);
-        }
-
-        return this._http.delete(typeof file === 'string' ? file : file.href, { headers: headers })
-            .retryWhen(this.retryAntares)
-            .catch(e => this.checkCorsOrDnsErrors(e))
-            .map<VfsObject | string>(r => file);
-    }
-
     ClearAllFunctionCache(functionInfo: FunctionInfo) {
         ClearAllFunctionCache(functionInfo);
     }
@@ -281,50 +136,6 @@ export class FunctionsService {
                 this.localize(object);
                 return object;
             });
-    }
-
-    @ClearCache('getFunctions')
-    createFunction(functionName: string, templateId: string) {
-        if (templateId) {
-            let body: CreateFunctionInfo = {
-                name: functionName,
-                templateId: (templateId && templateId !== 'Empty' ? templateId : null),
-                containerScmUrl: this.scmUrl
-            };
-            return this._http.put(`${this.scmUrl}/functions/${functionName}`, JSON.stringify(body), { headers: this.getScmSiteHeaders() })
-                .retryWhen(this.retryAntares)
-                .catch(e => this.checkCorsOrDnsErrors(e))
-                .map<FunctionInfo>(r => r.json());
-        } else {
-            return this._http
-                .put(`${this.scmUrl}/functions/${functionName}`, JSON.stringify({ config: {} }), { headers: this.getScmSiteHeaders() })
-                .retryWhen(this.retryAntares)
-                .catch(e => this.checkCorsOrDnsErrors(e))
-                .map<FunctionInfo>(r => r.json());
-        }
-    }
-
-    getFunctionContainerAppSettings(functionContainer: FunctionContainer) {
-        let url = `${this.scmUrl}/settings`;
-        return this._http.get(url, { headers: this.getScmSiteHeaders() })
-            .retryWhen(this.retryAntares)
-            .catch(e => this.checkCorsOrDnsErrors(e))
-            .map<{ [key: string]: string }>(r => r.json());
-    }
-
-    @ClearCache('getFunctions')
-    createFunctionV2(functionName: string, files: any, config: any) {
-        let filesCopy = Object.assign({}, files);
-        let sampleData = filesCopy['sample.dat'];
-        delete filesCopy['sample.dat'];
-
-        let content = JSON.stringify({ files: filesCopy, test_data: sampleData, config: config });
-        let url = `${this.scmUrl}/functions/${functionName}`;
-
-        return this._http.put(url, content, { headers: this.getScmSiteHeaders() })
-            .retryWhen(this.retryAntares)
-            .catch(e => this.checkCorsOrDnsErrors(e))
-            .map<FunctionInfo>(r => r.json());
     }
 
     getNewFunctionNode(): FunctionInfo {
@@ -359,124 +170,11 @@ export class FunctionsService {
         };
     }
 
-    statusCodeToText(code: number) {
-        let statusClass = Math.floor(code / 100) * 100;
-        return this.statusCodeMap[code] || this.genericStatusCodeMap[statusClass] || 'Unknown Status Code';
-    }
-
-    runHttpFunction(functionInfo: FunctionInfo, url: string, model: HttpRunModel) {
-        let content = model.body;
-
-        let regExp = /\{([^}]+)\}/g;
-        let matchesPathParams = url.match(regExp);
-        let processedParams = [];
-
-        let splitResults = url.split('?');
-        if (splitResults.length === 2) {
-            url = splitResults[0];
-        }
-
-        if (matchesPathParams) {
-            matchesPathParams.forEach((m) => {
-                let name = m.split(':')[0].replace('{', '').replace('}', '');
-                processedParams.push(name);
-                let param = model.queryStringParams.find((p) => {
-                    return p.name === name;
-                });
-                if (param) {
-                    url = url.replace(m, param.value);
-                }
-            });
-        }
-
-        let firstDone = false;
-        model.queryStringParams.forEach((p, index) => {
-            let findResult = processedParams.find((pr) => {
-                return pr === p.name;
-            });
-
-            if (!findResult) {
-                if (!firstDone) {
-                    url += '?';
-                    firstDone = true;
-                } else {
-                    url += '&';
-                }
-                url += p.name + '=' + p.value;
-            }
-        });
-        let inputBinding = (functionInfo.config && functionInfo.config.bindings
-            ? functionInfo.config.bindings.find(e => e.type === 'httpTrigger')
-            : null);
-
-        let contentType: string;
-        if (!inputBinding || inputBinding && inputBinding.webHookType) {
-            contentType = 'application/json';
-        }
-
-        let headers = this.getMainSiteHeaders(contentType);
-        model.headers.forEach((h) => {
-            headers.append(h.name, h.value);
-        });
-
-        let response: Observable<Response>;
-        switch (model.method) {
-            case Constants.httpMethods.GET:
-                response = this._http.get(url, { headers: headers });
-                break;
-            case Constants.httpMethods.POST:
-                response = this._http.post(url, content, { headers: headers });
-                break;
-            case Constants.httpMethods.DELETE:
-                response = this._http.delete(url, { headers: headers });
-                break;
-            case Constants.httpMethods.HEAD:
-                response = this._http.head(url, { headers: headers });
-                break;
-            case Constants.httpMethods.PATCH:
-                response = this._http.patch(url, content, { headers: headers });
-                break;
-            case Constants.httpMethods.PUT:
-                response = this._http.put(url, content, { headers: headers });
-                break;
-            default:
-                response = this._http.request(url, {
-                    headers: headers,
-                    method: model.method,
-                    body: content
-                });
-                break;
-        }
-
-        return this.runFunctionInternal(response, functionInfo);
-    }
-
-    runFunction(functionInfo: FunctionInfo, content: string) {
-        let url = `${this.mainSiteUrl}/admin/functions/${functionInfo.name.toLocaleLowerCase()}`;
-        let _content: string = JSON.stringify({ input: content });
-        let contentType: string;
-
-        try {
-            JSON.parse(_content);
-            contentType = 'application/json';
-        } catch (e) {
-            contentType = 'plain/text';
-        }
 
 
-        return this.runFunctionInternal(
-            this._http.post(url, _content, { headers: this.getMainSiteHeaders(contentType) }),
-            functionInfo);
 
-    }
 
-    @ClearCache('clearAllCachedData')
-    deleteFunction(functionInfo: FunctionInfo) {
-        return this._http.delete(functionInfo.href, { headers: this.getScmSiteHeaders() })
-            .retryWhen(this.retryAntares)
-            .catch(e => this.checkCorsOrDnsErrors(e))
-            .map<string>(r => r.statusText);
-    }
+
 
     @Cache()
     getDesignerSchema() {
@@ -494,54 +192,10 @@ export class FunctionsService {
             .catch(e => this.checkCorsOrDnsErrors(e))
             .map<string>(r => r.statusText);
 
-        observable.subscribe(() => this.getHostSecrets(), () => this.getHostSecrets());
+        observable.subscribe();
         return observable;
     }
 
-    @Cache('secrets_file_href')
-    getSecrets(fi: FunctionInfo) {
-        return this._http.get(fi.secrets_file_href, { headers: this.getScmSiteHeaders() })
-            .catch(_ => Observable.of({
-                json: () => { return {}; }
-            }))
-            .map<FunctionSecrets>(r => r.json());
-    }
-
-    @ClearCache('getSecrets', 'secrets_file_href')
-    setSecrets(fi: FunctionInfo, secrets: FunctionSecrets) {
-        return this.saveFile(fi.secrets_file_href, JSON.stringify(secrets))
-            .retryWhen(this.retryAntares)
-            .catch(e => this.checkCorsOrDnsErrors(e))
-            .map<FunctionSecrets>(e => secrets);
-    }
-
-    @Cache()
-    getHostJson() {
-        return this._http.get(`${this.azureScmServer}/api/functions/config`, { headers: this.getScmSiteHeaders() })
-            .retryWhen(this.retryAntares)
-            .catch(_ => Observable.of({
-                json: () => { return {}; }
-            }))
-            .map<any>(r => {
-                return r.json();
-            });
-    }
-
-    @ClearCache('getFunction', 'href')
-    saveFunction(fi: FunctionInfo, config: any) {
-        ClearAllFunctionCache(fi);
-        return this._http.put(fi.href, JSON.stringify({ config: config }), { headers: this.getScmSiteHeaders() })
-            .retryWhen(this.retryAntares)
-            .catch(e => this.checkCorsOrDnsErrors(e))
-            .map<FunctionInfo>(r => r.json());
-    }
-
-    @Cache('href')
-    getFunction(fi: FunctionInfo) {
-        return this._http.get(fi.href, { headers: this.getScmSiteHeaders() })
-            .retryWhen(this.retryAntares)
-            .map<FunctionInfo>(r => r.json());
-    }
 
     getScmUrl() {
         return this.azureScmServer;
@@ -555,96 +209,7 @@ export class FunctionsService {
         return this.mainSiteUrl;
     }
 
-    getHostSecrets() {
-        if (this.scmUrl.indexOf('localhost:6061') !== -1) {
-            this.masterKey = this.localAdminKey;
-            this.isMultiKeySupported = true;
-        }
 
-        // call kudu
-        let masterKey = this._http.get(`${this.scmUrl}/functions/admin/masterkey`, { headers: this.getScmSiteHeaders() })
-            .retryWhen(e => e.scan<number>((errorCount, err: Response) => {
-                if (err.status === 404) {
-                    throw err;
-                }
-                if (errorCount >= 10) {
-                    throw err;
-                }
-                return errorCount + 1;
-            }, 0).delay(400))
-            .catch((e: Response) => {
-                if (e.status === 404) {
-                    throw e;
-                }
-                return this.checkCorsOrDnsErrors(e);
-            });
-        masterKey
-            .subscribe(r => {
-                let key: { masterKey: string } = r.json();
-                this.masterKey = key.masterKey;
-                this.getFunctionHostKeys();
-            }, e => {
-                this.isMultiKeySupported = false;
-                this.legacyGetHostSecrets();
-            });
-        return masterKey;
-    }
-
-    legacyGetHostSecrets() {
-        return this._http.get(`${this.scmUrl}/vfs/data/functions/secrets/host.json`, { headers: this.getScmSiteHeaders() })
-            .retryWhen(e => e.scan<number>((errorCount, err) => {
-                if (errorCount >= 100) {
-                    throw err;
-                }
-                return errorCount + 1;
-            }, 0).delay(400))
-            .catch(e => this.checkCorsOrDnsErrors(e))
-            .map<string>(r => r.json().masterKey)
-            .subscribe(h => {
-                this.masterKey = h;
-                this.isMultiKeySupported = false;
-            }, e => console.log(e));
-    }
-
-    getFunctionHostKeys(): Observable<FunctionKeys> {
-        if (this.isEasyAuthEnabled) {
-            return Observable.of({keys: [], links: []});
-        }
-
-        let hostKeys = this._http.get(`${this.mainSiteUrl}/admin/host/keys`, { headers: this.getMainSiteHeaders() })
-            .retryWhen(e => e.scan<number>((errorCount, err: Response) => {
-                if (err.status === 404) {
-                    throw err;
-                }
-                if (errorCount >= 10) {
-                    throw err;
-                }
-                return errorCount + 1;
-            }, 0).delay(400))
-            .catch((e: Response) => {
-                if (e.status === 404) {
-                    throw e;
-                }
-                return this.checkCorsOrDnsErrors(e);
-            })
-            .map<FunctionKeys>(r => {
-                let keys: FunctionKeys = r.json();
-                if (keys && Array.isArray(keys.keys)) {
-                    keys.keys.unshift({
-                        name: '_master',
-                        value: this.masterKey
-                    });
-                }
-                return keys;
-            });
-
-        hostKeys.subscribe(r => {
-            this.isMultiKeySupported = true;
-        }, e => {
-            this.isMultiKeySupported = false;
-        });
-        return hostKeys;
-    }
 
     @Cache()
     getBindingConfig(): Observable<BindingConfig> {
@@ -715,50 +280,9 @@ export class FunctionsService {
             .map<UIResource>(r => r.json());
     }
 
-    updateFunction(fi: FunctionInfo) {
-        ClearAllFunctionCache(fi);
-        return this._http.put(fi.href, JSON.stringify(fi), { headers: this.getScmSiteHeaders() })
-            .retryWhen(this.retryAntares)
-            .catch(e => this.checkCorsOrDnsErrors(e))
-            .map<FunctionInfo>(r => r.json());
-    }
 
-    getFunctionErrors(fi: FunctionInfo) {
-        return this.isEasyAuthEnabled
-            ? Observable.of([])
-            : this._http.get(`${this.mainSiteUrl}/admin/functions/${fi.name}/status`, { headers: this.getMainSiteHeaders() })
-                .retryWhen(this.retryAntares)
-                .map<string[]>(r => r.json().errors || [])
-                .catch<string[]>(e => Observable.of(null));
-    }
 
-    getHostErrors() {
-        if (this.isEasyAuthEnabled || !this.masterKey) {
-            return Observable.of([]);
-        } else {
-            return this._http.get(`${this.mainSiteUrl}/admin/host/status`, { headers: this.getMainSiteHeaders() })
-                .retryWhen(e => e.scan<number>((errorCount, err) => {
-                    // retry 12 times with 5 seconds delay. This would retry for 1 minute before throwing.
-                    if (errorCount >= 12) {
-                        throw err;
-                    }
-                    return errorCount + 1;
-                }, 0).delay(5000))
-                .catch(e => this.checkCorsOrDnsErrors(e))
-                .map<string[]>(r => r.json().errors || []);
-        }
-    }
 
-    @Cache()
-    getFunctionHostId() {
-        if (this.isEasyAuthEnabled || !this.masterKey) {
-            return Observable.of([]);
-        } else {
-            return this._http.get(`${this.mainSiteUrl}/admin/host/status`, { headers: this.getMainSiteHeaders() })
-                .map<string>(r => r.json().id)
-                .catch(e => Observable.of(null));
-        }
-    }
 
     getFunctionAppArmId() {
         if (this.functionContainer && this.functionContainer.id && this.functionContainer.id.trim().length !== 0) {
@@ -774,68 +298,7 @@ export class FunctionsService {
         this.isEasyAuthEnabled = config['enabled'] && config['unauthenticatedClientAction'] !== 1;
     }
 
-    getOldLogs(fi: FunctionInfo, range: number): Observable<string> {
-        let url = `${this.scmUrl}/vfs/logfiles/application/functions/function/${fi.name}/`;
-        return this._http.get(url, { headers: this.getScmSiteHeaders() })
-            .retryWhen(this.retryAntares)
-            .catch(e => Observable.of({ json: () => [] }))
-            .flatMap<string>(r => {
-                let files: any[] = r.json();
-                if (files.length > 0) {
-                    let headers = this.getScmSiteHeaders();
-                    headers.append('Range', `bytes=-${range}`);
 
-                    files
-                        .map(e => { e.parsedTime = new Date(e.mtime); return e; })
-                        .sort((a, b) => a.parsedTime.getTime() - b.parsedTime.getTime());
-
-                    return this._http.get(files.pop().href, { headers: headers })
-                        .map<string>(f => {
-                            let content = f.text();
-                            let index = content.indexOf('\n');
-                            return index !== -1
-                                ? content.substring(index + 1)
-                                : content;
-                        });
-                } else {
-                    return Observable.of('');
-                }
-            });
-    }
-
-    @Cache('href')
-    getVfsObjects(fi: FunctionInfo | string) {
-        return this._http.get(typeof fi === 'string' ? fi : fi.script_root_path_href, { headers: this.getScmSiteHeaders() })
-            .retryWhen(this.retryAntares)
-            .catch(e => this.checkCorsOrDnsErrors(e))
-            .map<VfsObject[]>(e => e.json());
-    }
-
-    @ClearCache('clearAllCachedData')
-    clearAllCachedData() { }
-
-    checkLocalFunctionsServer() {
-        return this._http.get(this.localServer)
-            .map<boolean>(r => true)
-            .catch(e => Observable.of(false));
-    }
-
-    switchToLocalServer() {
-        this.mainSiteUrl = this.localServer;
-        this.scmUrl = this.localServer + '/admin';
-        this.azureAdminKey = this.masterKey;
-        this.masterKey = this.localAdminKey;
-    }
-
-    switchToAzure() {
-        this.mainSiteUrl = this.azureMainServer;
-        this.scmUrl = `${this.azureScmServer}/api`;
-        this.masterKey = this.azureAdminKey;
-    }
-
-    launchVsCode() {
-        return this._http.post(`${this.localServer}/admin/run/vscode`, '');
-    }
 
     getLatestRuntime() {
         return this._http.get(Constants.serviceHost + 'api/latestruntime', { headers: this.getPortalHeaders() })
@@ -855,75 +318,9 @@ export class FunctionsService {
             .catch(e => this.checkCorsOrDnsErrors(e));
     }
 
-    @Cache('href')
-    getFunctionKeys(functionInfo: FunctionInfo) {
-        return this._http.get(`${this.mainSiteUrl}/admin/functions/${functionInfo.name}/keys`, { headers: this.getMainSiteHeaders() })
-            .retryWhen(this.retryAntares)
-            .catch(e => this.checkCorsOrDnsErrors(e))
-            .map<FunctionKeys>(r => r.json());
-    }
 
-    @ClearCache('clearAllFunction', 'getFunctionKeys')
-    @ClearCache('clearAllFunction', 'getFunctionHostKeys')
-    createKey(keyName: string, keyValue: string, functionInfo?: FunctionInfo) {
-        let url = functionInfo
-            ? `${this.mainSiteUrl}/admin/functions/${functionInfo.name}/keys/${keyName}`
-            : `${this.mainSiteUrl}/admin/host/keys/${keyName}`;
 
-        if (keyValue) {
-            let body = {
-                name: keyName,
-                value: keyValue
-            };
-            return this._http.put(url, JSON.stringify(body), { headers: this.getMainSiteHeaders() })
-                .retryWhen(this.retryAntares)
-                .catch(e => this.checkCorsOrDnsErrors(e))
-                .map<FunctionKey>(r => r.json());
-        } else {
-            return this._http.post(url, '', { headers: this.getMainSiteHeaders() })
-                .retryWhen(this.retryAntares)
-                .catch(e => this.checkCorsOrDnsErrors(e))
-                .map<FunctionKey>(r => r.json());
-        }
-    }
 
-    @ClearCache('clearAllFunction', 'getFunctionKeys')
-    @ClearCache('clearAllFunction', 'getFunctionHostKeys')
-    deleteKey(key: FunctionKey, functionInfo?: FunctionInfo) {
-        let url = functionInfo
-            ? `${this.mainSiteUrl}/admin/functions/${functionInfo.name}/keys/${key.name}`
-            : `${this.mainSiteUrl}/admin/host/keys/${key.name}`;
-
-        return this._http.delete(url, { headers: this.getMainSiteHeaders() })
-            .retryWhen(this.retryAntares)
-            .catch(e => this.checkCorsOrDnsErrors(e));
-    }
-
-    @ClearCache('clearAllFunction', 'getFunctionKeys')
-    @ClearCache('clearAllFunction', 'getFunctionHostKeys')
-    renewKey(key: FunctionKey, functionInfo?: FunctionInfo) {
-        let url = functionInfo
-            ? `${this.mainSiteUrl}/admin/functions/${functionInfo.name}/keys/${key.name}`
-            : `${this.mainSiteUrl}/admin/host/keys/${key.name}`;
-        let keyRenew = this._http.post(url, '', { headers: this.getMainSiteHeaders() })
-            .retryWhen(this.retryAntares)
-            .catch(e => this.checkCorsOrDnsErrors(e))
-            .share();
-        if (!functionInfo && key.name === '_master') {
-            keyRenew.subscribe(r => {
-                this.masterKey = r.json().value;
-            });
-            return keyRenew.delay(100);
-        } else {
-            return keyRenew;
-        }
-    }
-
-    fireSyncTrigger() {
-        let url = `${this.scmUrl}/functions/synctriggers`;
-        this._http.post(url, '', { headers: this.getScmSiteHeaders() })
-            .subscribe(success => console.log(success), error => console.log(error));
-    }
 
     @Cache()
     getJson(uri: string) {
@@ -1118,37 +515,5 @@ export class FunctionsService {
         throw error;
     }
 
-    private runFunctionInternal(response: Observable<Response>, functionInfo: FunctionInfo) {
-        return response
-            .catch((e: Response) => {
-                if (this.isEasyAuthEnabled) {
-                    return Observable.of({
-                        status: 401,
-                        statusText: this.statusCodeToText(401),
-                        text: () => this._translateService.instant(PortalResources.functionService_authIsEnabled)
-                    });
-                } else if (e.status === 200 && e.type === ResponseType.Error) {
-                    return Observable.of({
-                        status: 502,
-                        statusText: this.statusCodeToText(502),
-                        text: () => this._translateService.instant(PortalResources.functionService_errorRunningFunc, {
-                            name: functionInfo.name
-                        })
-                    });
-                } else if (e.status === 0 && e.type === ResponseType.Error) {
-                    return Observable.of({
-                        status: 0,
-                        statusText: this.statusCodeToText(0),
-                        text: () => ''
-                    });
-                } else {
-                    return Observable.of({
-                        status: e.status,
-                        statusText: this.statusCodeToText(e.status),
-                        text: () => ''
-                    });
-                }
-            })
-            .map<RunFunctionResult>(r => ({ statusCode: r.status, statusText: this.statusCodeToText(r.status), content: r.text() }));
-    }
+
 }

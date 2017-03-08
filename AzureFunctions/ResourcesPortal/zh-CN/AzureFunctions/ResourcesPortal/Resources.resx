@@ -784,10 +784,10 @@
   <data name="error_DnsResolution" xml:space="preserve">
     <value>我们无法访问你的 Function App。你的应用可能出现暂时性问题或无法启动。可以检查日志，或在几分钟后重试。</value>
   </data>
-  <data name="error_UnableToRetriveFunctionApp" xml:space="preserve">
+  <data name="error_UnableToRetrieveFunctionApp" xml:space="preserve">
     <value>无法检索函数应用({{functionApp}})</value>
   </data>
-  <data name="error_UnableToRetriveFunctions" xml:space="preserve">
+  <data name="error_UnableToRetrieveFunctions" xml:space="preserve">
     <value>无法访问你的 Function App ({{statusText}})。请稍后重试。</value>
   </data>
   <data name="tryNow_fewMoreSeconds" xml:space="preserve">

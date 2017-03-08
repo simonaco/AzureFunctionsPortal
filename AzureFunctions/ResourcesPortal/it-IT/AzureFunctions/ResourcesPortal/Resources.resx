@@ -784,10 +784,10 @@
   <data name="error_DnsResolution" xml:space="preserve">
     <value>Non è possibile raggiungere l'app per le funzioni. Potrebbe essersi verificato un problema temporaneo nell'app o un errore di avvio. Esaminare i log o riprovare tra qualche minuto.</value>
   </data>
-  <data name="error_UnableToRetriveFunctionApp" xml:space="preserve">
+  <data name="error_UnableToRetrieveFunctionApp" xml:space="preserve">
     <value>Non è possibile recuperare l'app per le funzioni ({{functionApp}})</value>
   </data>
-  <data name="error_UnableToRetriveFunctions" xml:space="preserve">
+  <data name="error_UnableToRetrieveFunctions" xml:space="preserve">
     <value>Non è possibile raggiungere l'app per le funzioni ({{statusText}}). Riprovare più tardi.</value>
   </data>
   <data name="tryNow_fewMoreSeconds" xml:space="preserve">

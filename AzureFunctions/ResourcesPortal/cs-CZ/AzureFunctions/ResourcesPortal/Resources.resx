@@ -784,10 +784,10 @@
   <data name="error_DnsResolution" xml:space="preserve">
     <value>Nepovedlo se nám kontaktovat vaši aplikaci Function App. Je možné, že s aplikací jsou jenom dočasné problémy nebo se ji nedaří spustit. Můžete se podívat na protokoly nebo to zkusit za pár minut znovu.</value>
   </data>
-  <data name="error_UnableToRetriveFunctionApp" xml:space="preserve">
+  <data name="error_UnableToRetrieveFunctionApp" xml:space="preserve">
     <value>Nepovedlo se načíst aplikaci Function App ({{functionApp}}).</value>
   </data>
-  <data name="error_UnableToRetriveFunctions" xml:space="preserve">
+  <data name="error_UnableToRetrieveFunctions" xml:space="preserve">
     <value>Nepovedlo se nám kontaktovat vaši aplikaci Function App ({{statusText}}). Zkuste to prosím znovu.</value>
   </data>
   <data name="tryNow_fewMoreSeconds" xml:space="preserve">
