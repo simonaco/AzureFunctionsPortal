@@ -1,4 +1,4 @@
-<h2 class="feature-group-header">{{group.title}}</h2>
+<div class="feature-group-header">{{group.title}}</div>
 <div class="feature-group-items">
 
     <div *ngFor="let feature of filteredFeatures"
@@ -9,21 +9,24 @@
          
          <div *ngIf="feature.isEmpty">&nbsp;</div>
 
-         <div *ngIf="!feature.isEmpty">
+         <div *ngIf="!feature.isEmpty" class="feature-group-item-content">
             <img [src]="feature.imageUrl" />
 
             <span *ngIf="feature.enabled" class="link" (click)="click(feature)">{{feature.title}}</span>
             <span *ngIf="!feature.enabled" class="feature-group-disabled">{{feature.title}}</span>
 
             <span *ngIf="feature.isHighlighted" class="feature-group-info">
+            <!--<span class="feature-group-info">-->
                 
                 <span>
                     <pop-over *ngIf="feature.warning" [message]="feature.warning">
-                        <i class="fa fa-ban warning feature-menu-item"></i>
+                        <!--<i class="fa fa-ban warning feature-menu-item"></i>-->
+                        <img src="images/warning.svg" />
                     </pop-over>
                     
                     <pop-over *ngIf="feature.info" [message]="feature.info">
-                        <i class="fa fa-info-circle feature-menu-item"></i>
+                        <!--<i class="fa fa-info-circle feature-menu-item"></i>-->
+                        <img src="images/info.svg" />
                     </pop-over>
                 </span>
             </span>
