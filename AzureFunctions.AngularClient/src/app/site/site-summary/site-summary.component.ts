@@ -96,7 +96,8 @@ export class SiteSummaryComponent implements OnDestroy {
                 this.resourceGroup = descriptor.resourceGroup;
 
                 let serverFarm = site.properties.serverFarmId.split('/')[8];
-                this.plan = `${serverFarm} (${site.properties.sku})`;
+
+                this.plan = `${serverFarm} (${site.properties.sku.replace("Dynamic", "Consumption")})`;
                 this.url = `https://${site.properties.defaultHostName}`;
 
                 this.location = site.location;
@@ -142,6 +143,9 @@ export class SiteSummaryComponent implements OnDestroy {
             })
             .subscribe(res =>{
                 this._globalStateService.clearBusyState();
+                let traceKey = this._viewInfo.data.siteTraceKey;
+                this._aiService.stopTrace("/sites/overview-tab-ready", traceKey);
+
                 this.scmType = res.config.properties.scmType;
 
                 if(this.hasWriteAccess){
