@@ -61,7 +61,6 @@ export class SiteManageComponent {
         })
         .switchMap(r =>{
             this._globalStateService.clearBusyState();
-
             let traceKey = this._viewInfo.data.siteTraceKey;
             this._aiService.stopTrace("/sites/features-tab-ready", traceKey);
 
@@ -89,6 +88,10 @@ export class SiteManageComponent {
                 (s, p, l) => ({ hasSiteWritePermissions : s, hasPlanReadPermissions : p, hasReadOnlyLock : l})
             )
         })
+        .do(null, e =>{
+            this._aiService.trackException(e, "site-manage");
+        })
+        .retry()
         .subscribe(r =>{
             let hasSiteWritePermissions = r.hasSiteWritePermissions && !r.hasReadOnlyLock;
             let siteWriteDisabledMessage = "";

@@ -79,13 +79,12 @@ export class SiteSummaryComponent implements OnDestroy {
 
         this._viewInfoStream = new Subject<TreeViewInfo>();
         this._viewInfoStream
-            .distinctUntilChanged()
             .switchMap(viewInfo =>{
                 this._viewInfo = viewInfo;
                 this._globalStateService.setBusyState();
                 return this._cacheService.getArm(viewInfo.resourceId);
             })
-            .switchMap(r =>{
+            .flatMap(r =>{
                 let site : ArmObj<Site> = r.json();
                 this.site = site;
                 let descriptor = new SiteDescriptor(site.id);
@@ -115,6 +114,10 @@ export class SiteSummaryComponent implements OnDestroy {
                 let configId = `${site.id}/config/web`;
                 let availabilityId = `${site.id}/providers/Microsoft.ResourceHealth/availabilityStatuses/current`;
 
+                this._globalStateService.clearBusyState();
+                let traceKey = this._viewInfo.data.siteTraceKey;
+                this._aiService.stopTrace("/sites/overview-tab-ready", traceKey);
+
                 return Observable.zip<DataModel>(
                     authZService.hasPermission(site.id, [AuthzService.writeScope]),
                     authZService.hasReadOnlyLock(site.id),
@@ -128,6 +131,10 @@ export class SiteSummaryComponent implements OnDestroy {
                     }))
             })
             .flatMap(res =>{
+                if(!res){
+                    return Observable.of(null);
+                }
+
                 this.hasWriteAccess = res.hasWritePermission && !res.hasReadOnlyLock;
                 this._setAvailabilityState(res.availability.properties.availabilityState);
 
@@ -141,11 +148,11 @@ export class SiteSummaryComponent implements OnDestroy {
 
                 return Observable.of(res);
             })
-            .subscribe(res =>{
-                this._globalStateService.clearBusyState();
-                let traceKey = this._viewInfo.data.siteTraceKey;
-                this._aiService.stopTrace("/sites/overview-tab-ready", traceKey);
-
+            .do(null, e =>{
+                this._aiService.trackException(e, "site-summary");
+            })
+            .retry()
+            .subscribe((res : DataModel) =>{
                 this.scmType = res.config.properties.scmType;
 
                 if(this.hasWriteAccess){
@@ -162,7 +169,7 @@ export class SiteSummaryComponent implements OnDestroy {
             return;
         }
 
-        this._viewInfoStream.next(viewInfo);
+        this._viewInfoStream.next(viewInfo);        
     }
 
     ngOnDestroy() {
