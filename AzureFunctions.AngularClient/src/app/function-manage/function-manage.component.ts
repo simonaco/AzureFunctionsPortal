@@ -41,7 +41,7 @@ export class FunctionManageComponent {
                 this.functionInfo = this._functionNode.functionInfo;
                 this.functionApp = this.functionInfo.functionApp;
                 return Observable.zip(
-                    this.functionApp.checkIfDisabled(),
+                    this.functionApp.checkIfSourceControlEnabled(),
                     this.functionApp.getAuthSettings(),
                     (d, e) => ({ disabled: d, easyAuthEnabled: e.easyAuthEnabled}))
             })

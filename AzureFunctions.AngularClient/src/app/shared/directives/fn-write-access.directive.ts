@@ -18,7 +18,7 @@ export class FnWriteAccessDirective {
 
         this.functionAppStream
             .debounceTime(100)
-            .switchMap(fa => fa.checkIfDisabled())
+            .switchMap(fa => fa.checkIfSourceControlEnabled())
             .subscribe(isDisabled => {
                 if (isDisabled) {
                     this.elementRef.nativeElement.style.pointerEvents = 'none';

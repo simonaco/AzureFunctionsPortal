@@ -64,7 +64,7 @@ export class FunctionEditComponent {
                     this.tabId = segments[segments.length - 1];
                 }
 
-                return this.selectedFunction.functionApp.checkIfDisabled();
+                return this.selectedFunction.functionApp.checkIfSourceControlEnabled();
             })
             .subscribe(disabled =>{
                 this.disabled = disabled;

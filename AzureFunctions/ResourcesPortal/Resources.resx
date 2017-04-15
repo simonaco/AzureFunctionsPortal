@@ -1621,4 +1621,19 @@ Set to "External URL" to use an API definition that is hosted elsewhere.</value>
   <data name="swaggerDefinition_urlHelp" xml:space="preserve">
     <value>Use this URL to directly access your API definition and import into 3rd party tools </value>
   </data>
+  <data name="appFunctionSettings_changeEditMode" xml:space="preserve">
+    <value>Change the edit mode of your function app</value>
+  </data>
+  <data name="appFunctionSettings_editMode" xml:space="preserve">
+    <value>Function app edit mode</value>
+  </data>
+  <data name="appFunctionSettings_readOnlyMode" xml:space="preserve">
+    <value>Read Only</value>
+  </data>
+  <data name="appFunctionSettings_readWriteMode" xml:space="preserve">
+    <value>Read\Write</value>
+  </data>
+  <data name="error_unableToUpdateFunctionAppEditMode" xml:space="preserve">
+    <value>We are unable to update your function app's edit mode. Please try again later.</value>
+  </data>
 </root>

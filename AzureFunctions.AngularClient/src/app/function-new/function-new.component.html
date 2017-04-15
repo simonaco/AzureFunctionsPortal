@@ -1,6 +1,6 @@
 <div class="newfunc-container" >
 
-    <div *ngIf="functionApp?.checkIfDisabled() | async">
+    <div *ngIf="functionApp?.checkIfSourceControlEnabled() | async">
         <br />
         <div class="alert alert-warning alert-dismissible" role="alert">
             {{ 'readOnly' | translate }}

@@ -1290,17 +1290,52 @@ export class FunctionApp {
         return this._http.get(uri, { headers: this.getMainSiteHeaders() })
             .map<any>(r => r.json());
     }
-    checkIfDisabled() {
+
+    checkIfSourceControlEnabled(): Observable<boolean> {
         return this._cacheService.getArm(`${this.site.id}/config/web`)
         .map(r => {
-            let config : ArmObj<SiteConfig> = r.json();
-            if (!config.properties["scmType"] || config.properties["scmType"] !== "None") {
-                return true;
-            } else {
-                return false;
-            }
+            let config: ArmObj<SiteConfig> = r.json();
+            return this.mapSourceControlConfig(config);
         })
         .catch(e => Observable.of(false));
+    }
+
+    mapSourceControlConfig(config: ArmObj<SiteConfig>): boolean {
+        return !config.properties['scmType'] || config.properties['scmType'] !== 'None';
+    }
+
+    checkIfFunctionAppEditable(): Observable<boolean> {
+        // The we have 2 settings to check here. There is the SourceControl setting which comes from /config/web
+        // and there is FUNCTION_APP_EDIT_MODE which comes from app settings.
+        // editMode (true -> readWrite, false -> readOnly)
+        // Table
+        //  | SourceControl | AppSettingValue | EditMode |
+        //  | true          | readWrite       | true     |
+        //  | true          | readOnly        | false    |
+        //  | true          | undefined       | false    |
+        //  | false         | readWrite       | true     |
+        //  | false         | readOnly        | false    |
+        //  | false         | undefined       | true     |
+        return Observable.zip(
+            this.checkIfSourceControlEnabled(),
+            this._cacheService.getArm(``),
+            (a, b) => ({sourceControlEnabled: a, appSettingsResponse: b})
+        )
+        .map<boolean>(result => this.mapEditMode(result.sourceControlEnabled, result.appSettingsResponse.json()));
+    }
+
+    mapEditMode(sourceControlEnabled: boolean, appSettings: ArmObj<any>): boolean {
+        let editModeSettingString: string = appSettings.properties[Constants.functionAppEditModeSettingName] || '';
+        editModeSettingString = editModeSettingString.toLocaleLowerCase();
+        let sourceControlState = sourceControlEnabled;
+
+        if (editModeSettingString === Constants.ReadWriteMode) {
+            return true;
+        } else if (editModeSettingString === Constants.ReadOnlyMode) {
+            return false;
+        } else {
+            return !sourceControlState;
+        }
     }
 
     public getAuthSettings(): Observable<AuthSettings>{
@@ -1568,7 +1603,7 @@ export class FunctionApp {
     }
 
     getGeneratedSwaggerData(key: string) {
-        let url: string = this.getMainSiteUrl() + "/admin/host/swagger/default?code=" + key;
+        let url: string = this.getMainSiteUrl() + '/admin/host/swagger/default?code=' + key;
         return this._http.get(url).map<any>(r => { return r.json() })
         .do(_ => this._broadcastService.broadcast<string>(BroadcastEvent.ClearError, ErrorIds.unableToloadGeneratedAPIDefinition),
             (error: FunctionsResponse) => {
@@ -1587,7 +1622,7 @@ export class FunctionApp {
     }
 
     getSwaggerDocument(key: string) {
-        let url: string = this.getMainSiteUrl() + "/admin/host/swagger?code=" + key;
+        let url: string = this.getMainSiteUrl() + '/admin/host/swagger?code=' + key;
         return this._http.get(url).map<any>(r => { return r.json() });
     }
 
